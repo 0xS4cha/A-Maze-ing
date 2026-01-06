@@ -15,7 +15,8 @@ class Config:
         self.EXIT = [0, 0]
         self.OUTPUT_FILE = ""
         self.PERFECT = False
-
+        self.EMPTY_CHAR = ' '
+        self.FULL_CHAR = '█'
         with open(config_path, "r") as f:
             for i, line in enumerate(f.readlines()):
                 if line.strip().startswith("#"):
@@ -46,10 +47,6 @@ class Config:
                         self.PERFECT = bool(right_arg)
                     elif left_arg == "ALGORITHMS":
                         self.ALGORITHMS = int(right_arg)
-                    elif left_arg == "FULL_CHAR":
-                        self.FULL_CHAR = right_arg
-                    elif left_arg == "EMPTY_CHAR":
-                        self.EMPTY_CHAR = right_arg
                     else:
                         raise ValueError(f"Unknown entry: {line}.")
                 except ValueError as e:
