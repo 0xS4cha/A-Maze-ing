@@ -1,20 +1,8 @@
 #!/usr/bin/env python3
 
 import sys
-import argparse
-
-
-def display_errors(message: str) -> None:
-    print(f"[ERROR]: {message}")
-
-
-def check_flags() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--algo", choices=["medium", "complex"], default="medium")
-    args = parser.parse_args()
-    mapping = {"medium": 0, "complex": 1}
-
-    return mapping[args.algo]
+import exception
+import config
 
 
 def medium():
@@ -25,19 +13,25 @@ def complex():
     print("complex")
 
 
-def generate_maze(algo: int) -> bool:
+def generate_maze(config) -> bool:
     algo_list = [medium, complex]
-    print(algo)
-    return (algo_list[algo])
+    return (algo_list[config.algo]())
 
 
 def main():
-    _algo = 0
     if len(sys.argv) <= 1:
-        return display_errors("Not enough arguments")
-    _algo = check_flags()
-    generate_maze(_algo)
+        raise exception.ArgsException("Not enough arguments")
+    try:
+        _config = config.Config(sys.argv[1])
+    except Exception as e:
+        raise exception.ConfigException(f"Bad config file: {e}")
+    generate_maze(_config)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (exception.ArgsException, exception.ConfigException) as e:
+        exception.display_errors(e)
+    except Exception as e:
+        exception.display_errors(f"An unexpected error occurred: {e}")
