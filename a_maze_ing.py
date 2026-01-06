@@ -5,24 +5,35 @@ import exception
 import config
 import algorithms.backtracking as backtracking
 import algorithms.eller as eller
+import mlx
 
 
-def print_maze(maze: list[list[int]], empty, full, start_point, end_point):
-    start_x, start_y = start_point
-    end_x, end_y = end_point
+def print_maze(maze: list[list[int]], empty, full):
     for line in range(len(maze)):
         for column in range(len(maze[line])):
-            if maze[line][column] == 1:
-                print(full, end="")
-            else:
+            if maze[line][column] == 0:
                 print(empty, end="")
+            elif maze[line][column] == 1:
+                print(full, end="")
+            elif maze[line][column] == 2:
+                print(config.COLOR_STARTING + full + config.COLOR_RESET, end='')
+            elif maze[line][column] == 3:
+                print(config.COLOR_ENDING + full + config.COLOR_RESET, end='')
         print()
 
 
-def generate_maze(_config) -> bool:
+def generate_maze(_config: config.Config) -> bool:
     algo_list = [backtracking, eller]
-    result = algo_list[_config.ALGORITHMS].generate(_config)
-    print_maze(result, _config.EMPTY_CHAR, _config.FULL_CHAR, _config.ENTRY, _config.EXIT)
+    result: list[list[int]] = algo_list[_config.ALGORITHMS].generate(_config)
+    # set entry and exit
+    entry_x, entry_y = _config.ENTRY
+    exit_x, exit_y = _config.EXIT
+    if (entry_x < 1 or entry_y < 1 or entry_x > _config.WIDTH - 2 or entry_y > _config.HEIGHT - 2) \
+            or (entry_x == exit_x and entry_y == exit_y):
+        raise exception.ConfigException("Invalid entry or exit position, outside the map")
+    result[entry_y][entry_x] = 2
+    result[exit_y][exit_x] = 3
+    print_maze(result, _config.EMPTY_CHAR, _config.FULL_CHAR)
     return True
 
 

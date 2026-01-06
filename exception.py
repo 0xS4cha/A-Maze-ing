@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 def display_errors(message: str) -> None:
     print(f"[ERROR]: {message}")
 
