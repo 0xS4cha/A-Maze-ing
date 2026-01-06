@@ -50,22 +50,35 @@ class Config:
                 except ValueError as e:
                     raise ConfigException(f"Invalid config entry: {e.args[0]}.\n{self.get_error_line_format(i+1, config_path)}")
 
+
 FULL_CHAR = '█'
 EMPTY_CHAR = ' '
+
 
 def print_maze(maze: list[list[str]]):
     for line in maze:
         print("".join(line))
 
+
 def generate_maze(config: Config):
     maze = [[EMPTY_CHAR] * config.WIDTH for _ in range(config.HEIGHT)]
-    for i in range(config.HEIGHT):
-        maze[i][i] = FULL_CHAR
+    # starting matrix generation
+    for y in range(config.HEIGHT):
+        for x in range(config.WIDTH):
+            if (y % 2 == 0 or x % 2 == 0)\
+                or (y == 0 or y == config.HEIGHT - 1)\
+                    or (x == 0 or x == config.WIDTH - 1):
+                maze[y][x] = FULL_CHAR
+    for y in range(1, int((config.HEIGHT - 1) / 2)):
+        for x in range(1, int((config.WIDTH - 1) / 2)):
+
     print_maze(maze)
+
 
 def main():
     config = Config("./config.txt")
     generate_maze(config)
 
+
 if __name__ == "__main__":
-	main()
+    main()
