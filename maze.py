@@ -1,35 +1,92 @@
 #!/usr/bin/env python3
 
-from config import Config, ConfigException
-
+from config import Config
+import random
 
 FULL_CHAR = '█'
 EMPTY_CHAR = ' '
+STARTING_COLOR = "\033[35m"
+FINISH_COLOR = "\033[31m"
 
 
 def print_maze(maze: list[list[str]]):
     for line in maze:
-        print("".join(line))
+        for elem in line:
+            if elem == 0:
+                print(EMPTY_CHAR, end='')
+            else:
+                print(FULL_CHAR, end='')
+        print()
 
 
-def generate_maze(config: Config):
-    maze = [[EMPTY_CHAR] * config.WIDTH for _ in range(config.HEIGHT)]
-    # starting matrix generation
-    for y in range(config.HEIGHT):
-        for x in range(config.WIDTH):
-            if (y % 2 == 0 or x % 2 == 0)\
-                or (y == 0 or y == config.HEIGHT - 1)\
-                    or (x == 0 or x == config.WIDTH - 1):
-                maze[y][x] = FULL_CHAR
-    for y in range(1, int((config.HEIGHT - 1) / 2)):
-        for x in range(1, int((config.WIDTH - 1) / 2)):
+def generate(config: Config):
+    width = config.WIDTH // 2
+    height = config.HEIGHT // 2
+    next_id = 0
+    sets = [i for i in range(width)]
+    next_id = width
 
-    print_maze(maze)
+    maze = [
+        [{'R': False, 'D': False} for _ in range(width)]
+        for _ in range(height)]
+
+    for y in range(height):
+        for x in range(width):
+            if sets[x] is None:
+                sets[x] = next_id
+                next_id += 1
+
+        # horizontal connections
+        for x in range(width - 1):
+            if sets[x] != sets[x + 1] and (y == height - 1 or random.choice([True, False])):
+                maze[y][x]['R'] = True
+                old = sets[x + 1]
+                new = sets[x]
+                for i in range(width):
+                    if sets[i] == old:
+                        sets[i] = new
+
+        # force merge for last row
+        if y == height - 1:
+            break
+
+        # vertical connections
+        next_sets = [None] * width
+        used = {}
+        for x in range(width):
+            used.setdefault(sets[x], []).append(x)
+
+        for s in used:
+            cells = used[s]
+            random.shuffle(cells)
+            count = random.randint(1, len(cells))  # one random cell vertical
+            for x in cells[:count]:
+                maze[y][x]['D'] = True
+                next_sets[x] = sets[x]
+        sets = next_sets
+
+    pw = width * 2 + 1
+    ph = height * 2 + 1
+
+    pixels = [[1] * pw for _ in range(ph)]
+
+    for y in range(height):
+        for x in range(width):
+            px = x * 2 + 1
+            py = y * 2 + 1
+            pixels[py][px] = 0
+            if maze[y][x]['R']:
+                pixels[py][px + 1] = 0
+            if maze[y][x]['D']:
+                pixels[py + 1][px] = 0
+    return pixels
 
 
 def main():
     config = Config("./config.txt")
-    generate_maze(config)
+    #generate(config)
+    m = generate(config)
+    print_maze(m)
 
 
 if __name__ == "__main__":
