@@ -7,3 +7,4 @@
 - [ ] Add a `.gitignore`
 - [ ] Create test programs to verify project functionality
 - [ ] Use venv
+- [ ] Fix config parsing (PERFECT)
