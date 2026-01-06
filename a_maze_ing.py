@@ -3,19 +3,27 @@
 import sys
 import exception
 import config
+import algorithms.backtracking as backtracking
+import algorithms.eller as eller
 
 
-def medium():
-    print("medium")
+def print_maze(maze: list[list[int]], empty, full, start_point, end_point):
+    start_x, start_y = start_point
+    end_x, end_y = end_point
+    for line in range(len(maze)):
+        for column in range(len(maze[line])):
+            if maze[line][column] == 1:
+                print(full, end="")
+            else:
+                print(empty, end="")
+        print()
 
 
-def complex():
-    print("complex")
-
-
-def generate_maze(config) -> bool:
-    algo_list = [medium, complex]
-    return (algo_list[config.algo]())
+def generate_maze(_config) -> bool:
+    algo_list = [backtracking, eller]
+    result = algo_list[_config.ALGORITHMS].generate(_config)
+    print_maze(result, _config.EMPTY_CHAR, _config.FULL_CHAR, _config.ENTRY, _config.EXIT)
+    return True
 
 
 def main():

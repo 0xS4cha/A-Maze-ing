@@ -19,7 +19,7 @@ class Config:
         with open(config_path, "r") as f:
             for i, line in enumerate(f.readlines()):
                 if line.strip().startswith("#"):
-                    continue # skip comments
+                    continue  # skip comments
                 separator_idx = line.find("=")
                 if separator_idx == -1:
                     raise exception.ConfigException(f"Entry is not a definition: {line}.\n{self.get_error_line_format(i+1, config_path)}")
@@ -45,7 +45,11 @@ class Config:
                     elif left_arg == "PERFECT":
                         self.PERFECT = bool(right_arg)
                     elif left_arg == "ALGORITHMS":
-                        self.algo = int(right_arg)
+                        self.ALGORITHMS = int(right_arg)
+                    elif left_arg == "FULL_CHAR":
+                        self.FULL_CHAR = right_arg
+                    elif left_arg == "EMPTY_CHAR":
+                        self.EMPTY_CHAR = right_arg
                     else:
                         raise ValueError(f"Unknown entry: {line}.")
                 except ValueError as e:

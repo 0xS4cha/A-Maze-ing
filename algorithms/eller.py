@@ -3,20 +3,8 @@
 from config import Config
 import random
 
-FULL_CHAR = '█'
-EMPTY_CHAR = ' '
 STARTING_COLOR = "\033[35m"
 FINISH_COLOR = "\033[31m"
-
-
-def print_maze(maze: list[list[str]]):
-    for line in maze:
-        for elem in line:
-            if elem == 0:
-                print(EMPTY_CHAR, end='')
-            else:
-                print(FULL_CHAR, end='')
-        print()
 
 
 def generate(config: Config):
@@ -82,12 +70,11 @@ def generate(config: Config):
     return pixels
 
 
-def main():
-    config = Config("./config.txt")
-    #generate(config)
-    m = generate(config)
-    print_maze(m)
+#def main():
+#    config = Config("./config.txt")
+#    m = generate(config)
+#    print_maze(m)
 
 
-if __name__ == "__main__":
-    main()
+#if __name__ == "__main__":
+#    main()
