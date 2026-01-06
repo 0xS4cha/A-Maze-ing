@@ -2,6 +2,9 @@
 
 import exception
 
+COLOR_STARTING = "\033[35m"
+COLOR_ENDING = "\033[31m"
+COLOR_RESET = "\033[0m"
 
 class Config:
     @staticmethod
@@ -36,11 +39,11 @@ class Config:
                         if (len(entry) != 2):
                             raise
                         if left_arg == "ENTRY":
-                            self.ENTRY[0] = entry[0].strip()
-                            self.ENTRY[1] = entry[1].strip()
+                            self.ENTRY[0] = int(entry[0].strip()) + 1
+                            self.ENTRY[1] = int(entry[1].strip()) + 1
                         else:
-                            self.EXIT[0] = entry[0].strip()
-                            self.EXIT[1] = entry[1].strip()
+                            self.EXIT[0] = int(entry[0].strip()) + 1
+                            self.EXIT[1] = int(entry[1].strip()) + 1
                     elif left_arg == "OUTPUT_FILE":
                         self.OUTPUT_FILE = right_arg
                     elif left_arg == "PERFECT":
