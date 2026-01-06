@@ -3,6 +3,11 @@
 import exception
 import sys
 
+sys.setrecursionlimit(2000)
+
+COLOR_STARTING = "\033[35m"
+COLOR_ENDING = "\033[31m"
+COLOR_RESET = "\033[0m"
 
 class Config:
     @staticmethod

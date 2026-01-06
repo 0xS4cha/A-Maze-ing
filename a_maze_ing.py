@@ -5,7 +5,6 @@ import exception
 import config
 import algorithms.backtracking as backtracking
 import algorithms.eller as eller
-import mlx
 
 
 def print_maze(maze: list[list[int]], empty, full):
