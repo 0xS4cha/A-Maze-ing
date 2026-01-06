@@ -46,6 +46,10 @@ class Config:
                         self.PERFECT = bool(right_arg)
                     elif left_arg == "ALGORITHMS":
                         self.algo = int(right_arg)
+                    elif left_arg == "FULL_CHAR":
+                        self.full_char = right_arg
+                    elif left_arg == "EMPTY_CHAR":
+                        self.empty_char = right_arg
                     else:
                         raise ValueError(f"Unknown entry: {line}.")
                 except ValueError as e:

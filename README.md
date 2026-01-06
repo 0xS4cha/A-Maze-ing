@@ -7,3 +7,4 @@
 - [ ] Add a `.gitignore`
 - [ ] Create test programs to verify project functionality
 - [ ] Use venv
+- [ ] Check if the input and output coordinates are within the width and height.

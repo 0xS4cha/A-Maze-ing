@@ -3,19 +3,12 @@
 import sys
 import exception
 import config
-
-
-def medium():
-    print("medium")
-
-
-def complex():
-    print("complex")
+import recursive_backtracker
 
 
 def generate_maze(config) -> bool:
-    algo_list = [medium, complex]
-    return (algo_list[config.algo]())
+    algo_list = [recursive_backtracker]
+    return (algo_list[config.algo].generate(config))
 
 
 def main():
