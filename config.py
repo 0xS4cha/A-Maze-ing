@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import exception
+import sys
 
+sys.setrecursionlimit(2000)
 
 class Config:
     @staticmethod
