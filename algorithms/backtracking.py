@@ -31,12 +31,11 @@ def ensure_connectivity(maze, width, height):
                         break
 
 
-def generate(_config):
+def generate(maze, _config):
     print("Starting")
     w = _config.WIDTH
     h = _config.HEIGHT
 
-    maze = [[1 for _ in range(w)] for _ in range(h)]
     try:
         entry_x = int(_config.ENTRY[0])
         entry_y = int(_config.ENTRY[1])
