@@ -19,19 +19,21 @@ ft_symbol = [
 ]
 
 
-def add_symbol(maze, symbol):
+def add_symbol(maze, symbol, sigma=None):
     maze_h = len(maze)
     maze_w = len(maze[0])
     sym_h = len(symbol)
     sym_w = len(symbol[0])
-
     y_start = (maze_h - sym_h) // 2
     x_start = (maze_w - sym_w) // 2
     for y in range(len(ft_symbol)):
         last_x = x_start
         for x in range(len(ft_symbol[y])):
-            if ft_symbol[y][x] == 2:
-                maze[y_start][last_x] = ft_symbol[y][x]
+            if sigma is not None and y == 14:
+                maze[y_start][last_x] = 1
+            else:
+                if ft_symbol[y][x] == 2:
+                    maze[y_start][last_x] = ft_symbol[y][x]
             last_x += 1
         y_start += 1
 
@@ -58,9 +60,10 @@ def generate_maze(_config: config.Config, xvar=None) -> bool:
     global maze
     maze = [[1 for _ in range(_config.WIDTH)] for _ in range(_config.HEIGHT)]
     if _config.WIDTH > len(ft_symbol[0]) and _config.HEIGHT > len(ft_symbol):
-        add_symbol(maze, ft_symbol)
+        add_symbol(maze, ft_symbol, _config.ALGORITHMS == 1)
     if _config.ANIMATION and xvar:
-        render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, maze, _config, xvar)
+        render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, maze, _config,
+                           xvar)
     result: list[list[int]] = algo_list[_config.ALGORITHMS].generate(maze,
                                                                      _config,
                                                                      xvar)

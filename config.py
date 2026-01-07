@@ -25,7 +25,7 @@ class Config:
         self.PERFECT = False
         self.EMPTY_CHAR = ' '
         self.FULL_CHAR = '█'
-        self.DELAY = 0.01
+        self.DELAY = 0
         self.COLORS = {
             0: 0xFF1E1E2E,  # empty -> Dark Blue/Black background (Base)
             1: 0xFF45475A,  # wall -> Soft Grey/Blue (Surface)
