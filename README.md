@@ -7,5 +7,6 @@
 - [x] Add a `.gitignore`
 - [ ] Create test programs to verify project functionality
 - [ ] Use venv
+- [ ] Fix `makefile`: add install `mlx`
 - [ ] A default configuration file must be available in your Git repository
 - [ ] The maze must be randomly generated, but reproducibility via a seed is required

@@ -66,32 +66,3 @@ def resolve(pos: tuple[int, int], direction: int,
             maze[ny][nx] = 0
 
     return False
-
-
-#def resolve(maze: list[list[int]], config: Config):
-#    entry_x, entry_y = config.ENTRY
-#    exit_x, exit_y = config.EXIT
-
-#    directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]  # N, S, W, E
-#    visited = [[False] * config.WIDTH for _ in range(config.HEIGHT)]
-
-#    x = entry_x
-#    y = entry_y
-#    visited[y][x] = True
-#    while (not (x == exit_x and y == exit_y)):
-#        found = False
-#        random.shuffle(directions)
-#        for dir in directions:
-#            new_x, new_y = x + dir[0], y + dir[1]
-#            if maze[new_y][new_x] == 0 and not visited[new_y][new_x]:
-#                x = new_x
-#                y = new_y
-#                visited[y][x] = True
-#                time.sleep(0.2)
-#                maze[new_y][new_x] = 25
-#                print_maze(maze, config.EMPTY_CHAR, config.FULL_CHAR)
-#                maze[new_y][new_x] = 0
-#                found = True
-#                break
-        #if not found:
-            

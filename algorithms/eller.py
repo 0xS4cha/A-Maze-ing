@@ -16,6 +16,9 @@ def generate(maze, config: Config, xvar=None):
     sets = [i for i in range(width)]
     next_id = width
 
+    def blocked(r, c):
+        return maze[r][c] == 2
+
     def draw_update(r, c):
         if xvar:
             update_cell(xvar, c, r, 0, config)
@@ -25,82 +28,62 @@ def generate(maze, config: Config, xvar=None):
 
     for y in range(height):
         for x in range(width):
+            ry, rx = 2 * y + 1, 2 * x + 1
+            if blocked(ry, rx):
+                sets[x] = None
+                continue
             if sets[x] is None:
                 sets[x] = next_id
                 next_id += 1
-            # Carve cell
-            maze[2 * y + 1][2 * x + 1] = 0
-            draw_update(2 * y + 1, 2 * x + 1)
+            maze[ry][rx] = 0
+            draw_update(ry, rx)
 
         # horizontal connections
         for x in range(width - 1):
-            if sets[x] != sets[x + 1] and (y == height - 1 or random.choice([True, False])):
-                maze[2 * y + 1][2 * x + 2] = 0
-                draw_update(2 * y + 1, 2 * x + 2)
-                old = sets[x + 1]
-                new = sets[x]
-                for i in range(width):
-                    if sets[i] == old:
-                        sets[i] = new
+            ry, rx = 2 * y + 1, 2 * x + 2
+            if blocked(ry, rx):
+                continue
+            if sets[x] is not None and sets[x + 1] is not None:
+                if sets[x] != sets[x + 1] and (y == height - 1 or random.choice([True, False])):
+                    maze[ry][rx] = 0
+                    draw_update(ry, rx)
+                    old = sets[x + 1]
+                    new = sets[x]
+                    for i in range(width):
+                        if sets[i] == old:
+                            sets[i] = new
 
         # vertical connections
         if y < height - 1:
             next_sets = [None] * width
             used = {}
             for x in range(width):
-                used.setdefault(sets[x], []).append(x)
+                if sets[x] is not None:
+                    used.setdefault(sets[x], []).append(x)
 
-            for s in used:
-                cells = used[s]
+            for s, cells in used.items():
                 random.shuffle(cells)
                 count = random.randint(1, len(cells))
                 for x in cells[:count]:
-                    maze[2 * y + 2][2 * x + 1] = 0
-                    draw_update(2 * y + 2, 2 * x + 1)
-                    next_sets[x] = sets[x]
+                    ry, rx = 2 * y + 2, 2 * x + 1
+                    if blocked(ry, rx):
+                        continue
+                    maze[ry][rx] = 0
+                    draw_update(ry, rx)
+                    next_sets[x] = s
             sets = next_sets
 
-    try:
-        entry_x = int(config.ENTRY[0])
-        entry_y = int(config.ENTRY[1])
-        exit_x = int(config.EXIT[0])
-        exit_y = int(config.EXIT[1])
-    except (ValueError, IndexError):
-        entry_x, entry_y = 1, 1
-        exit_x, exit_y = h - 2, w - 2
-
-    entry_x = max(0, min(entry_x, h - 1))
-    entry_y = max(0, min(entry_y, w - 1))
-    exit_x = max(0, min(exit_x, h - 1))
-    exit_y = max(0, min(exit_y, w - 1))
+    entry_x, entry_y = tuple(getattr(config, "ENTRY", (1, 1)))
+    exit_x, exit_y = tuple(getattr(config, "EXIT", (h - 2, w - 2)))
 
     maze[entry_x][entry_y] = 0
-    if entry_x == 0 and entry_x + 1 < h:
-        maze[entry_x + 1][entry_y] = 0
-    elif entry_x == h - 1 and entry_x - 1 >= 0:
-        maze[entry_x - 1][entry_y] = 0
-    elif entry_y == 0 and entry_y + 1 < w:
-        maze[entry_x][entry_y + 1] = 0
-    elif entry_y == w - 1 and entry_y - 1 >= 0:
-        maze[entry_x][entry_y - 1] = 0
-
     maze[exit_x][exit_y] = 0
-    if exit_x == 0 and exit_x + 1 < h:
-        maze[exit_x + 1][exit_y] = 0
-    elif exit_x == h - 1 and exit_x - 1 >= 0:
-        maze[exit_x - 1][exit_y] = 0
-    elif exit_y == 0 and exit_y + 1 < w:
-        maze[exit_x][exit_y + 1] = 0
-    elif exit_y == w - 1 and exit_y - 1 >= 0:
-        maze[exit_x][exit_y - 1] = 0
 
-    for row in range(h):
-        for col in range(w):
-            if row == 0 or row == h - 1 or col == 0 or col == w - 1:
-                is_entry = (row == entry_x and col == entry_y)
-                is_exit = (row == exit_x and col == exit_y)
-                if not is_entry and not is_exit:
-                    maze[row][col] = 1
-                else:
-                    maze[row][col] = 0
+    for r in range(h):
+        for c in range(w):
+            if maze[r][c] == 2:
+                continue
+            if r == 0 or r == h - 1 or c == 0 or c == w - 1:
+                if (r, c) not in [(entry_x, entry_y), (exit_x, exit_y)]:
+                    maze[r][c] = 1
     return maze
