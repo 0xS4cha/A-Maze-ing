@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 def display_errors(message: str) -> None:
-    print(f"[ERROR]: {message}")
+    print(f"\033[31m[ERROR]\033[0m: {message}")
 
 
 class ArgsException(Exception):

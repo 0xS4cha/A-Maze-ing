@@ -9,6 +9,8 @@ class XVar:
         self.mlx_ptr = None
         self.screen_w = 0
         self.screen_h = 0
+        self.win_w = 0
+        self.win_h = 0
         self.win_1 = None
         self.win_2 = None
         self.imgidx = 0
@@ -85,6 +87,8 @@ rendering")
     xvar.img_format = fmt
     xvar.img_w = img_w
     xvar.img_h = img_h
+
+    # draw_buttons(xvar)
 
     mlx.mlx_put_image_to_window(mlx_ptr, win_ptr, img, 0, 0)
 
