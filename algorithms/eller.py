@@ -2,22 +2,26 @@
 
 from config import Config
 import random
+import time
+from utils.mlx_utils import render_maze_to_mlx, update_cell
 
 
-def generate(maze, config: Config):
+def generate(maze, config: Config, xvar=None):
     w = config.WIDTH
     h = config.HEIGHT
-
-    # Initialize maze with walls
-    for y in range(h):
-        for x in range(w):
-            maze[y][x] = 1
 
     width = (w - 1) // 2
     height = (h - 1) // 2
 
     sets = [i for i in range(width)]
     next_id = width
+
+    def draw_update(r, c):
+        if xvar:
+            update_cell(xvar, c, r, 0, config)
+            if hasattr(config, 'DELAY') and config.DELAY > 0:
+                time.sleep(config.DELAY)
+                xvar.mlx.mlx_do_sync(xvar.mlx_ptr)
 
     for y in range(height):
         for x in range(width):
@@ -26,11 +30,13 @@ def generate(maze, config: Config):
                 next_id += 1
             # Carve cell
             maze[2 * y + 1][2 * x + 1] = 0
+            draw_update(2 * y + 1, 2 * x + 1)
 
         # horizontal connections
         for x in range(width - 1):
             if sets[x] != sets[x + 1] and (y == height - 1 or random.choice([True, False])):
                 maze[2 * y + 1][2 * x + 2] = 0
+                draw_update(2 * y + 1, 2 * x + 2)
                 old = sets[x + 1]
                 new = sets[x]
                 for i in range(width):
@@ -50,6 +56,7 @@ def generate(maze, config: Config):
                 count = random.randint(1, len(cells))
                 for x in cells[:count]:
                     maze[2 * y + 2][2 * x + 1] = 0
+                    draw_update(2 * y + 2, 2 * x + 1)
                     next_sets[x] = sets[x]
             sets = next_sets
 

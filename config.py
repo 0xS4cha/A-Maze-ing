@@ -25,6 +25,14 @@ class Config:
         self.PERFECT = False
         self.EMPTY_CHAR = ' '
         self.FULL_CHAR = '█'
+        self.DELAY = 0.01
+        self.COLORS = {
+            0: 0xFF1E1E2E,  # empty -> Dark Blue/Black background (Base)
+            1: 0xFF45475A,  # wall -> Soft Grey/Blue (Surface)
+            2: 0xFFF9E2AF,  # ft symbol -> Gold/Yellow (Accent principal)
+            3: 0xFFA6E3A1,  # start -> Soft Green
+            4: 0xFFF38BA8,  # end -> Soft Red
+        }
         with open(config_path, "r") as f:
             for i, line in enumerate(f.readlines()):
                 if line.strip().startswith("#"):
@@ -40,6 +48,8 @@ definition: {line}.\n{self.get_error_line_format(i+1, config_path)}")
                         self.WIDTH = int(right_arg)
                     elif left_arg == "HEIGHT" and int(right_arg) > 0:
                         self.HEIGHT = int(right_arg)
+                    elif left_arg == "DELAY":
+                        self.DELAY = float(right_arg)
                     elif (left_arg == "ENTRY" or
                           left_arg == "EXIT") and right_arg.find(",") != -1:
                         entry = right_arg.split(",")
