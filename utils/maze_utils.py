@@ -2,6 +2,7 @@ import config
 import algorithms.backtracking as backtracking
 import algorithms.eller as eller
 import exception
+from resolve import resolve
 
 
 ft_symbol = [
@@ -57,5 +58,6 @@ outside the map")
     result[exit_y][exit_x] = 4
     if _config.WIDTH > len(ft_symbol[0]) and _config.HEIGHT > len(ft_symbol):
         result = add_symbol(result, ft_symbol)
+    resolve(result, _config)
     print_maze(result, _config.EMPTY_CHAR, _config.FULL_CHAR)
     return True

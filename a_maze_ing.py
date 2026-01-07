@@ -24,26 +24,26 @@ def main():
 
     generate_maze(_config)
 
-    try:
-        xvar.mlx_ptr = xvar.mlx.mlx_init()
-        ret, xvar.screen_w, xvar.screen_h = xvar.mlx.mlx_get_screen_size(
-            xvar.mlx_ptr)
-        win_w = min(400, xvar.screen_w if xvar.screen_w else 400)
-        win_h = min(400, xvar.screen_h if xvar.screen_h else 400)
-        xvar.win_1 = xvar.mlx.mlx_new_window(xvar.mlx_ptr, win_w, win_h,
-                                             "A-Maze-ing")
-        if not xvar.win_1:
-            raise Exception("Can't create MLX window")
-        xvar.mlx.mlx_key_hook(xvar.win_1, manage_key_simple, xvar)
-        xvar.mlx.mlx_hook(xvar.win_1, 33, 0, manage_close, xvar)
-    except Exception as e:
-        raise exception.ConfigException(f"MLX error: {e}")
+    #try:
+    #    xvar.mlx_ptr = xvar.mlx.mlx_init()
+    #    ret, xvar.screen_w, xvar.screen_h = xvar.mlx.mlx_get_screen_size(
+    #        xvar.mlx_ptr)
+    #    win_w = min(400, xvar.screen_w if xvar.screen_w else 400)
+    #    win_h = min(400, xvar.screen_h if xvar.screen_h else 400)
+    #    xvar.win_1 = xvar.mlx.mlx_new_window(xvar.mlx_ptr, win_w, win_h,
+    #                                         "A-Maze-ing")
+    #    if not xvar.win_1:
+    #        raise Exception("Can't create MLX window")
+    #    xvar.mlx.mlx_key_hook(xvar.win_1, manage_key_simple, xvar)
+    #    xvar.mlx.mlx_hook(xvar.win_1, 33, 0, manage_close, xvar)
+    #except Exception as e:
+    #    raise exception.ConfigException(f"MLX error: {e}")
 
-    xvar.mlx.mlx_loop(xvar.mlx_ptr)
-    print("destroy win(s)")
-    xvar.mlx.mlx_destroy_window(xvar.mlx_ptr, xvar.win_1)
-    print("destroy mlx")
-    xvar.mlx.mlx_release(xvar.mlx_ptr)
+    #xvar.mlx.mlx_loop(xvar.mlx_ptr)
+    #print("destroy win(s)")
+    #xvar.mlx.mlx_destroy_window(xvar.mlx_ptr, xvar.win_1)
+    #print("destroy mlx")
+    #xvar.mlx.mlx_release(xvar.mlx_ptr)
 
 
 if __name__ == "__main__":
