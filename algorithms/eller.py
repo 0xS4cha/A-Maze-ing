@@ -3,9 +3,6 @@
 from config import Config
 import random
 
-STARTING_COLOR = "\033[35m"
-FINISH_COLOR = "\033[31m"
-
 
 def generate(config: Config):
     width = config.WIDTH // 2
@@ -68,13 +65,3 @@ def generate(config: Config):
             if maze[y][x]['D']:
                 pixels[py + 1][px] = 0
     return pixels
-
-
-#def main():
-#    config = Config("./config.txt")
-#    m = generate(config)
-#    print_maze(m)
-
-
-#if __name__ == "__main__":
-#    main()

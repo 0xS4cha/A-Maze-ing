@@ -7,7 +7,9 @@ sys.setrecursionlimit(2000)
 
 COLOR_STARTING = "\033[35m"
 COLOR_ENDING = "\033[31m"
+COLOR_FT = "\033[0;36m"
 COLOR_RESET = "\033[0m"
+
 
 class Config:
     @staticmethod
@@ -29,7 +31,8 @@ class Config:
                     continue  # skip comments
                 separator_idx = line.find("=")
                 if separator_idx == -1:
-                    raise exception.ConfigException(f"Entry is not a definition: {line}.\n{self.get_error_line_format(i+1, config_path)}")
+                    raise exception.ConfigException(f"Entry is not a \
+definition: {line}.\n{self.get_error_line_format(i+1, config_path)}")
                 left_arg = line[:separator_idx].strip()
                 right_arg = line[separator_idx + 1:].strip()
                 try:
@@ -37,7 +40,8 @@ class Config:
                         self.WIDTH = int(right_arg)
                     elif left_arg == "HEIGHT" and int(right_arg) > 0:
                         self.HEIGHT = int(right_arg)
-                    elif (left_arg == "ENTRY" or left_arg == "EXIT") and right_arg.find(",") != -1:
+                    elif (left_arg == "ENTRY" or
+                          left_arg == "EXIT") and right_arg.find(",") != -1:
                         entry = right_arg.split(",")
                         if (len(entry) != 2):
                             raise
@@ -56,4 +60,5 @@ class Config:
                     else:
                         raise ValueError(f"Unknown entry: {line}.")
                 except ValueError as e:
-                    raise exception.ConfigException(f"Invalid config entry: {e.args[0]}.\n{self.get_error_line_format(i+1, config_path)}")
+                    raise exception.ConfigException(f"Invalid config entry: \
+{e.args[0]}.\n{self.get_error_line_format(i+1, config_path)}")

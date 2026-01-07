@@ -3,47 +3,47 @@
 import sys
 import exception
 import config
-import algorithms.backtracking as backtracking
-import algorithms.eller as eller
-
-
-def print_maze(maze: list[list[int]], empty, full):
-    for line in range(len(maze)):
-        for column in range(len(maze[line])):
-            if maze[line][column] == 0:
-                print(empty, end="")
-            elif maze[line][column] == 1:
-                print(full, end="")
-            elif maze[line][column] == 2:
-                print(config.COLOR_STARTING + full + config.COLOR_RESET, end='')
-            elif maze[line][column] == 3:
-                print(config.COLOR_ENDING + full + config.COLOR_RESET, end='')
-        print()
-
-
-def generate_maze(_config: config.Config) -> bool:
-    algo_list = [backtracking, eller]
-    result: list[list[int]] = algo_list[_config.ALGORITHMS].generate(_config)
-    # set entry and exit
-    entry_x, entry_y = _config.ENTRY
-    exit_x, exit_y = _config.EXIT
-    if (entry_x < 1 or entry_y < 1 or entry_x > _config.WIDTH - 2 or entry_y > _config.HEIGHT - 2) \
-            or (entry_x == exit_x and entry_y == exit_y):
-        raise exception.ConfigException("Invalid entry or exit position, outside the map")
-    result[entry_y][entry_x] = 2
-    result[exit_y][exit_x] = 3
-    print_maze(result, _config.EMPTY_CHAR, _config.FULL_CHAR)
-    return True
+from mlx import Mlx
+from utils.mlx_utils import manage_close, manage_key_simple, XVar
+from utils.maze_utils import generate_maze
 
 
 def main():
+    xvar = XVar()
+    try:
+        xvar.mlx = Mlx()
+    except Exception as e:
+        raise exception.ConfigException(f"Can't initialize MLX: {e}")
+
     if len(sys.argv) <= 1:
         raise exception.ArgsException("Not enough arguments")
     try:
         _config = config.Config(sys.argv[1])
     except Exception as e:
         raise exception.ConfigException(f"Bad config file: {e}")
+
     generate_maze(_config)
+
+    try:
+        xvar.mlx_ptr = xvar.mlx.mlx_init()
+        ret, xvar.screen_w, xvar.screen_h = xvar.mlx.mlx_get_screen_size(
+            xvar.mlx_ptr)
+        win_w = min(400, xvar.screen_w if xvar.screen_w else 400)
+        win_h = min(400, xvar.screen_h if xvar.screen_h else 400)
+        xvar.win_1 = xvar.mlx.mlx_new_window(xvar.mlx_ptr, win_w, win_h,
+                                             "A-Maze-ing")
+        if not xvar.win_1:
+            raise Exception("Can't create MLX window")
+        xvar.mlx.mlx_key_hook(xvar.win_1, manage_key_simple, xvar)
+        xvar.mlx.mlx_hook(xvar.win_1, 33, 0, manage_close, xvar)
+    except Exception as e:
+        raise exception.ConfigException(f"MLX error: {e}")
+
+    xvar.mlx.mlx_loop(xvar.mlx_ptr)
+    print("destroy win(s)")
+    xvar.mlx.mlx_destroy_window(xvar.mlx_ptr, xvar.win_1)
+    print("destroy mlx")
+    xvar.mlx.mlx_release(xvar.mlx_ptr)
 
 
 if __name__ == "__main__":

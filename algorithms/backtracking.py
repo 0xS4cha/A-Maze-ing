@@ -37,7 +37,6 @@ def generate(_config):
     h = _config.HEIGHT
 
     maze = [[1 for _ in range(w)] for _ in range(h)]
-
     try:
         entry_x = int(_config.ENTRY[0])
         entry_y = int(_config.ENTRY[1])
