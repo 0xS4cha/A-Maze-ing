@@ -67,3 +67,4 @@ def resolve(pos: tuple[int, int], direction: int,
             maze[ny][nx] = 0
 
     return False
+
