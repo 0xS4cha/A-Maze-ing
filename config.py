@@ -57,6 +57,10 @@ definition: {line}.\n{self.get_error_line_format(i+1, config_path)}")
                         self.PERFECT = bool(right_arg)
                     elif left_arg == "ALGORITHMS":
                         self.ALGORITHMS = int(right_arg)
+                    elif left_arg == "ANIMATION":
+                        self.ANIMATION = bool(right_arg)
+                    elif left_arg == "GRAPHIC":
+                        self.GRAPHIC = bool(right_arg)
                     else:
                         raise ValueError(f"Unknown entry: {line}.")
                 except ValueError as e:
