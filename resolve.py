@@ -51,15 +51,14 @@ def resolve(pos: tuple[int, int], direction: int,
 
         if not (0 <= nx < config.WIDTH and 0 <= ny < config.HEIGHT):
             continue
-        if maze[ny][nx] == 1 or visited[ny][nx]:
+        if maze[ny][nx] == 1 or maze[ny][nx] == 2 or visited[ny][nx]:
             continue
 
         if (nx, ny) == tuple(config.EXIT):
             return True
 
         maze[ny][nx] = 25
-        print_maze(maze, config.EMPTY_CHAR, config.FULL_CHAR)
-        time.sleep(0.05)
+        # print_maze(maze, config.EMPTY_CHAR, config.FULL_CHAR)
 
         if resolve((nx, ny), directions_base.index(d), maze, visited, config):
             return True
