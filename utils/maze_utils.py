@@ -47,26 +47,10 @@ def add_symbol(maze, symbol, is_perfect):
         maze[logo_y + 2][logo_x + 12] = 0
 
 
-def print_maze(maze: list[list[int]], empty, full):
-    for line in range(len(maze)):
-        for column in range(len(maze[line])):
-            if maze[line][column] == 0:
-                print(empty, end="")
-            elif maze[line][column] == 1:
-                print(full, end="")
-            elif maze[line][column] == 2:
-                print(config.COLOR_FT + full + config.COLOR_RESET, end='')
-            elif maze[line][column] == 3:
-                print(config.COLOR_STARTING + full + config.COLOR_RESET,
-                      end='')
-            elif maze[line][column] == 4:
-                print(config.COLOR_ENDING + full + config.COLOR_RESET, end='')
-        print()
-
-
 def generate_maze(_config: config.Config, xvar=None) -> bool:
-    algo_list = [eller, backtracking]
     global maze
+    algo_list = [eller, backtracking]
+    xvar.path = []
     maze = [[1 for _ in range(_config.WIDTH)] for _ in range(_config.HEIGHT)]
     add_symbol(maze, ft_symbol, _config.PERFECT == 1)
     entry_x, entry_y = _config.ENTRY
@@ -88,12 +72,9 @@ outside the map")
     result[entry_y][entry_x] = 3
     result[exit_y][exit_x] = 4
     result[_config.HEIGHT - 1][23] = 1
-    if _config.GRAPHIC == 0:
-        print_maze(result, _config.EMPTY_CHAR, _config.FULL_CHAR)
-    path = resolve((_config.ENTRY[0], _config.ENTRY[1]), 0, result, None, _config)
+    path = resolve((_config.ENTRY[0], _config.ENTRY[1]), 0, result, None, _config, xvar)
     if type(path) is list:
         generate_output(result, path, _config)
     else:
         exception.display_errors("Could not find a valid path")
-        #raise exception.ConfigException()
     return result

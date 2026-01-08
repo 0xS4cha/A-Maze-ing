@@ -16,6 +16,7 @@ def main_expose(xvar):
 
 
 def main():
+    global xvar
     xvar = XVar()
     try:
         xvar.mlx = Mlx()
@@ -32,44 +33,43 @@ def main():
         raise exception.ConfigException("Window size too small, minimum (w30, h20)")
     if _config.WIDTH % 2 == 0 or _config.HEIGHT % 2 == 0:
         raise exception.ConfigException("The window size cannot be even")
-    if _config.GRAPHIC:
-        try:
-            xvar.mlx_ptr = xvar.mlx.mlx_init()
-            ret, xvar.screen_w, xvar.screen_h = xvar.mlx.mlx_get_screen_size(
-                xvar.mlx_ptr)
+    try:
+        xvar.mlx_ptr = xvar.mlx.mlx_init()
+        ret, xvar.screen_w, xvar.screen_h = xvar.mlx.mlx_get_screen_size(
+            xvar.mlx_ptr)
 
-            required_w, required_h, _ = calculate_window_size(
-                _config,
-                xvar.screen_w,
-                xvar.screen_h,
-                ui_width=250
-            )
+        required_w, required_h, _ = calculate_window_size(
+            _config,
+            xvar.screen_w,
+            xvar.screen_h,
+            ui_width=250
+        )
 
-            xvar.win_w = required_w
-            xvar.win_h = required_h
-            xvar.win_1 = xvar.mlx.mlx_new_window(xvar.mlx_ptr, required_w,
-                                                 required_h,
-                                                 "A-Maze-ing")
-            if not xvar.win_1:
-                raise Exception("Can't create MLX window")
+        xvar.win_w = required_w
+        xvar.win_h = required_h
+        xvar.win_1 = xvar.mlx.mlx_new_window(xvar.mlx_ptr, required_w,
+                                             required_h,
+                                             "A-Maze-ing")
+        if not xvar.win_1:
+            raise Exception("Can't create MLX window")
 
-            xvar.mlx.mlx_mouse_hook(xvar.win_1, mouse_handler, xvar)
-            xvar.mlx.mlx_key_hook(xvar.win_1, manage_key_simple, xvar)
-            xvar.mlx.mlx_hook(xvar.win_1, 33, 0, manage_close, xvar)
-            xvar.mlx.mlx_expose_hook(xvar.win_1, main_expose, xvar)
+        xvar.mlx.mlx_mouse_hook(xvar.win_1, mouse_handler, xvar)
+        xvar.mlx.mlx_key_hook(xvar.win_1, manage_key_simple, xvar)
+        xvar.mlx.mlx_hook(xvar.win_1, 33, 0, manage_close, xvar)
+        xvar.mlx.mlx_expose_hook(xvar.win_1, main_expose, xvar)
 
-            maze = generate_maze(_config, xvar)
-            render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, maze,
-                               _config, xvar)
-        except Exception as e:
-            raise exception.ConfigException(f"MLX error: {e}")
+        xvar.maze_data = generate_maze(_config, xvar)
+        render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, xvar.maze_data,
+                           _config, xvar)
+    except Exception as e:
+        raise exception.ConfigException(f"MLX error: {e}")
 
-        buttons_init(_config, xvar)
-        draw_buttons(xvar)
+    buttons_init(_config, xvar)
+    draw_buttons(xvar)
 
-        xvar.mlx.mlx_loop(xvar.mlx_ptr)
-        xvar.mlx.mlx_destroy_window(xvar.mlx_ptr, xvar.win_1)
-        xvar.mlx.mlx_release(xvar.mlx_ptr)
+    xvar.mlx.mlx_loop(xvar.mlx_ptr)
+    xvar.mlx.mlx_destroy_window(xvar.mlx_ptr, xvar.win_1)
+    xvar.mlx.mlx_release(xvar.mlx_ptr)
 
 
 if __name__ == "__main__":

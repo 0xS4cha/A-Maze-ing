@@ -28,7 +28,7 @@ def print_maze(maze: list[list[int]], empty, full):
 def resolve(pos: tuple[int, int], direction: int,
             maze: list[list[int]],
             visited: list[list[bool]] | None,
-            config: Config) -> list[str] | bool:
+            config: Config, xvar) -> list[str] | bool:
     queue = deque([pos])
     visited_set = {pos}
     came_from = {pos: None}
@@ -80,9 +80,8 @@ def resolve(pos: tuple[int, int], direction: int,
             path.append(d)
 
             if curr != end_pos:
-                maze[curr[1]][curr[0]] = 25
+                xvar.path.append((curr[0], curr[1]))
             curr = parent
         path.reverse()
         return path
     return False
-
