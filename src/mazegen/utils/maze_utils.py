@@ -69,10 +69,19 @@ on the 42 symbol (unvalid path)")
             or (entry_x == exit_x and entry_y == exit_y):
         raise exception.ConfigException("Invalid entry or exit position, \
 outside the map")
+    # define entry and exit pixels
     result[entry_y][entry_x] = 3
     result[exit_y][exit_x] = 4
+    # remove the empty cell
     result[_config.HEIGHT - 1][23] = 1
-    path = resolve((_config.ENTRY[0], _config.ENTRY[1]), 0, result, None, _config, xvar)
+    path = resolve(
+        (_config.ENTRY[0], _config.ENTRY[1]),
+        0,
+        result,
+        None,
+        _config,
+        xvar
+    )
     if type(path) is list:
         generate_output(result, path, _config)
     else:

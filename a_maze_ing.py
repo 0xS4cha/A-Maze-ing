@@ -13,6 +13,7 @@ def main():
         maze = maze_generator.generate_maze()
         maze_generator.draw_control_buttons()
         maze_generator.draw_maze(maze)
+        maze_generator.run()
     except Exception as e:
         raise exception.ConfigException(f"Bad config file: {e}")
 

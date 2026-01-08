@@ -61,21 +61,30 @@ def calculate_window_size(_config, screen_w, screen_h, ui_width=250):
 
 def manage_expose(xvar):
     if xvar.img:
-        xvar.mlx.mlx_put_image_to_window(xvar.mlx_ptr, xvar.win_1, xvar.img,
-                                         0, 0)
+        xvar.mlx.mlx_put_image_to_window(
+            xvar.mlx_ptr,
+            xvar.win_1,
+            xvar.img,
+            0,
+            0
+        )
 
 
 def render_maze_to_mlx(mlx, mlx_ptr, win_ptr, maze: list[list[int]], _config:
                        config.Config, xvar):
     try:
-        screen_w = xvar.screen_w if xvar.screen_w else _config.WIDTH * 8
-        screen_h = xvar.screen_h if xvar.screen_h else _config.HEIGHT * 8
+        screen_w = xvar.screen_w if xvar.screen_w else 1920
+        screen_h = xvar.screen_h if xvar.screen_h else 1080
     except Exception:
-        screen_w = _config.WIDTH * 8
-        screen_h = _config.HEIGHT * 8
+        screen_w = 1920
+        screen_h = 1080
 
-    scale_x = max(1, screen_w // _config.WIDTH)
-    scale_y = max(1, screen_h // _config.HEIGHT)
+    # Ensure we account for the UI width
+    avail_w = screen_w - 250
+    avail_h = screen_h
+
+    scale_x = max(1, avail_w // _config.WIDTH)
+    scale_y = max(1, avail_h // _config.HEIGHT)
     scale = min(scale_x, scale_y, 16)
 
     img_w = _config.WIDTH * scale
@@ -122,10 +131,18 @@ def update_cell(xvar, mx, my, val, _config):
     if not xvar or not xvar.img_data:
         return
 
-    screen_w = xvar.screen_w if xvar.screen_w else _config.WIDTH * 8
-    screen_h = xvar.screen_h if xvar.screen_h else _config.HEIGHT * 8
-    scale_x = max(1, screen_w // _config.WIDTH)
-    scale_y = max(1, screen_h // _config.HEIGHT)
+    try:
+        screen_w = xvar.screen_w if xvar.screen_w else 1920
+        screen_h = xvar.screen_h if xvar.screen_h else 1080
+    except Exception:
+        screen_w = 1920
+        screen_h = 1080
+
+    avail_w = screen_w - 250
+    avail_h = screen_h
+
+    scale_x = max(1, avail_w // _config.WIDTH)
+    scale_y = max(1, avail_h // _config.HEIGHT)
     scale = min(scale_x, scale_y, 16)
 
     color_int = _config.COLORS[xvar.color_palette].get(val, 0xFFFFFFFF)

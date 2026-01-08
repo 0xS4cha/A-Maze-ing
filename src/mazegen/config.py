@@ -3,7 +3,7 @@
 from . import exception
 import sys
 
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(100000)
 
 COLOR_STARTING = "\033[35m"
 COLOR_ENDING = "\033[31m"
@@ -25,7 +25,8 @@ class Config:
         self.PERFECT = False
         self.EMPTY_CHAR = ' '
         self.FULL_CHAR = '█'
-        self.DELAY = 0
+        self.SEED = 0
+        self.DELAY = 0.001
         self.COLORS = [
             {
                 0: 0xFF1E1E2E,  # empty -> Dark Blue/Black background (Base)
@@ -102,6 +103,8 @@ definition: {line}.\n{self.get_error_line_format(i+1, config_path)}")
                         self.PERFECT = int(right_arg)
                     elif left_arg == "ANIMATION":
                         self.ANIMATION = int(right_arg)
+                    elif left_arg == "SEED":
+                        self.SEED = right_arg
                     else:
                         raise ValueError(f"Unknown entry: '{line}'.")
                 except ValueError as e:
