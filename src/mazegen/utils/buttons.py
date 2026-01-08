@@ -117,7 +117,8 @@ def button_color_maze(config: Config, xvar: XVar):
     color_max = len(config.COLORS)
     xvar.color_palette = (xvar.color_palette + 1) % color_max
     render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, xvar.maze_data, config, xvar)
-    button_toggle_path(config, xvar, xvar.show_path)
+    if xvar.show_path:
+        button_toggle_path(config, xvar, xvar.show_path)
 
 
 def button_toggle_path(config: Config, xvar: XVar, status=None):

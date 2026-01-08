@@ -1,0 +1,2 @@
+[console_scripts]
+a-maze-ing = a_maze_ing:main
