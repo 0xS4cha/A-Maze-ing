@@ -1,20 +1,23 @@
 # this is a comment
 
 # width of the maze
-WIDTH=53
+WIDTH=153
 # height of the maze
-HEIGHT=53
+HEIGHT=153
 
 # position of the entry point of the maze (x, y)
 ENTRY=1,1
 # position of the exit point of the maze (x, y)
-EXIT=49,49
+EXIT=150,150
 
 # path of the output file
 OUTPUT_FILE=output.txt
 
 # the generated maze contains only one solution
-PERFECT=0
+PERFECT=1
 
 # view generation and resolving in realtime
-ANIMATION=1
+ANIMATION=0
+
+# generate a maze with seeds (0 = no seeds)
+SEED=0

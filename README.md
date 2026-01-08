@@ -57,7 +57,7 @@ This is the list of the resources used to make this project.
 - [ ] Use venv
 - [ ] Fix `makefile`: add install `mlx`
 - [ ] A default configuration file must be available in your Git repository
-- [ ] The maze must be randomly generated, but reproducibility via a seed is required
+- [x] The maze must be randomly generated, but reproducibility via a seed is required
 - [ ] You must provide a short documentation describing how to:
 	- [ ] Instantiate and use your generator, with at least a basic example.
 	- [ ] Pass custom parameters (e.g., `size`, `seed`).

@@ -25,6 +25,7 @@ class Config:
         self.PERFECT = False
         self.EMPTY_CHAR = ' '
         self.FULL_CHAR = '█'
+        self.SEED = 0
         self.DELAY = 0
         self.COLORS = [
             {
@@ -102,6 +103,8 @@ definition: {line}.\n{self.get_error_line_format(i+1, config_path)}")
                         self.PERFECT = int(right_arg)
                     elif left_arg == "ANIMATION":
                         self.ANIMATION = int(right_arg)
+                    elif left_arg == "SEED":
+                        self.SEED = int(right_arg)
                     else:
                         raise ValueError(f"Unknown entry: '{line}'.")
                 except ValueError as e:

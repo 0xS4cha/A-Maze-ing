@@ -2,7 +2,9 @@
 
 import sys
 import exception
+import random
 import config
+import secrets
 from mlx import Mlx
 from utils.mlx_utils import manage_expose, manage_close, manage_key_simple
 from utils.mlx_utils import XVar, render_maze_to_mlx, calculate_window_size
@@ -34,6 +36,12 @@ def main():
     if _config.WIDTH % 2 == 0 or _config.HEIGHT % 2 == 0:
         raise exception.ConfigException("The window size cannot be even")
     try:
+        if _config.SEED == 0:
+            seed = secrets.token_hex(8)
+            random.seed(seed)
+            print(seed)
+        else:
+            random.seed(_config.SEED)
         xvar.mlx_ptr = xvar.mlx.mlx_init()
         ret, xvar.screen_w, xvar.screen_h = xvar.mlx.mlx_get_screen_size(
             xvar.mlx_ptr)
