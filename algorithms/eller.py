@@ -46,17 +46,21 @@ def generate(maze, config: Config, xvar=None):
             if blocked(ry, rx):
                 continue
             if sets[x] is not None and sets[x + 1] is not None:
-                if sets[x] != sets[x + 1] and (y == height - 1
-                                               or sets[x] in new_sets
-                                               or sets[x + 1] in new_sets
-                                               or random.choice([0, 1])):
+                if sets[x] != sets[x + 1]:
+                    if (y == height - 1
+                            or sets[x] in new_sets
+                            or sets[x + 1] in new_sets
+                            or random.choice([0, 1])):
+                        maze[ry][rx] = 0
+                        draw_update(ry, rx)
+                        old = sets[x + 1]
+                        new = sets[x]
+                        for i in range(width):
+                            if sets[i] == old:
+                                sets[i] = new
+                elif not config.PERFECT and random.choice([0, 1]):
                     maze[ry][rx] = 0
                     draw_update(ry, rx)
-                    old = sets[x + 1]
-                    new = sets[x]
-                    for i in range(width):
-                        if sets[i] == old:
-                            sets[i] = new
 
         # vertical connections
         if y < height - 1:
@@ -69,6 +73,9 @@ def generate(maze, config: Config, xvar=None):
             for s, cells in used.items():
                 random.shuffle(cells)
                 count = random.randint(1, len(cells))
+                if not config.PERFECT:
+                    count = random.randint(1, len(cells)) if random.choice([0, 1]) else len(cells)
+
                 for x in cells[:count]:
                     ry, rx = 2 * y + 2, 2 * x + 1
                     if blocked(ry, rx):

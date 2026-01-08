@@ -1,3 +1,4 @@
+# sample config
 WIDTH=53
 HEIGHT=53
 ENTRY=1,1
