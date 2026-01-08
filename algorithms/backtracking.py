@@ -21,7 +21,7 @@ def backtrack(x, y, maze, width, height, _config=None, xvar=None):
                 wx, wy = x + dx // 2, y + dy // 2
                 maze[wy][wx] = 0
 
-                if xvar:
+                if xvar and _config.ANIMATION == 1:
                     update_cell(xvar, wx, wy, 0, _config)
                     if not is_exit and not is_entry:
                         update_cell(xvar, nx, ny, 0, _config)

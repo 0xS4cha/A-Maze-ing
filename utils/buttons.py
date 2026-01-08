@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
-from utils.mlx_utils import XVar, manage_close
+from utils.mlx_utils import XVar, manage_close, update_cell
 import exception
 from utils.maze_utils import generate_maze, render_maze_to_mlx
 from config import Config
 
 mouse_callbacks = {}
+ui_bg_img = None  # Global to store UI background image
 
 
 def mouse_handler(btn_type, x, y, arg):
@@ -24,8 +25,32 @@ def mouse_handler(btn_type, x, y, arg):
 
 
 def draw_buttons(xvar: XVar):
+    global ui_bg_img
     mlx = xvar.mlx
     mlx_ptr = xvar.mlx_ptr
+
+    ui_width = 250
+    win_w = xvar.win_w if xvar.win_w else 800
+    win_h = xvar.win_h if xvar.win_h else 600
+    panel_x = win_w - ui_width
+
+    if ui_bg_img is None:
+        ui_bg_img = mlx.mlx_new_image(mlx_ptr, ui_width, win_h)
+        if ui_bg_img:
+            bg_color_int = 0xFF323232
+
+            buf, bpp, sl, fmt = mlx.mlx_get_data_addr(ui_bg_img)
+            color_bytes = bg_color_int.to_bytes(4, "little")
+
+            for y in range(win_h):
+                off = y * sl
+                for x in range(ui_width):
+                    i = off + x * 4
+                    if i + 4 <= len(buf):
+                        buf[i:i+4] = color_bytes
+
+    if ui_bg_img:
+        mlx.mlx_put_image_to_window(mlx_ptr, xvar.win_1, ui_bg_img, panel_x, 0)
 
     for data in mouse_callbacks.values():
         bx, by = data["x"], data["y"]
@@ -84,8 +109,25 @@ def button_exit(xvar: XVar):
 
 
 def button_restart(config: Config, xvar: XVar):
-    maze = generate_maze(config, xvar)
-    render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, maze, config, xvar)
+    xvar.maze_data = generate_maze(config, xvar)
+    render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, xvar.maze_data, config, xvar)
+
+
+def button_color_maze(config: Config, xvar: XVar):
+    color_max = len(config.COLORS)
+    xvar.color_palette = (xvar.color_palette + 1) % color_max
+    render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, xvar.maze_data, config, xvar)
+    button_toggle_path(config, xvar, xvar.show_path)
+
+
+def button_toggle_path(config: Config, xvar: XVar, status=None):
+    colors = {True: 5, False: 0}
+    if status is not None:
+        xvar.show_path = status
+    else:
+        xvar.show_path = not xvar.show_path
+    for x, y in xvar.path:
+        update_cell(xvar, x, y, colors[xvar.show_path], config)
 
 
 def buttons_init(config: Config, xvar: XVar):
@@ -96,8 +138,8 @@ def buttons_init(config: Config, xvar: XVar):
     btn_bg_reload = 0xFFB5EAD7  # Pastel Mint Green
     btn_bg_path = 0xFFC7CEEA    # Pastel Periwinkle Blue
     btn_bg_color = 0xFFE2F0CB   # Pastel Lime/Yellow
-    
-    text_color = 0xFF555555  
+
+    text_color = 0xFF555555
 
     btn_width = 180
     btn_height = 45
@@ -117,15 +159,18 @@ def buttons_init(config: Config, xvar: XVar):
         add_button(name, center_x, current_y, btn_width, btn_height, 
                    text, bg_color, text_color, callback, args)
 
-    create_btn("button_restart", "NEW MAZE", btn_bg_reload, button_restart, {"config": config, "xvar": xvar})
+    create_btn("button_restart", "NEW MAZE", btn_bg_reload, button_restart,
+               {"config": config, "xvar": xvar})
     current_y += btn_height + spacing
-    
-    create_btn("button_path", "SHOW PATH", btn_bg_path, button_restart, {"config": config, "xvar": xvar})
+
+    create_btn("button_path", "SHOW PATH", btn_bg_path, button_toggle_path,
+               {"config": config, "xvar": xvar})
     current_y += btn_height + spacing
-    
-    create_btn("button_color", "ROTATE COLORS", btn_bg_color, button_restart, {"config": config, "xvar": xvar})
+
+    create_btn("button_color_maze", "ROTATE COLORS", btn_bg_color,
+               button_color_maze, {"config": config, "xvar": xvar})
     current_y += btn_height + spacing
-    
+
     create_btn("button_exit", "EXIT", btn_bg_exit, button_exit, {"xvar": xvar})
 
     xvar.mlx.mlx_mouse_hook(xvar.win_1, mouse_handler, None)

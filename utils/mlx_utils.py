@@ -14,7 +14,9 @@ class XVar:
         self.win_1 = None
         self.win_2 = None
         self.imgidx = 0
-        # image fields
+        self.color_palette = 0
+        self.path = []
+        self.show_path = False
         self.img = None
         self.img_data = None
         self.img_bpp = 0
@@ -92,7 +94,7 @@ rendering")
     for my in range(_config.HEIGHT):
         for mx in range(_config.WIDTH):
             val = maze[my][mx]
-            color = _config.COLORS.get(val, 0xFFFFFFFF)
+            color = _config.COLORS[xvar.color_palette].get(val, 0xFFFFFFFF)
             for dy in range(scale):
                 py = my * scale + dy
                 row_off = py * sl
@@ -126,7 +128,7 @@ def update_cell(xvar, mx, my, val, _config):
     scale_y = max(1, screen_h // _config.HEIGHT)
     scale = min(scale_x, scale_y, 16)
 
-    color_int = _config.COLORS.get(val, 0xFFFFFFFF)
+    color_int = _config.COLORS[xvar.color_palette].get(val, 0xFFFFFFFF)
     color_bytes = color_int.to_bytes(4, 'little')
 
     # Modification du buffer

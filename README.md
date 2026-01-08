@@ -3,9 +3,15 @@ of the 42 curriculum by sservant and julcleme*
 
 # Description
 This project is a python project focused on understanding and implementing maze generation and maze solving algorithms by using a graphic library. 
+
+# Algorithms
 This project contains two algorithms: `Recursive Backtracking` and `Eller` algorithms.
+We choose these algorithms because the `Recursive Backtracking` ensure a perfect maze since it builds the path and never goes back to the pixels already visited.
+
+`Eller`' algorithm is efficient and it uses graphs so its implementation was very interesting. And it could generate non perfect mazes so it was a very good choice
 
 # Instructions
+Usage: `python3 a_maze_ing.py config.txt`
 
 # Configuration File
 ```bash
@@ -29,9 +35,6 @@ PERFECT=0
 
 # view generation and resolving in realtime
 ANIMATION=1
-
-# use graphic library or ASCII style rendering
-GRAPHIC=1
 ```
 
 # Resources
@@ -60,6 +63,17 @@ This is the list of the resources used to make this project.
 	- [ ] Pass custom parameters (e.g., `size`, `seed`).
 	- [ ] Access the generated structure, and access at least a solution.
 - [ ] Fix `README.md`
+	- [ ] The complete structure and format of your config file.
+	- [ ] The maze generation algorithm you chose.
+	- [ ] Why you chose this algorithm.
+	- [ ] What part of your code is reusable, and how.
+	- [ ] Your team and project management with:
+		- [ ] The roles of each team member.
+		- [ ] Your anticipated planning and how it evolved until the end
+		- [ ] What worked well and what could be improved
+		- [ ] Have you used any specific tools? Which ones?
+	- [ ] If you implement advanced features (multiple algorithms, display options)describe them in this README.md file
+- [ ] NO FRENCH :fr:
 
 
 This entire reusable module (code and documentation) must be available in a single file
