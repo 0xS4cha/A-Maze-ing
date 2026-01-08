@@ -1,2 +1,4 @@
 __pycache__
 algorithms/__pycache__
+output.txt
+.mypy_cache

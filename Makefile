@@ -1,10 +1,11 @@
 PYTHON			= python3
 MAIN			= main.py
 MYPY_FLAGS		= --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
-DEPENDENCIES	= 
+DEPENDENCIES	= lib/mlx-2.2-py3-ubuntu-any.whl
 
 install:
 	pip install $(DEPENDENCIES)
+	$(CP) lib/mlx_CLXV/libmlx.so ~/.local/lib/python3.10/site-packages/mlx/
 
 run:
 	$(PYTHON) $(MAIN)
