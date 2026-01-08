@@ -3,12 +3,12 @@
 # width of the maze
 WIDTH=453
 # height of the maze
-HEIGHT=23
+HEIGHT=453
 
 # position of the entry point of the maze (x, y)
 ENTRY=1,1
 # position of the exit point of the maze (x, y)
-EXIT=450,20
+EXIT=450,450
 
 # path of the output file
 OUTPUT_FILE=output.txt

@@ -26,22 +26,23 @@ class XVar:
         self.img_h = 0
 
 
-def manage_close(xvar):
+def manage_close(xvar: XVar) -> None:
     xvar.mlx.mlx_loop_exit(xvar.mlx_ptr)
 
 
-def manage_key_simple(key, xvar):
+def manage_key_simple(key: int, xvar: XVar) -> None:
     if key in (113, 27, 65307):
         xvar.mlx.mlx_loop_exit(xvar.mlx_ptr)
         return 0
     return 0
 
 
-def render_buttons(xvar):
+def render_buttons(xvar: XVar) -> None:
     pass
 
 
-def calculate_window_size(_config, screen_w, screen_h, ui_width=250):
+def calculate_window_size(_config: config, screen_w: int, screen_h: int,
+                          ui_width=250) -> int:
     avail_w = (screen_w if screen_w else 1920) - ui_width
     avail_h = (screen_h if screen_h else 1080)
 
@@ -59,7 +60,7 @@ def calculate_window_size(_config, screen_w, screen_h, ui_width=250):
     return win_w, win_h, scale
 
 
-def manage_expose(xvar):
+def manage_expose(xvar: XVar) -> None:
     if xvar.img:
         xvar.mlx.mlx_put_image_to_window(
             xvar.mlx_ptr,
@@ -71,7 +72,7 @@ def manage_expose(xvar):
 
 
 def render_maze_to_mlx(mlx, mlx_ptr, win_ptr, maze: list[list[int]], _config:
-                       config.Config, xvar):
+                       config.Config, xvar: XVar) -> None:
     try:
         screen_w = xvar.screen_w if xvar.screen_w else 1920
         screen_h = xvar.screen_h if xvar.screen_h else 1080
@@ -127,7 +128,8 @@ rendering")
         time.sleep(_config.DELAY)
 
 
-def update_cell(xvar, mx, my, val, _config):
+def update_cell(xvar: XVar, mx: int, my: int, val: int,
+                _config: config) -> None:
     if not xvar or not xvar.img_data:
         return
 

@@ -5,7 +5,7 @@ import src.mazegen.exception as exception
 from mazegen import MazeGenerator
 
 
-def main():
+def main() -> None:
     if len(sys.argv) <= 1:
         raise exception.ArgsException("Not enough arguments")
     try:

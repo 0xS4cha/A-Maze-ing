@@ -12,7 +12,7 @@ from .utils.buttons import mouse_handler, buttons_init, draw_buttons
 
 
 class MazeGenerator:
-    def __init__(self, path: str):
+    def __init__(self, path: str) -> None:
         self.__xvar = XVar()
         try:
             self.__xvar.mlx = Mlx()
@@ -80,15 +80,15 @@ minimum 30x20")
         buttons_init(self.__config, self.__xvar)
         draw_buttons(self.__xvar)
 
-    def __main_expose(self, xvar):
+    def __main_expose(self, xvar: XVar) -> None:
         manage_expose(xvar)
         draw_buttons(xvar)
 
-    def generate_maze(self):
+    def generate_maze(self) -> list[list[int]]:
         self.__xvar.maze_data = utils_generate_maze(self.__config, self.__xvar)
         return self.__xvar.maze_data
 
-    def draw_maze(self, maze):
+    def draw_maze(self, maze: list[list[int]]) -> None:
         render_maze_to_mlx(
             self.__xvar.mlx,
             self.__xvar.mlx_ptr,
@@ -98,11 +98,11 @@ minimum 30x20")
             self.__xvar
         )
 
-    def draw_control_buttons(self):
+    def draw_control_buttons(self) -> None:
         buttons_init(self.__config, self.__xvar)
         draw_buttons(self.__xvar)
 
-    def run(self):
+    def run(self) -> None:
         self.__xvar.mlx.mlx_loop(self.__xvar.mlx_ptr)
         self.__xvar.mlx.mlx_destroy_window(
             self.__xvar.mlx_ptr,

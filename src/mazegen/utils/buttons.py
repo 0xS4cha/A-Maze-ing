@@ -4,12 +4,13 @@ from ..utils.mlx_utils import XVar, manage_close, update_cell
 from .. import exception
 from ..utils.maze_utils import generate_maze, render_maze_to_mlx
 from ..config import Config
+from typing import Callable
 
 mouse_callbacks = {}
 ui_bg_img = None
 
 
-def mouse_handler(btn_type, x, y, arg):
+def mouse_handler(btn_type: int, x: int, y: int, arg) -> None:
     try:
         if btn_type != 1:
             return
@@ -24,7 +25,7 @@ def mouse_handler(btn_type, x, y, arg):
         raise SystemExit(0)
 
 
-def draw_buttons(xvar: XVar):
+def draw_buttons(xvar: XVar) -> None:
     global ui_bg_img
     mlx = xvar.mlx
     mlx_ptr = xvar.mlx_ptr
@@ -87,8 +88,8 @@ def add_button(name: str,
                text: str,
                bg: int,
                fg: int,
-               callback,
-               args):
+               callback: Callable,
+               args) -> None:
     mouse_callbacks[name] = {
         "x": x,
         "y": y,
@@ -103,24 +104,26 @@ def add_button(name: str,
     }
 
 
-def button_exit(xvar: XVar):
+def button_exit(xvar: XVar) -> None:
     manage_close(xvar)
 
 
-def button_restart(config: Config, xvar: XVar):
+def button_restart(config: Config, xvar: XVar) -> None:
     xvar.maze_data = generate_maze(config, xvar)
-    render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, xvar.maze_data, config, xvar)
+    render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, xvar.maze_data,
+                       config, xvar)
 
 
-def button_color_maze(config: Config, xvar: XVar):
+def button_color_maze(config: Config, xvar: XVar) -> None:
     color_max = len(config.COLORS)
     xvar.color_palette = (xvar.color_palette + 1) % color_max
-    render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, xvar.maze_data, config, xvar)
+    render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, xvar.maze_data,
+                       config, xvar)
     if xvar.show_path:
         button_toggle_path(config, xvar, xvar.show_path)
 
 
-def button_toggle_path(config: Config, xvar: XVar, status=None):
+def button_toggle_path(config: Config, xvar: XVar, status=None) -> None:
     colors = {True: 5, False: 0}
     if status is not None:
         xvar.show_path = status
@@ -130,7 +133,7 @@ def button_toggle_path(config: Config, xvar: XVar, status=None):
         update_cell(xvar, x, y, colors[xvar.show_path], config)
 
 
-def buttons_init(config: Config, xvar: XVar):
+def buttons_init(config: Config, xvar: XVar) -> None:
     win_w = xvar.win_w if xvar.win_w else 800
     win_h = xvar.win_h if xvar.win_h else 600
 
@@ -146,7 +149,7 @@ def buttons_init(config: Config, xvar: XVar):
     base_btn_h = 45
     base_spacing = 15
     num_btns = 4
-    
+
     required_h = (base_btn_h * num_btns) + (base_spacing * (num_btns - 1)) + 40
 
     if win_h < required_h:
@@ -178,7 +181,8 @@ def buttons_init(config: Config, xvar: XVar):
         xvar.mlx.mlx_destroy_image(xvar.mlx_ptr, ui_bg_img)
         ui_bg_img = None
 
-    def create_btn(name, text, bg_color, callback, args={}):
+    def create_btn(name: str, text: str, bg_color: int, callback: Callable,
+                   args={}) -> None:
         add_button(name, center_x, current_y, btn_width, btn_height,
                    text, bg_color, text_color, callback, args)
 

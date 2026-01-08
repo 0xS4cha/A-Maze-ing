@@ -20,7 +20,8 @@ ft_symbol = [
 ]
 
 
-def add_symbol(maze, symbol, is_perfect):
+def add_symbol(maze: list[list[int]], symbol: list[list[int]],
+               is_perfect: bool) -> None:
     maze_h = len(maze)
     maze_w = len(maze[0])
     sym_h = len(symbol)
@@ -37,7 +38,7 @@ def add_symbol(maze, symbol, is_perfect):
                     maze[y_start][last_x] = ft_symbol[y][x]
             last_x += 1
         y_start += 1
-    # ensure connectivity for eller maze
+
     if not is_perfect:
         logo_x = len(maze[0]) // 2 - len(ft_symbol[0]) // 2
         logo_y = len(maze) // 2 - len(ft_symbol) // 2
@@ -69,10 +70,8 @@ on the 42 symbol (unvalid path)")
             or (entry_x == exit_x and entry_y == exit_y):
         raise exception.ConfigException("Invalid entry or exit position, \
 outside the map")
-    # define entry and exit pixels
     result[entry_y][entry_x] = 3
     result[exit_y][exit_x] = 4
-    # remove the empty cell
     result[_config.HEIGHT - 1][23] = 1
     path = resolve(
         (_config.ENTRY[0], _config.ENTRY[1]),
