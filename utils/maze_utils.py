@@ -20,7 +20,7 @@ ft_symbol = [
 ]
 
 
-def add_symbol(maze, symbol, sigma=None):
+def add_symbol(maze, symbol, is_perfect=None):
     maze_h = len(maze)
     maze_w = len(maze[0])
     sym_h = len(symbol)
@@ -30,13 +30,20 @@ def add_symbol(maze, symbol, sigma=None):
     for y in range(len(ft_symbol)):
         last_x = x_start
         for x in range(len(ft_symbol[y])):
-            if sigma is not None and y == 14:
+            if is_perfect is not None and y == 14:
                 maze[y_start][last_x] = 1
             else:
                 if ft_symbol[y][x] == 2:
                     maze[y_start][last_x] = ft_symbol[y][x]
             last_x += 1
         y_start += 1
+    # ensure connectivity for mazes
+    logo_x = len(maze[0]) // 2 - len(ft_symbol[0]) // 2
+    logo_y = len(maze) // 2 - len(ft_symbol) // 2
+
+    maze[logo_y][logo_x + 12] = 0
+    maze[logo_y + 1][logo_x + 12] = 0
+    maze[logo_y + 2][logo_x + 12] = 0
 
 
 def print_maze(maze: list[list[int]], empty, full):
@@ -86,5 +93,6 @@ outside the map")
     if type(path) is list:
         generate_output(result, path, _config)
     else:
-        raise exception.ConfigException(exception.display_errors("Could not find a valid path"))
+        exception.display_errors("Could not find a valid path")
+        #raise exception.ConfigException()
     return result

@@ -3,7 +3,7 @@
 from config import Config
 import random
 import time
-from utils.mlx_utils import render_maze_to_mlx, update_cell
+from utils.mlx_utils import update_cell
 
 
 def generate(maze, config: Config, xvar=None):
@@ -27,6 +27,7 @@ def generate(maze, config: Config, xvar=None):
                 xvar.mlx.mlx_do_sync(xvar.mlx_ptr)
 
     for y in range(height):
+        new_sets = set()
         for x in range(width):
             ry, rx = 2 * y + 1, 2 * x + 1
             if blocked(ry, rx):
@@ -34,6 +35,7 @@ def generate(maze, config: Config, xvar=None):
                 continue
             if sets[x] is None:
                 sets[x] = next_id
+                new_sets.add(next_id)
                 next_id += 1
             maze[ry][rx] = 0
             draw_update(ry, rx)
@@ -44,7 +46,10 @@ def generate(maze, config: Config, xvar=None):
             if blocked(ry, rx):
                 continue
             if sets[x] is not None and sets[x + 1] is not None:
-                if sets[x] != sets[x + 1] and (y == height - 1 or random.choice([True, False])):
+                if sets[x] != sets[x + 1] and (y == height - 1
+                                               or sets[x] in new_sets
+                                               or sets[x + 1] in new_sets
+                                               or random.choice([0, 1])):
                     maze[ry][rx] = 0
                     draw_update(ry, rx)
                     old = sets[x + 1]
