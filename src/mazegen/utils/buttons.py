@@ -6,7 +6,7 @@ from utils.maze_utils import generate_maze, render_maze_to_mlx
 from config import Config
 
 mouse_callbacks = {}
-ui_bg_img = None  # Global to store UI background image
+ui_bg_img = None
 
 
 def mouse_handler(btn_type, x, y, arg):
@@ -74,7 +74,6 @@ def draw_buttons(xvar: XVar):
 
         mlx.mlx_put_image_to_window(mlx_ptr, xvar.win_1, data["img"], bx, by)
 
-        # Fake bold for better visibility (scaling not supported by MLX)
         text = data["text"]
         tx = bx + (bw - len(text) * 10) // 2
         ty = by + (bh - 20) // 2
@@ -143,8 +142,23 @@ def buttons_init(config: Config, xvar: XVar):
     text_color = 0xFF555555
 
     btn_width = 180
-    btn_height = 45
-    spacing = 15
+
+    base_btn_h = 45
+    base_spacing = 15
+    num_btns = 4
+    
+    required_h = (base_btn_h * num_btns) + (base_spacing * (num_btns - 1)) + 40
+
+    if win_h < required_h:
+        avail_h = max(win_h - 40, 40)
+        btn_height = int(avail_h / 5)
+        spacing = int(btn_height / 3)
+        if btn_height < 20:
+            btn_height = 20
+            spacing = 5
+    else:
+        btn_height = base_btn_h
+        spacing = base_spacing
 
     ui_panel_width = 250
     panel_start_x = win_w - ui_panel_width
@@ -156,8 +170,16 @@ def buttons_init(config: Config, xvar: XVar):
         start_y = 20
     current_y = start_y
 
+    global mouse_callbacks
+    mouse_callbacks = {}
+
+    global ui_bg_img
+    if ui_bg_img:
+        xvar.mlx.mlx_destroy_image(xvar.mlx_ptr, ui_bg_img)
+        ui_bg_img = None
+
     def create_btn(name, text, bg_color, callback, args={}):
-        add_button(name, center_x, current_y, btn_width, btn_height, 
+        add_button(name, center_x, current_y, btn_width, btn_height,
                    text, bg_color, text_color, callback, args)
 
     create_btn("button_restart", "NEW MAZE", btn_bg_reload, button_restart,
