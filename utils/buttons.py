@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from utils.mlx_utils import XVar
+from utils.mlx_utils import XVar, manage_close
 import exception
 from utils.maze_utils import generate_maze, render_maze_to_mlx
 from config import Config
@@ -79,8 +79,8 @@ def add_button(name: str,
     }
 
 
-def button_exit():
-    exit(0)
+def button_exit(xvar: XVar):
+    manage_close(xvar)
 
 
 def button_restart(config: Config, xvar: XVar):
@@ -90,9 +90,43 @@ def button_restart(config: Config, xvar: XVar):
 
 def buttons_init(config: Config, xvar: XVar):
     win_w = xvar.win_w if xvar.win_w else 800
-    add_button("button_exit", win_w - 220, 20, 200, 50, "Exit", 0xffffffff, 0xff0000ff, button_exit, {})
-    add_button("button_restart", win_w - 220, 80, 200, 50, "Reload", 0xffffffff, 0xff0000ff, button_restart,
-               {"config": config, "xvar": xvar})
+    win_h = xvar.win_h if xvar.win_h else 600
+
+    btn_bg_exit = 0xFFFFB7B2    # Pastel Red/Pink
+    btn_bg_reload = 0xFFB5EAD7  # Pastel Mint Green
+    btn_bg_path = 0xFFC7CEEA    # Pastel Periwinkle Blue
+    btn_bg_color = 0xFFE2F0CB   # Pastel Lime/Yellow
+    
+    text_color = 0xFF555555  
+
+    btn_width = 180
+    btn_height = 45
+    spacing = 15
+
+    ui_panel_width = 250
+    panel_start_x = win_w - ui_panel_width
+    center_x = panel_start_x + (ui_panel_width - btn_width) // 2
+    total_height = (btn_height * 4) + (spacing * 3)
+    start_y = (win_h - total_height) // 2
+
+    if start_y < 20:
+        start_y = 20
+    current_y = start_y
+
+    def create_btn(name, text, bg_color, callback, args={}):
+        add_button(name, center_x, current_y, btn_width, btn_height, 
+                   text, bg_color, text_color, callback, args)
+
+    create_btn("button_restart", "NEW MAZE", btn_bg_reload, button_restart, {"config": config, "xvar": xvar})
+    current_y += btn_height + spacing
+    
+    create_btn("button_path", "SHOW PATH", btn_bg_path, button_restart, {"config": config, "xvar": xvar})
+    current_y += btn_height + spacing
+    
+    create_btn("button_color", "ROTATE COLORS", btn_bg_color, button_restart, {"config": config, "xvar": xvar})
+    current_y += btn_height + spacing
+    
+    create_btn("button_exit", "EXIT", btn_bg_exit, button_exit, {"xvar": xvar})
 
     xvar.mlx.mlx_mouse_hook(xvar.win_1, mouse_handler, None)
     draw_buttons(xvar)

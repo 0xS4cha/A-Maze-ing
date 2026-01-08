@@ -57,7 +57,7 @@ def print_maze(maze: list[list[int]], empty, full):
 
 
 def generate_maze(_config: config.Config, xvar=None) -> bool:
-    algo_list = [backtracking, eller]
+    algo_list = [eller, backtracking]
     global maze
     maze = [[1 for _ in range(_config.WIDTH)] for _ in range(_config.HEIGHT)]
     add_symbol(maze, ft_symbol, _config.PERFECT == 1)
