@@ -5,7 +5,7 @@ import exception
 import config
 from mlx import Mlx
 from utils.mlx_utils import manage_expose, manage_close, manage_key_simple
-from utils.mlx_utils import XVar, render_maze_to_mlx
+from utils.mlx_utils import XVar, render_maze_to_mlx, calculate_window_size
 from utils.maze_utils import generate_maze
 from utils.buttons import mouse_handler, buttons_init, draw_buttons
 
@@ -28,24 +28,27 @@ def main():
         _config = config.Config(sys.argv[1])
     except Exception as e:
         raise exception.ConfigException(f"Bad config file: {e}")
-
+    if _config.WIDTH < 30 or _config.HEIGHT < 20:
+        raise exception.ConfigException("Window size too small, minimum (w30, h20)")
+    if _config.WIDTH % 2 == 0 or _config.HEIGHT % 2 == 0:
+        raise exception.ConfigException("The window size cannot be even")
     if _config.GRAPHIC:
         try:
             xvar.mlx_ptr = xvar.mlx.mlx_init()
             ret, xvar.screen_w, xvar.screen_h = xvar.mlx.mlx_get_screen_size(
                 xvar.mlx_ptr)
 
-            # Adjust window width logic to accommodate UI
-            # We want to use as much space as possible but valid
-            avail_w = xvar.screen_w if xvar.screen_w else 1920
-            avail_h = xvar.screen_h if xvar.screen_h else 1080
+            required_w, required_h, _ = calculate_window_size(
+                _config,
+                xvar.screen_w,
+                xvar.screen_h,
+                ui_width=250
+            )
 
-            win_w = min(1920, avail_w)
-            win_h = min(1080, avail_h)
-
-            xvar.win_w = win_w
-            xvar.win_h = win_h
-            xvar.win_1 = xvar.mlx.mlx_new_window(xvar.mlx_ptr, win_w, win_h,
+            xvar.win_w = required_w
+            xvar.win_h = required_h
+            xvar.win_1 = xvar.mlx.mlx_new_window(xvar.mlx_ptr, required_w,
+                                                 required_h,
                                                  "A-Maze-ing")
             if not xvar.win_1:
                 raise Exception("Can't create MLX window")

@@ -3,7 +3,7 @@
 import exception
 import sys
 
-sys.setrecursionlimit(2000)
+sys.setrecursionlimit(10000)
 
 COLOR_STARTING = "\033[35m"
 COLOR_ENDING = "\033[31m"
@@ -64,9 +64,7 @@ definition: {line}.\n{self.get_error_line_format(i+1, config_path)}")
                     elif left_arg == "OUTPUT_FILE":
                         self.OUTPUT_FILE = right_arg
                     elif left_arg == "PERFECT":
-                        self.PERFECT = bool(right_arg)
-                    elif left_arg == "ALGORITHMS":
-                        self.ALGORITHMS = int(right_arg)
+                        self.PERFECT = int(right_arg)
                     elif left_arg == "ANIMATION":
                         self.ANIMATION = bool(right_arg)
                     elif left_arg == "GRAPHIC":
