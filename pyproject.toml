@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mazegen"
+version = "1.0.0"
+authors = [
+  { name="sservant", email="sservant@student.42lyon.fr" },
+  { name="julcleme", email="julcleme@student.42lyon.fr" },
+]
+description = "A standalone generic Maze Generator using Eller's algorithm and BFS solver."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://projects.intra.42.fr/a-maze-ing/julcleme"
