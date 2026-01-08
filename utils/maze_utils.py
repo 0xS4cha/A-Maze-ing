@@ -1,6 +1,7 @@
 import config
 import algorithms.backtracking as backtracking
 import algorithms.eller as eller
+from parser import generate_output
 from utils.mlx_utils import render_maze_to_mlx
 import exception
 from resolve import resolve
@@ -79,5 +80,9 @@ outside the map")
     result[_config.HEIGHT - 1][23] = 1
     if _config.GRAPHIC == 0:
         print_maze(result, _config.EMPTY_CHAR, _config.FULL_CHAR)
-    resolve((_config.ENTRY[0], _config.ENTRY[1]), 0, result, None, _config)
+    path = resolve((_config.ENTRY[0], _config.ENTRY[1]), 0, result, None, _config)
+    if type(path) is list:
+        generate_output(result, path, _config)
+    else:
+        raise exception.ConfigException(exception.display_errors("Could not find a valid path"))
     return result

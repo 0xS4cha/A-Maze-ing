@@ -88,8 +88,6 @@ rendering")
     xvar.img_w = img_w
     xvar.img_h = img_h
 
-    # draw_buttons(xvar)
-
     mlx.mlx_put_image_to_window(mlx_ptr, win_ptr, img, 0, 0)
 
     if hasattr(_config, 'DELAY') and _config.DELAY > 0:

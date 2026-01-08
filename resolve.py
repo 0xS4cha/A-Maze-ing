@@ -3,6 +3,7 @@
 from config import Config, COLOR_FT, COLOR_STARTING, COLOR_RESET, COLOR_ENDING
 import time
 import random
+from collections import deque
 
 
 def print_maze(maze: list[list[int]], empty, full):
@@ -27,43 +28,61 @@ def print_maze(maze: list[list[int]], empty, full):
 def resolve(pos: tuple[int, int], direction: int,
             maze: list[list[int]],
             visited: list[list[bool]] | None,
-            config: Config) -> bool:
-    x, y = pos
+            config: Config) -> list[str] | bool:
+    queue = deque([pos])
+    visited_set = {pos}
+    came_from = {pos: None}
+    end_pos = tuple(config.EXIT)
 
-    if visited is None:
-        visited = [[False] * config.WIDTH for _ in range(config.HEIGHT)]
+    final_node = None
 
-    if (x, y) == tuple(config.EXIT):
-        return True
+    while queue:
+        current = queue.popleft()
 
-    visited[y][x] = True
+        if current == end_pos:
+            final_node = current
+            break
 
-    directions_base = [(0, -1), (1, 0), (0, 1), (-1, 0)]  # N, E, S, W
-    directions = [
-        directions_base[direction],            # forward
-        directions_base[(direction + 3) % 4],  # left
-        directions_base[(direction + 1) % 4],  # right
-        directions_base[(direction + 2) % 4],  # back
-    ]
+        x, y = current
+        # Directions: N, E, S, W
+        movements = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 
-    for d in directions:
-        nx, ny = x + d[0], y + d[1]
+        for dx, dy in movements:
+            nx, ny = x + dx, y + dy
 
-        if not (0 <= nx < config.WIDTH and 0 <= ny < config.HEIGHT):
-            continue
-        if maze[ny][nx] == 1 or maze[ny][nx] == 2 or visited[ny][nx]:
-            continue
+            if not (0 <= nx < config.WIDTH and 0 <= ny < config.HEIGHT):
+                continue
 
-        if (nx, ny) == tuple(config.EXIT):
-            return True
+            if maze[ny][nx] == 1 or maze[ny][nx] == 2:
+                continue
 
-        maze[ny][nx] = 25
-        # print_maze(maze, config.EMPTY_CHAR, config.FULL_CHAR)
+            if (nx, ny) not in visited_set:
+                visited_set.add((nx, ny))
+                came_from[(nx, ny)] = current
+                queue.append((nx, ny))
 
-        if resolve((nx, ny), directions_base.index(d), maze, visited, config):
-            return True
-        else:
-            maze[ny][nx] = 0
+    if final_node:
+        # Reconstruct path
+        path = []
+        curr = final_node
+        while curr != pos:
+            parent = came_from[curr]
+            dx, dy = curr[0] - parent[0], curr[1] - parent[1]
 
+            if dx == 0 and dy == -1:
+                d = "N"
+            elif dx == 1 and dy == 0:
+                d = "E"
+            elif dx == 0 and dy == 1:
+                d = "S"
+            elif dx == -1 and dy == 0:
+                d = "W"
+            path.append(d)
+
+            if curr != end_pos:
+                maze[curr[1]][curr[0]] = 25
+            curr = parent
+        path.reverse()
+        return path
     return False
 
