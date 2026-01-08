@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import random
 from . import exception
 from . import config
 from mlx import Mlx
@@ -19,66 +20,56 @@ class MazeGenerator:
 
         self.__config = config.Config(path)
         if self.__config.WIDTH < 30 or self.__config.HEIGHT < 20:
-            raise exception.ConfigException("Window size too small, \
-minimum 30x20")
+            raise exception.ConfigException("Window size too small, minimum (w30, h20)")
         if self.__config.WIDTH % 2 == 0 or self.__config.HEIGHT % 2 == 0:
             raise exception.ConfigException("The window size cannot be even")
         try:
+            if self.__config.SEED == 0:
+                seed = secrets.token_hex(8)
+                random.seed(seed)
+                print(seed)
+            else:
+                random.seed(self.__config.SEED)
             self.__xvar.mlx_ptr = self.__xvar.mlx.mlx_init()
-            ret, self.__xvar.screen_w, self.__xvar.screen_h = \
-                self.__xvar.mlx.mlx_get_screen_size(self.__xvar.mlx_ptr)
+            ret, self.__xvar.screen_w, self.__xvar.screen_h = self.__xvar.mlx.mlx_get_screen_size(
+                self.__xvar.mlx_ptr)
 
             required_w, required_h, _ = calculate_window_size(
                 self.__config,
-                self.__xvar.screen_w,
-                self.__xvar.screen_h,
+                xvar.screen_w,
+                xvar.screen_h,
                 ui_width=250
             )
 
-            self.__xvar.win_w = required_w
-            self.__xvar.win_h = required_h
-            self.__xvar.win_1 = self.__xvar.mlx.mlx_new_window(
-                self.__xvar.mlx_ptr, required_w,
-                required_h,
-                "A-Maze-ing"
-            )
-            if not self.__xvar.win_1:
+            xvar.win_w = required_w
+            xvar.win_h = required_h
+            xvar.win_1 = xvar.mlx.mlx_new_window(xvar.mlx_ptr, required_w,
+                                                required_h,
+                                                "A-Maze-ing")
+            if not xvar.win_1:
                 raise Exception("Can't create MLX window")
 
-            self.__xvar.mlx.mlx_mouse_hook(
-                self.__xvar.win_1,
-                mouse_handler,
-                self.__xvar
-            )
-            self.__xvar.mlx.mlx_key_hook(
-                self.__xvar.win_1,
-                manage_key_simple,
-                self.__xvar
-            )
-            self.__xvar.mlx.mlx_hook(
-                self.__xvar.win_1,
-                33, 0,
-                manage_close,
-                self.__xvar
-            )
-            self.__xvar.mlx.mlx_expose_hook(
-                self.__xvar.win_1,
-                self.__main_expose,
-                self.__xvar
-            )
+            xvar.mlx.mlx_mouse_hook(xvar.win_1, mouse_handler, xvar)
+            xvar.mlx.mlx_key_hook(xvar.win_1, manage_key_simple, xvar)
+            xvar.mlx.mlx_hook(xvar.win_1, 33, 0, manage_close, xvar)
+            xvar.mlx.mlx_expose_hook(xvar.win_1, main_expose, xvar)
+
+            xvar.maze_data = generate_maze(_config, xvar)
+            render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, xvar.maze_data,
+                            self.__config, xvar)
         except Exception as e:
             raise exception.ConfigException(f"MLX error: {e}")
 
-        self.__xvar.mlx.mlx_loop(self.__xvar.mlx_ptr)
-        self.__xvar.mlx.mlx_destroy_window(
-            self.__xvar.mlx_ptr,
-            self.__xvar.win_1
-        )
-        self.__xvar.mlx.mlx_release(self.__xvar.mlx_ptr)
+        buttons_init(_config, xvar)
+        draw_buttons(xvar)
+
+        xvar.mlx.mlx_loop(xvar.mlx_ptr)
+        xvar.mlx.mlx_destroy_window(xvar.mlx_ptr, xvar.win_1)
+        xvar.mlx.mlx_release(xvar.mlx_ptr)
 
     def __main_expose(self, xvar):
-        manage_expose(self.__xvar)
-        draw_buttons(self.__xvar)
+        manage_expose(xvar)
+        draw_buttons(xvar)
 
     def generate_maze(self):
         self.__xvar.maze_data = utils_generate_maze(self.__config, self.__xvar)
