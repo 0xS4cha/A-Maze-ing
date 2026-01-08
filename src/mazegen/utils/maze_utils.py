@@ -1,10 +1,10 @@
-import config
-import algorithms.backtracking as backtracking
-import algorithms.eller as eller
-from parser import generate_output
-from utils.mlx_utils import render_maze_to_mlx
-import exception
-from resolve import resolve
+from .. import config
+from ..algorithms import backtracking as backtracking
+from ..algorithms import eller as eller
+from ..parser import generate_output
+from ..utils.mlx_utils import render_maze_to_mlx
+from .. import exception
+from ..resolve import resolve
 
 
 ft_symbol = [

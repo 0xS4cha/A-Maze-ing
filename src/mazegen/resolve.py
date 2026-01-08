@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-from config import Config, COLOR_FT, COLOR_STARTING, COLOR_RESET, COLOR_ENDING
-import time
-import random
+from .config import Config, COLOR_FT, COLOR_STARTING, COLOR_RESET, COLOR_ENDING
 from collections import deque
 
 

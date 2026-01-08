@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import exception
+from . import exception
 import sys
 
 sys.setrecursionlimit(10000)

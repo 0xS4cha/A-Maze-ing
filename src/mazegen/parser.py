@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from config import Config
+from .config import Config
 
 
 def generate_output(maze: list[list[int]], path: list[str], config: Config):

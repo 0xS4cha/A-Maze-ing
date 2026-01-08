@@ -1,5 +1,5 @@
-import config
-import exception
+from .. import config
+from .. import exception
 import time
 
 

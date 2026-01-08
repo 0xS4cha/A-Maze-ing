@@ -2,7 +2,7 @@
 
 import random
 import time
-from utils.mlx_utils import update_cell
+from ..utils.mlx_utils import update_cell
 
 
 def backtrack(x, y, maze, width, height, _config=None, xvar=None):

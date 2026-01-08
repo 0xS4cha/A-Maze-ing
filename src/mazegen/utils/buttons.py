@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from utils.mlx_utils import XVar, manage_close, update_cell
-import exception
-from utils.maze_utils import generate_maze, render_maze_to_mlx
-from config import Config
+from ..utils.mlx_utils import XVar, manage_close, update_cell
+from .. import exception
+from ..utils.maze_utils import generate_maze, render_maze_to_mlx
+from ..config import Config
 
 mouse_callbacks = {}
 ui_bg_img = None  # Global to store UI background image

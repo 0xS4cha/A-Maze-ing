@@ -1,4 +1,9 @@
 __pycache__
-algorithms/__pycache__
+src/mazegen/algorithms/__pycache__
+src/mazegen/__pycache__
 output.txt
 .mypy_cache
+test.__pycache__
+.vscode
+dist
+mazegen-*.whl

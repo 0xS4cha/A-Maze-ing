@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from config import Config
+from ..config import Config
 import random
 import time
-from utils.mlx_utils import update_cell
+from ..utils.mlx_utils import update_cell
 
 
 def generate(maze, config: Config, xvar=None):
