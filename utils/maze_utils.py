@@ -60,16 +60,18 @@ def generate_maze(_config: config.Config, xvar=None) -> bool:
     algo_list = [backtracking, eller]
     global maze
     maze = [[1 for _ in range(_config.WIDTH)] for _ in range(_config.HEIGHT)]
-    if _config.WIDTH > len(ft_symbol[0]) and _config.HEIGHT > len(ft_symbol):
-        add_symbol(maze, ft_symbol, _config.ALGORITHMS == 1)
+    add_symbol(maze, ft_symbol, _config.PERFECT == 1)
+    entry_x, entry_y = _config.ENTRY
+    exit_x, exit_y = _config.EXIT
+    if maze[exit_y][exit_x] == 2:
+        raise exception.ConfigException("Invalid entry or exit position, \
+on the 42 symbol (unvalid path)")
     if _config.ANIMATION and xvar:
         render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, maze, _config,
                            xvar)
-    result: list[list[int]] = algo_list[_config.ALGORITHMS].generate(maze,
-                                                                     _config,
-                                                                     xvar)
-    entry_x, entry_y = _config.ENTRY
-    exit_x, exit_y = _config.EXIT
+    result: list[list[int]] = algo_list[_config.PERFECT].generate(maze,
+                                                                  _config,
+                                                                  xvar)
     if (entry_x < 1 or entry_y < 1 or entry_x > _config.WIDTH - 2 or
         entry_y > _config.HEIGHT - 2) \
             or (entry_x == exit_x and entry_y == exit_y):

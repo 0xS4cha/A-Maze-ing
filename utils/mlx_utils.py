@@ -35,6 +35,28 @@ def manage_key_simple(key, xvar):
     return 0
 
 
+def render_buttons(xvar):
+    pass
+
+
+def calculate_window_size(_config, screen_w, screen_h, ui_width=250):
+    avail_w = (screen_w if screen_w else 1920) - ui_width
+    avail_h = (screen_h if screen_h else 1080)
+
+    scale_x = max(1, avail_w // _config.WIDTH)
+    scale_y = max(1, avail_h // _config.HEIGHT)
+    scale = min(scale_x, scale_y, 16)
+
+    img_w = _config.WIDTH * scale
+    img_h = _config.HEIGHT * scale
+
+    # Total window size
+    win_w = img_w + ui_width
+    win_h = img_h
+
+    return win_w, win_h, scale
+
+
 def manage_expose(xvar):
     if xvar.img:
         xvar.mlx.mlx_put_image_to_window(xvar.mlx_ptr, xvar.win_1, xvar.img,

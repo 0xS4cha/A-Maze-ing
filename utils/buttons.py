@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from utils.mlx_utils import XVar
-from mlx import Mlx
 import exception
 from utils.maze_utils import generate_maze, render_maze_to_mlx
 from config import Config
