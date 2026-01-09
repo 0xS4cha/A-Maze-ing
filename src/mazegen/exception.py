@@ -8,15 +8,15 @@ def display_errors(message: str) -> None:
 
 
 class MazeException(Exception):
-    def __init__(self, *args):
+    def __init__(self, *args: str):
         super().__init__(*args)
 
 
 class ArgsException(MazeException):
-    def __init__(self, *args):
+    def __init__(self, *args: str):
         super().__init__(*args)
 
 
-class ConfigException(MazeException):
-    def __init__(self, *args):
+class ConfigException(Exception):
+    def __init__(self, *args: str):
         super().__init__(*args)

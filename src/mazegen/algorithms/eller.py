@@ -3,23 +3,25 @@
 from ..config import Config
 import random
 import time
-from ..utils.mlx_utils import update_cell
+from ..utils.mlx_utils import XVar, update_cell
+from typing import List
 
 
-def generate(maze, config: Config, xvar=None):
+def generate(maze: List[List[int]], config: Config,
+             xvar: (XVar | None) = None) -> List[List[int]]:
     w = config.WIDTH
     h = config.HEIGHT
 
     width = (w - 1) // 2
     height = (h - 1) // 2
 
-    sets = [i for i in range(width)]
+    sets: List[int | None] = [i for i in range(width)]
     next_id = width
 
-    def blocked(r, c):
+    def blocked(r: int, c: int) -> bool:
         return maze[r][c] == 2
 
-    def draw_update(r, c):
+    def draw_update(r: int, c: int) -> None:
         if xvar:
             update_cell(xvar, c, r, 0, config)
             if hasattr(config, 'DELAY') and config.DELAY > 0:
@@ -64,17 +66,21 @@ def generate(maze, config: Config, xvar=None):
 
         # vertical connections
         if y < height - 1:
-            next_sets = [None] * width
-            used = {}
+            next_sets: List[int | None] = [None] * width
+            used: dict[int, List[int]] = {}
             for x in range(width):
                 if sets[x] is not None:
-                    used.setdefault(sets[x], []).append(x)
-
+                    val = sets[x]
+                    if val is not None:
+                        used.setdefault(val, []).append(x)
             for s, cells in used.items():
                 random.shuffle(cells)
                 count = random.randint(1, len(cells))
                 if not config.PERFECT:
-                    count = random.randint(1, len(cells)) if random.choice([0, 1]) else len(cells)
+                    if random.choice([0, 1]):
+                        count = random.randint(1, len(cells))
+                    else:
+                        count = len(cells)
 
                 for x in cells[:count]:
                     ry, rx = 2 * y + 2, 2 * x + 1

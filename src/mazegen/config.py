@@ -22,7 +22,7 @@ class Config:
         self.ENTRY = [0, 0]
         self.EXIT = [0, 0]
         self.OUTPUT_FILE = ""
-        self.PERFECT = False
+        self.PERFECT = 0
         self.EMPTY_CHAR = ' '
         self.FULL_CHAR = '█'
         self.DELAY = 0.001

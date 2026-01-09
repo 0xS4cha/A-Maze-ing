@@ -1,11 +1,13 @@
 from .. import config
 from .. import exception
+from mlx import Mlx
 import time
+from typing import Any, List
 
 
 class XVar:
     def __init__(self) -> None:
-        self.mlx = None
+        self.mlx: Any = None
         self.mlx_ptr = None
         self.screen_w = 0
         self.screen_h = 0
@@ -15,7 +17,8 @@ class XVar:
         self.win_2 = None
         self.imgidx = 0
         self.color_palette = 0
-        self.path = []
+        self.maze_data: List[List[int]] = []
+        self.path: List[tuple[int, int]] = []
         self.show_path = False
         self.img = None
         self.img_data = None
@@ -33,8 +36,8 @@ def manage_close(xvar: XVar) -> None:
 def manage_key_simple(key: int, xvar: XVar) -> None:
     if key in (113, 27, 65307):
         xvar.mlx.mlx_loop_exit(xvar.mlx_ptr)
-        return 0
-    return 0
+        return
+    return
 
 
 def render_buttons(xvar: XVar) -> None:
@@ -42,7 +45,7 @@ def render_buttons(xvar: XVar) -> None:
 
 
 def calculate_window_size(_config: config.Config, screen_w: int, screen_h: int,
-                          ui_width: int = 250) -> int:
+                          ui_width: int = 250) -> tuple[int, int, int]:
     avail_w = (screen_w if screen_w else 1920) - ui_width
     avail_h = (screen_h if screen_h else 1080)
 
@@ -53,7 +56,6 @@ def calculate_window_size(_config: config.Config, screen_w: int, screen_h: int,
     img_w = _config.WIDTH * scale
     img_h = _config.HEIGHT * scale
 
-    # Total window size
     win_w = img_w + ui_width
     win_h = img_h
 
@@ -71,8 +73,9 @@ def manage_expose(xvar: XVar) -> None:
         )
 
 
-def render_maze_to_mlx(mlx, mlx_ptr, win_ptr, maze: list[list[int]], _config:
-                       config.Config, xvar: XVar) -> None:
+def render_maze_to_mlx(mlx: Mlx, mlx_ptr: Any, win_ptr: Any,
+                       maze: List[List[int]],
+                       _config: config.Config, xvar: XVar) -> None:
     try:
         screen_w = xvar.screen_w if xvar.screen_w else 1920
         screen_h = xvar.screen_h if xvar.screen_h else 1080
@@ -80,7 +83,6 @@ def render_maze_to_mlx(mlx, mlx_ptr, win_ptr, maze: list[list[int]], _config:
         screen_w = 1920
         screen_h = 1080
 
-    # Ensure we account for the UI width
     avail_w = screen_w - 250
     avail_h = screen_h
 
@@ -129,7 +131,7 @@ rendering")
 
 
 def update_cell(xvar: XVar, mx: int, my: int, val: int,
-                _config: config) -> None:
+                _config: config.Config) -> None:
     if not xvar or not xvar.img_data:
         return
 
@@ -150,7 +152,6 @@ def update_cell(xvar: XVar, mx: int, my: int, val: int,
     color_int = _config.COLORS[xvar.color_palette].get(val, 0xFFFFFFFF)
     color_bytes = color_int.to_bytes(4, 'little')
 
-    # Modification du buffer
     data = xvar.img_data
     sl = xvar.img_sl
     start_y = my * scale
