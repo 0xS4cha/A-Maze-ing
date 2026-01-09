@@ -77,6 +77,7 @@ def generate_maze(_config: config.Config, xvar: XVar) -> List[List[int]]:
     """
     global maze
     algo_list = [eller, backtracking]
+    xvar.show_path = False
     xvar.path = []
     maze = [[1 for _ in range(_config.WIDTH)] for _ in range(_config.HEIGHT)]
     add_symbol(maze, ft_symbol, _config.PERFECT == 1)
