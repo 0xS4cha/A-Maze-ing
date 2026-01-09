@@ -101,6 +101,7 @@ We started by researching algorithms, implemented a basic console version, then 
 - **Continuous Walls**: Post-processing for Eller's algorithm to avoid isolated dots.
 
 ## TODO
+- [ ] Fix eller animation
 - [x] You must implement the maze generation as a unique class
 - [ ] Use frameworks like pytest or unittest for unit tests, covering edge cases.
 - [x] Your functions should handle exceptions gracefully to avoid crashes

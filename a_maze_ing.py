@@ -22,7 +22,7 @@ def main() -> None:
         maze_generator.draw_control_buttons()
         maze_generator.draw_maze(maze)
         solution = maze_generator.get_solution(maze)
-        print(f"solution is: {''.join(solution)}")
+        print(f"Solution is: {''.join(solution)}")
         maze_generator.draw_solution()
         if not maze_generator.generate_output(maze, solution):
             raise Exception("Could not build output file")
