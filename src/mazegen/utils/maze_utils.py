@@ -120,7 +120,12 @@ def generate_maze(_config: config.Config, xvar: XVar) -> List[List[int]]:
         exception.ConfigException: If entry/exit points are invalid.
     """
     global maze
+<<<<<<< HEAD
+    algo_list = [eller, backtracking]
+    xvar.show_path = False
+=======
     algo_list = [prim, backtracking]
+>>>>>>> jules
     xvar.path = []
     maze = [[1 for _ in range(_config.WIDTH)] for _ in range(_config.HEIGHT)]
     add_symbol(maze, ft_symbol)
