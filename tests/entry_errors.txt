@@ -1,0 +1,20 @@
+# this is a comment
+
+# width of the maze
+WIDTH=53
+# height of the maze
+HEIGHT=53
+
+# position of the entry point of the maze (x, y)
+ENTRY=55,55
+# position of the exit point of the maze (x, y)
+EXIT=49,49
+
+# path of the output file
+OUTPUT_FILE=output.txt
+
+# the generated maze contains only one solution
+PERFECT=0
+
+# view generation and resolving in realtime
+ANIMATION=0
