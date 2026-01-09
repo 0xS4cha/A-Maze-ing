@@ -23,6 +23,7 @@ class Config:
         self.EXIT = [0, 0]
         self.OUTPUT_FILE = ""
         self.PERFECT = 0
+        self.ANIMATION = 1
         self.EMPTY_CHAR = ' '
         self.FULL_CHAR = '█'
         self.DELAY = 0.001
@@ -69,44 +70,49 @@ class Config:
                 5: 0xFFE0AAFF   # path -> Lavander
             }
         ]
-        with open(config_path, "r") as f:
-            for i, line in enumerate(f.readlines()):
-                if line.strip().startswith("#") or len(line.strip()) == 0:
-                    continue  # skip comments
-                separator_idx = line.find("=")
-                if separator_idx == -1:
-                    raise exception.ConfigException(f"Entry is not a \
-definition: {line}.\n{self.get_error_line_format(i+1, config_path)}")
-                left_arg = line[:separator_idx].strip()
-                right_arg = line[separator_idx + 1:].strip()
-                try:
-                    if left_arg == "WIDTH" and int(right_arg) > 0:
-                        self.WIDTH = int(right_arg)
-                    elif left_arg == "HEIGHT" and int(right_arg) > 0:
-                        self.HEIGHT = int(right_arg)
-                    elif left_arg == "DELAY":
-                        self.DELAY = float(right_arg)
-                    elif (left_arg == "ENTRY" or
-                          left_arg == "EXIT") and right_arg.find(",") != -1:
-                        entry = right_arg.split(",")
-                        if (len(entry) != 2):
-                            raise
-                        if left_arg == "ENTRY":
-                            self.ENTRY[0] = int(entry[0].strip()) + 1
-                            self.ENTRY[1] = int(entry[1].strip()) + 1
+        try:
+            with open(config_path, "r") as f:
+                for i, line in enumerate(f.readlines()):
+                    if line.strip().startswith("#") or len(line.strip()) == 0:
+                        continue  # skip comments
+                    separator_idx = line.find("=")
+                    if separator_idx == -1:
+                        raise exception.ConfigException(f"Entry is not a \
+    definition: {line}.\n{self.get_error_line_format(i+1, config_path)}")
+                    left_arg = line[:separator_idx].strip()
+                    right_arg = line[separator_idx + 1:].strip()
+                    try:
+                        if left_arg == "WIDTH" and int(right_arg) > 0:
+                            self.WIDTH = int(right_arg)
+                        elif left_arg == "HEIGHT" and int(right_arg) > 0:
+                            self.HEIGHT = int(right_arg)
+                        elif left_arg == "DELAY":
+                            self.DELAY = float(right_arg)
+                        elif (left_arg == "ENTRY" or
+                              left_arg == "EXIT") and \
+                                right_arg.find(",") != -1:
+                            entry = right_arg.split(",")
+                            if (len(entry) != 2):
+                                raise
+                            if left_arg == "ENTRY":
+                                self.ENTRY[0] = int(entry[0].strip()) + 1
+                                self.ENTRY[1] = int(entry[1].strip()) + 1
+                            else:
+                                self.EXIT[0] = int(entry[0].strip()) + 1
+                                self.EXIT[1] = int(entry[1].strip()) + 1
+                        elif left_arg == "OUTPUT_FILE":
+                            self.OUTPUT_FILE = right_arg
+                        elif left_arg == "PERFECT":
+                            self.PERFECT = int(right_arg)
+                        elif left_arg == "ANIMATION":
+                            self.ANIMATION = int(right_arg)
+                        elif left_arg == "SEED":
+                            self.SEED = right_arg
                         else:
-                            self.EXIT[0] = int(entry[0].strip()) + 1
-                            self.EXIT[1] = int(entry[1].strip()) + 1
-                    elif left_arg == "OUTPUT_FILE":
-                        self.OUTPUT_FILE = right_arg
-                    elif left_arg == "PERFECT":
-                        self.PERFECT = int(right_arg)
-                    elif left_arg == "ANIMATION":
-                        self.ANIMATION = int(right_arg)
-                    elif left_arg == "SEED":
-                        self.SEED = right_arg
-                    else:
-                        raise ValueError(f"Unknown entry: '{line}'.")
-                except ValueError as e:
-                    raise exception.ConfigException(f"Invalid config entry: \
-{e.args[0]}.\n{self.get_error_line_format(i+1, config_path)}")
+                            raise ValueError(f"Unknown entry: '{line}'.")
+                    except ValueError as e:
+                        raise exception.ConfigException(f"Invalid config entry: \
+    {e.args[0]}.\n{self.get_error_line_format(i+1, config_path)}")
+        except (FileExistsError, FileNotFoundError, PermissionError):
+            raise exception.ConfigException(f"File '{config_path}' \
+is not accessible")

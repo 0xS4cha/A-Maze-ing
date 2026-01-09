@@ -46,6 +46,60 @@ This is the list of the resources used to make this project.
 - [chatgpt.com](https://chatgpt.com) was used to explain us basics of each algorithm. It also helped with colors and the minilib-x library
 - [mypy.readthedocs.io](https://mypy.readthedocs.io/en/stable/) documentation for the mypy norm
 
+# Developer Guide
+
+## Package Installation
+
+The maze generator is available as a pip-installable package. You can build it from source:
+
+```bash
+make build
+```
+
+Then install it:
+
+```bash
+pip install mazegen-1.0.0-py3-none-any.whl
+```
+
+## Usage Example
+
+```python
+from mazegen import MazeGenerator
+
+# Initialize from config file
+generator = MazeGenerator("config.txt")
+
+# Generate maze
+maze = generator.generate_maze()
+
+# Display (if graphical mode enabled)
+generator.draw_maze(maze)
+
+# Solve
+solution_path = generator.get_solution(maze)
+
+# Run event loop (keeps window open)
+generator.run()
+```
+
+## Team
+
+- sservant
+- julcleme
+
+Roles:
+- sservant: Algorithm implementation (Backtracking, Analysis)
+- julcleme: Graphics (MLX), Packaging, Refactoring, Eller's algorithm enhancements
+
+Planning:
+We started by researching algorithms, implemented a basic console version, then added MLX graphics. Finally, we refactored repeatedly to meet the modularity requirements and packaging standards.
+
+## Advanced Features
+- **Multiple Algorithms**: Configurable via `PERFECT` flag (0 for Eller's, 1 for Backtracking).
+- **Graphical Interface**: Interactive buttons for solving/resetting.
+- **Continuous Walls**: Post-processing for Eller's algorithm to avoid isolated dots.
+
 ## TODO
 - [x] You must implement the maze generation as a unique class
 - [ ] Use frameworks like pytest or unittest for unit tests, covering edge cases.
@@ -74,7 +128,7 @@ This is the list of the resources used to make this project.
 		- [ ] What worked well and what could be improved
 		- [ ] Have you used any specific tools? Which ones?
 	- [ ] If you implement advanced features (multiple algorithms, display options)describe them in this README.md file
-- [ ] NO FRENCH :fr:
+- [x] NO FRENCH :fr:
 
 
 - [x] This entire reusable module (code and documentation) must be available in a single file

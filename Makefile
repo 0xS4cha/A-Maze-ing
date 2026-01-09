@@ -16,12 +16,11 @@ build:
 	cp ./dist/mazegen-*.whl .
 
 install:
-	pip install $(DEPENDENCIES)
-	#$(CP) lib/mlx_CLXV/libmlx.so ~/.local/lib/python3.10/site-packages/mlx/
-	pip install 
+	$(PYTHON) -m pip install $(DEPENDENCIES)
+	$(PYTHON) -m pip install mazegen-*.whl
 
 run:
-	$(PYTHON) $(MAIN)
+	$(PYTHON) a_maze_ing.py default_config.txt
 
 debug:
 	$(PYTHON) -m pdb $(MAIN)
