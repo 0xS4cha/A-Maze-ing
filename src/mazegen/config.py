@@ -26,6 +26,7 @@ class Config:
         self.EMPTY_CHAR = ' '
         self.FULL_CHAR = '█'
         self.DELAY = 0.001
+        self.SEED = 0
         self.COLORS = [
             {
                 0: 0xFF1E1E2E,  # empty -> Dark Blue/Black background (Base)
@@ -36,36 +37,36 @@ class Config:
                 5: 0xFFFFFFFF   # path -> White
             },
             {
-                0: 0xFFF5F5F7,  # empty -> Blanc Cassé / Papier
-                1: 0xFFD1D1D6,  # wall -> Gris Clair
-                2: 0xFFFF9500,  # ft symbol -> Orange Vif
-                3: 0xFF34C759,  # start -> Vert Classique
-                4: 0xFFFF3B30,  # end -> Rouge Classique
-                5: 0xFF1C1C1E   # path -> Encre Noire / Gris très sombre
+                0: 0xFFF5F5F7,  # empty -> White
+                1: 0xFFD1D1D6,  # wall -> Gray
+                2: 0xFFFF9500,  # ft symbol -> Orange
+                3: 0xFF34C759,  # start -> Green
+                4: 0xFFFF3B30,  # end -> Red
+                5: 0xFF1C1C1E   # path -> black
             },
             {
-                0: 0xFF0F380F,  # empty -> Vert le plus sombre (Presque noir)
-                1: 0xFF306230,  # wall -> Vert Foncé
-                2: 0xFF8BAC0F,  # ft symbol -> Vert Moyen (Accent)
-                3: 0xFFFFFFFF,  # start -> Blanc (Pour ressortir du thème)
-                4: 0xFF000000,  # end -> Noir (Pour ressortir du thème)
-                5: 0xFF9BBC0F   # path -> Vert le plus clair (Lumière)
+                0: 0xFF0F380F,  # empty -> Dark Green
+                1: 0xFF306230,  # wall -> Green
+                2: 0xFF8BAC0F,  # ft symbol -> Accent Green
+                3: 0xFFFFFFFF,  # start -> White
+                4: 0xFF000000,  # end -> Black
+                5: 0xFF9BBC0F   # path -> Green
             },
             {
-                0: 0xFF001F3F,  # empty -> Bleu Marine Profond
-                1: 0xFF3A6D8C,  # wall -> Bleu Acier
-                2: 0xFFFF851B,  # ft symbol -> Corail / Orange (Contraste)
-                3: 0xFF2ECC40,  # start -> Vert Algue
-                4: 0xFFFF4136,  # end -> Rouge Brique
-                5: 0xFF7FDBFF   # path -> Bleu Glace (Très clair)
+                0: 0xFF001F3F,  # empty -> Dark Blue
+                1: 0xFF3A6D8C,  # wall -> Steel Blue
+                2: 0xFFFF851B,  # ft symbol -> Orange
+                3: 0xFF2ECC40,  # start -> Green
+                4: 0xFFFF4136,  # end -> Red Brick
+                5: 0xFF7FDBFF   # path -> Blue
             },
             {
-                0: 0xFF240046,  # empty -> Violet très sombre
-                1: 0xFF5A189A,  # wall -> Violet vif
-                2: 0xFFFF9E00,  # ft symbol -> Orange Soleil
-                3: 0xFF00B4D8,  # start -> Bleu Lagon
+                0: 0xFF240046,  # empty -> Dark Purple
+                1: 0xFF5A189A,  # wall -> Purple
+                2: 0xFFFF9E00,  # ft symbol -> Orange
+                3: 0xFF00B4D8,  # start -> Blue
                 4: 0xFFF72585,  # end -> Magenta
-                5: 0xFFE0AAFF   # path -> Lavande pâle
+                5: 0xFFE0AAFF   # path -> Lavander
             }
         ]
         with open(config_path, "r") as f:

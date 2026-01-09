@@ -6,9 +6,13 @@ from . import config
 import secrets
 from mlx import Mlx
 from .utils.mlx_utils import manage_expose, manage_close, manage_key_simple
-from .utils.mlx_utils import XVar, render_maze_to_mlx, calculate_window_size
+from .utils.mlx_utils import XVar, render_maze_to_mlx, \
+                            calculate_window_size, update_cell
 from .utils.maze_utils import generate_maze as utils_generate_maze
-from .utils.buttons import mouse_handler, buttons_init, draw_buttons
+from .utils.buttons import mouse_handler, buttons_init, \
+                           draw_buttons, button_toggle_path
+from .resolve import resolve
+from .parser import generate_output as parser_generate_output
 
 
 class MazeGenerator:
@@ -29,7 +33,7 @@ minimum 30x20")
             if self.__config.SEED == 0:
                 seed = secrets.token_hex(8)
                 random.seed(seed)
-                print(seed)
+                print(f"Maze Seed: {seed}")
             else:
                 random.seed(self.__config.SEED)
             self.__xvar.mlx_ptr = self.__xvar.mlx.mlx_init()
@@ -77,9 +81,6 @@ minimum 30x20")
         except Exception as e:
             raise exception.ConfigException(f"MLX error: {e}")
 
-        buttons_init(self.__config, self.__xvar)
-        draw_buttons(self.__xvar)
-
     def __main_expose(self, xvar: XVar) -> None:
         manage_expose(xvar)
         draw_buttons(xvar)
@@ -101,6 +102,34 @@ minimum 30x20")
     def draw_control_buttons(self) -> None:
         buttons_init(self.__config, self.__xvar)
         draw_buttons(self.__xvar)
+
+    def get_solution(self, maze: list[list[int]]) -> list[tuple[int, int]]:
+        pos = tuple(self.__config.ENTRY)
+        result = resolve(
+            pos,
+            0,
+            maze,
+            None,
+            self.__config,
+            self.__xvar
+        )
+        if type(result) is list:
+            return result
+        else:
+            raise exception.MazeException("The maze has no possible solution")
+
+    def draw_solution(self) -> None:
+        button_toggle_path(self.__config, self.__xvar, True)
+
+    def hide_solution(self) -> None:
+        button_toggle_path(self.__config, self.__xvar, False)
+
+    def generate_output(self, maze: list[list[int]], solution: list[tuple]) -> bool:
+        return parser_generate_output(
+            maze,
+            solution,
+            self.__config
+        )
 
     def run(self) -> None:
         self.__xvar.mlx.mlx_loop(self.__xvar.mlx_ptr)

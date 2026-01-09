@@ -123,7 +123,7 @@ def button_color_maze(config: Config, xvar: XVar) -> None:
         button_toggle_path(config, xvar, xvar.show_path)
 
 
-def button_toggle_path(config: Config, xvar: XVar, status=None) -> None:
+def button_toggle_path(config, xvar: XVar, status=None) -> None:
     colors = {True: 5, False: 0}
     if status is not None:
         xvar.show_path = status

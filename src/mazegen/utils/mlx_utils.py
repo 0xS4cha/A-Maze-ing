@@ -4,7 +4,7 @@ import time
 
 
 class XVar:
-    def __init__(self):
+    def __init__(self) -> None:
         self.mlx = None
         self.mlx_ptr = None
         self.screen_w = 0
@@ -41,7 +41,7 @@ def render_buttons(xvar: XVar) -> None:
     pass
 
 
-def calculate_window_size(_config: config, screen_w: int, screen_h: int,
+def calculate_window_size(_config: config.Config, screen_w: int, screen_h: int,
                           ui_width: int = 250) -> int:
     avail_w = (screen_w if screen_w else 1920) - ui_width
     avail_h = (screen_h if screen_h else 1080)

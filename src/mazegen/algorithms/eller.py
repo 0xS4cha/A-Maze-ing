@@ -91,6 +91,17 @@ def generate(maze, config: Config, xvar=None):
     maze[entry_x][entry_y] = 0
     maze[exit_x][exit_y] = 0
 
+    # remove isolated walls
+    for r in range(1, h - 1):
+        for c in range(1, w - 1):
+            if maze[r][c] == 1:
+                # check neighbors (0=path, 1=wall, 2=obstacle)
+                if (maze[r-1][c] not in (1, 2) and
+                    maze[r+1][c] not in (1, 2) and
+                        maze[r][c-1] not in (1, 2) and
+                        maze[r][c+1] not in (1, 2)):
+                    maze[r][c] = 0
+
     for r in range(h):
         for c in range(w):
             if maze[r][c] == 2:

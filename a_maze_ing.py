@@ -8,22 +8,29 @@ from mazegen import MazeGenerator
 def main() -> None:
     if len(sys.argv) <= 1:
         raise exception.ArgsException("Not enough arguments")
-    try:
-        maze_generator = MazeGenerator(sys.argv[1])
-        maze = maze_generator.generate_maze()
-        maze_generator.draw_control_buttons()
-        maze_generator.draw_maze(maze)
-        maze_generator.run()
-    except Exception as e:
-        raise exception.ConfigException(f"Bad config file: {e}")
+    #try:
+    maze_generator = MazeGenerator(sys.argv[1])
+    maze = maze_generator.generate_maze()
+    maze_generator.draw_control_buttons()
+    maze_generator.draw_maze(maze)
+    solution = maze_generator.get_solution(maze)
+    maze_generator.draw_solution()
+    if not maze_generator.generate_output(maze, solution):
+        raise Exception("Could not build output file")
+    else:
+        print("Successfully built the output")
+    maze_generator.run()
+    #except Exception as e:
+    #    raise exception.ConfigException(f"Bad config file: {e.args[0]}")
 
 
 if __name__ == "__main__":
+    main()
     try:
-        main()
+        pass
     except SystemExit:
         pass
     except (exception.ArgsException, exception.ConfigException) as e:
-        exception.display_errors(e)
+        exception.display_errors(e.args[0])
     except Exception as e:
-        exception.display_errors(f"An unexpected error occurred: {e}")
+        exception.display_errors(f"An unexpected error occurred: {e.args[0]}")

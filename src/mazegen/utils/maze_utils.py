@@ -48,7 +48,7 @@ def add_symbol(maze: list[list[int]], symbol: list[list[int]],
         maze[logo_y + 2][logo_x + 12] = 0
 
 
-def generate_maze(_config: config.Config, xvar=None) -> bool:
+def generate_maze(_config: config.Config, xvar: bool = None) -> bool:
     global maze
     algo_list = [eller, backtracking]
     xvar.path = []
@@ -81,8 +81,6 @@ outside the map")
         _config,
         xvar
     )
-    if type(path) is list:
-        generate_output(result, path, _config)
-    else:
+    if type(path) is not list:
         exception.display_errors("Could not find a valid path")
     return result
