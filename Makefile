@@ -2,6 +2,7 @@ PYTHON			= python3
 MAIN			= main.py
 MYPY_FLAGS		= --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 DEPENDENCIES	= src/mazegen/lib/mlx-2.2-py3-ubuntu-any.whl
+FLAKE			= ~/.local/bin/flake8
 
 build:
 	bash -c "\
@@ -30,11 +31,11 @@ clean:
 	rm -rf .mypy_cache .pytest_cache
 
 lint:
-	flake8 .
+	flake8 . --exclude './src/mazegen/lib'
 	mypy . $(MYPY_FLAGS)
 
 lint-strict:
-	flake8 .
+	flake8 . --exclude './src/mazegen/lib'
 	mypy . --strict
 
 .PHONY: install run debug clean lint lint-strict

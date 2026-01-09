@@ -42,7 +42,7 @@ def render_buttons(xvar: XVar) -> None:
 
 
 def calculate_window_size(_config: config, screen_w: int, screen_h: int,
-                          ui_width=250) -> int:
+                          ui_width: int = 250) -> int:
     avail_w = (screen_w if screen_w else 1920) - ui_width
     avail_h = (screen_h if screen_h else 1080)
 
