@@ -25,7 +25,6 @@ class Config:
         self.PERFECT = False
         self.EMPTY_CHAR = ' '
         self.FULL_CHAR = '█'
-        self.SEED = 0
         self.DELAY = 0.001
         self.COLORS = [
             {

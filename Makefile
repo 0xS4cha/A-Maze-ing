@@ -31,11 +31,11 @@ clean:
 	rm -rf .mypy_cache .pytest_cache
 
 lint:
-	flake8 .
+	flake8 . --exclude './src/mazegen/lib'
 	mypy . $(MYPY_FLAGS)
 
 lint-strict:
-	flake8 .
+	flake8 . --exclude './src/mazegen/lib'
 	mypy . --strict
 
 .PHONY: install run debug clean lint lint-strict
