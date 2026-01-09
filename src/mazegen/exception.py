@@ -5,10 +5,10 @@ def display_errors(message: str) -> None:
 
 
 class ArgsException(Exception):
-    def __init__(self, *args):
+    def __init__(self, *args: str):
         super().__init__(*args)
 
 
 class ConfigException(Exception):
-    def __init__(self, *args):
+    def __init__(self, *args: str):
         super().__init__(*args)

@@ -2,11 +2,13 @@ from .. import config
 from ..algorithms import backtracking as backtracking
 from ..algorithms import eller as eller
 from ..parser import generate_output
-from ..utils.mlx_utils import render_maze_to_mlx
+from ..utils.mlx_utils import XVar, render_maze_to_mlx
 from .. import exception
 from ..resolve import resolve
+from typing import List
 
 
+maze: List[List[int]] = []
 ft_symbol = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0],
     [0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2],
@@ -20,7 +22,7 @@ ft_symbol = [
 ]
 
 
-def add_symbol(maze: list[list[int]], symbol: list[list[int]],
+def add_symbol(maze: List[List[int]], symbol: List[List[int]],
                is_perfect: bool) -> None:
     maze_h = len(maze)
     maze_w = len(maze[0])
@@ -48,7 +50,7 @@ def add_symbol(maze: list[list[int]], symbol: list[list[int]],
         maze[logo_y + 2][logo_x + 12] = 0
 
 
-def generate_maze(_config: config.Config, xvar=None) -> bool:
+def generate_maze(_config: config.Config, xvar: XVar) -> List[List[int]]:
     global maze
     algo_list = [eller, backtracking]
     xvar.path = []

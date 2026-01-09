@@ -2,18 +2,19 @@
 
 from .config import Config
 from collections import deque
+from .utils.mlx_utils import XVar
 
 
 def resolve(pos: tuple[int, int], direction: int,
             maze: list[list[int]],
             visited: list[list[bool]] | None,
-            config: Config, xvar) -> list[str] | bool:
+            config: Config, xvar: XVar) -> list[str] | bool:
     queue = deque([pos])
     visited_set = {pos}
-    came_from = {pos: None}
+    came_from: dict[tuple[int, int], tuple[int, int] | None] = {pos: None}
     end_pos = tuple(config.EXIT)
 
-    final_node = None
+    final_node: tuple[int, int] | None = None
 
     while queue:
         current = queue.popleft()
@@ -45,8 +46,11 @@ def resolve(pos: tuple[int, int], direction: int,
         curr = final_node
         while curr != pos:
             parent = came_from[curr]
+            if parent is None:
+                break
             dx, dy = curr[0] - parent[0], curr[1] - parent[1]
 
+            d = ""
             if dx == 0 and dy == -1:
                 d = "N"
             elif dx == 1 and dy == 0:

@@ -4,13 +4,14 @@ from ..utils.mlx_utils import XVar, manage_close, update_cell
 from .. import exception
 from ..utils.maze_utils import generate_maze, render_maze_to_mlx
 from ..config import Config
-from typing import Callable
+from typing import Callable, Any
 
-mouse_callbacks = {}
+
+mouse_callbacks: dict[str, Any] = {}
 ui_bg_img = None
 
 
-def mouse_handler(btn_type: int, x: int, y: int, arg) -> None:
+def mouse_handler(btn_type: int, x: int, y: int, arg: None) -> None:
     try:
         if btn_type != 1:
             return
@@ -89,7 +90,7 @@ def add_button(name: str,
                bg: int,
                fg: int,
                callback: Callable,
-               args) -> None:
+               args: dict[str, Any]) -> None:
     mouse_callbacks[name] = {
         "x": x,
         "y": y,
@@ -123,7 +124,8 @@ def button_color_maze(config: Config, xvar: XVar) -> None:
         button_toggle_path(config, xvar, xvar.show_path)
 
 
-def button_toggle_path(config: Config, xvar: XVar, status=None) -> None:
+def button_toggle_path(config: Config, xvar: XVar,
+                       status: bool | None = None) -> None:
     colors = {True: 5, False: 0}
     if status is not None:
         xvar.show_path = status
@@ -182,7 +184,7 @@ def buttons_init(config: Config, xvar: XVar) -> None:
         ui_bg_img = None
 
     def create_btn(name: str, text: str, bg_color: int, callback: Callable,
-                   args={}) -> None:
+                   args: dict[str, Any] = {}) -> None:
         add_button(name, center_x, current_y, btn_width, btn_height,
                    text, bg_color, text_color, callback, args)
 

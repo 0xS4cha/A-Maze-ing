@@ -2,12 +2,12 @@
 
 import random
 import time
-from ..utils.mlx_utils import update_cell
+from ..utils.mlx_utils import XVar, update_cell
 from ..config import Config
 
 
 def backtrack(x: int, y: int, maze: list[list[int]], width: int, height: int,
-              _config=None, xvar=None) -> None:
+              _config: Config, xvar: XVar) -> None:
     directions = [(0, 2), (0, -2), (2, 0), (-2, 0)]
     random.shuffle(directions)
 
@@ -35,7 +35,7 @@ def backtrack(x: int, y: int, maze: list[list[int]], width: int, height: int,
 
 
 def ensure_connectivity(maze: list[list[int]], width: int, height: int,
-                        _config=None, xvar=None) -> None:
+                        _config: Config, xvar: XVar) -> None:
     for row in range(1, height - 1, 2):
         for col in range(1, width - 1, 2):
             if maze[row][col] == 1:
@@ -52,7 +52,7 @@ def ensure_connectivity(maze: list[list[int]], width: int, height: int,
 
 
 def generate(maze: list[list[int]], _config: Config,
-             xvar=None) -> list[list[int]]:
+             xvar: XVar) -> list[list[int]]:
     w = _config.WIDTH
     h = _config.HEIGHT
 

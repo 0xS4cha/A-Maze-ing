@@ -1,3 +1,4 @@
 from .MazeGenerator import MazeGenerator
+from typing import Any
 
-__all__ = [MazeGenerator]
+__all__: Any = [MazeGenerator]
