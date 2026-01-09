@@ -1,26 +1,7 @@
 #!/usr/bin/env python3
 
-from .config import Config, COLOR_FT, COLOR_STARTING, COLOR_RESET, COLOR_ENDING
+from .config import Config
 from collections import deque
-
-
-def print_maze(maze: list[list[int]], empty, full):
-    for line in range(len(maze)):
-        for column in range(len(maze[line])):
-            if maze[line][column] == 0:
-                print(empty, end="")
-            elif maze[line][column] == 1:
-                print(full, end="")
-            elif maze[line][column] == 2:
-                print(COLOR_FT + full + COLOR_RESET, end='')
-            elif maze[line][column] == 3:
-                print(COLOR_STARTING + full + COLOR_RESET,
-                      end='')
-            elif maze[line][column] == 4:
-                print(COLOR_ENDING + full + COLOR_RESET, end='')
-            elif maze[line][column] == 25:
-                print("\033[32m" + full + COLOR_RESET, end='')
-        print()
 
 
 def resolve(pos: tuple[int, int], direction: int,
@@ -60,7 +41,6 @@ def resolve(pos: tuple[int, int], direction: int,
                 queue.append((nx, ny))
 
     if final_node:
-        # Reconstruct path
         path = []
         curr = final_node
         while curr != pos:

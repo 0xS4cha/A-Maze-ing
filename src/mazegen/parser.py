@@ -3,7 +3,8 @@
 from .config import Config
 
 
-def generate_output(maze: list[list[int]], path: list[str], config: Config):
+def generate_output(maze: list[list[int]], path: list[str],
+                    config: Config) -> None:
     with open(config.OUTPUT_FILE, "w") as f:
         for y in range(1, config.HEIGHT, 2):
             line = ""

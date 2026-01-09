@@ -6,7 +6,7 @@ import time
 from ..utils.mlx_utils import update_cell
 
 
-def generate(maze, config: Config, xvar=None):
+def generate(maze: list[list[int]], config: Config, xvar=None) -> None:
     w = config.WIDTH
     h = config.HEIGHT
 
@@ -74,7 +74,10 @@ def generate(maze, config: Config, xvar=None):
                 random.shuffle(cells)
                 count = random.randint(1, len(cells))
                 if not config.PERFECT:
-                    count = random.randint(1, len(cells)) if random.choice([0, 1]) else len(cells)
+                    if random.choice([0, 1]):
+                        count = random.randint(1, len(cells))
+                    else:
+                        count = len(cells)
 
                 for x in cells[:count]:
                     ry, rx = 2 * y + 2, 2 * x + 1
