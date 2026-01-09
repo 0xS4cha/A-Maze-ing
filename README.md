@@ -1,19 +1,94 @@
+# A-Maze-ing
+
 *This project has been created as part
 of the 42 curriculum by sservant and julcleme*
 
 # Description
 This project is a python project focused on understanding and implementing maze generation and maze solving algorithms by using a graphic library. 
 
-# Algorithms
-This project contains two algorithms: `Recursive Backtracking` and `Randomized Prim's` algorithms.
-We choose these algorithms because the `Recursive Backtracking` ensure a perfect maze since it builds the path and never goes back to the pixels already visited.
+```mermaid
+graph TD
+    %% Styles
+    classDef jule fill:#BBDEFB,stroke:#1565C0,stroke-width:2px,color:black;
+    classDef sserv fill:#C8E6C9,stroke:#2E7D32,stroke-width:2px,color:black;
+    classDef both fill:#E1BEE7,stroke:#6A1B9A,stroke-width:2px,stroke-dasharray: 5 5,color:black;
+    classDef gui fill:#FFF9C4,stroke:#FBC02D,stroke-width:2px,color:black;
 
-`Randomized Prim's`' algorithm is interesting due to its working behaviour and it uses graphs so its implementation was very interesting. And it could generate non perfect mazes so it was a very good choice
+    %% Nœuds (Textes entre guillemets pour supporter les parenthèses)
+    Config["Configuration File<br/>Start Point<br/>(Julecleme)"]:::jule
+    User["User Script<br/>Main Logic<br/>(Both)"]:::both
+    
+    Generator["MazeGenerator Class<br/>Core Algorithme<br/>(Both)"]:::both
+    Maze["Maze Structure<br/>Data Model<br/>(sservant)"]:::sserv
+    Solution["Solution Path<br/>Solver<br/>(julcleme)"]:::jule
+    
+    GUI["Visualization MLX<br/>Display<br/>(sservant)"]:::sserv
+
+    %% Connexions
+    Config -->|Load| Generator
+    User -->|Import| Generator
+    
+    Generator -->|generate_maze| Maze
+    Generator -->|solve / get_solution| Solution
+    Generator -->|draw_maze| GUI
+```
+
+# Algorithms
+This project implements the following algorithms:
+
+1.  **Recursive Backtracking**: The choice of a backtracking algorithm was very quick because it is the most efficient in generating mazes and creates a perfect maze for sure. ```sservant```
+2.  **Prim Algorithm**: We chose the Prim algorithm because using graphs is good practice in this style of generation, and it's a good thing to see. ```julcleme```
 
 # Instructions
-Usage: `python3 a_maze_ing.py default_config.txt`
+
+## Installation
+
+The maze generator is available as a pip-installable package.
+
+Build from source:
+```bash
+make build
+```
+
+Install:
+```bash
+pip install mazegen-1.0.0-py3-none-any.whl
+```
+
+## Usage
+
+### Command Line
+Run the program with a configuration file:
+`python3 a_maze_ing.py default_config.txt`
+
+### Python API
+You can use the `mazegen` package in your own scripts.
+
+```python
+from mazegen import MazeGenerator
+
+# Initialize from config file
+generator = MazeGenerator("config.txt")
+
+# Generate maze
+maze = generator.generate_maze()
+
+# Solve
+solution_path = generator.get_solution(maze)
+
+# Display (keeps window open)
+generator.draw_maze(maze)
+generator.run()
+```
+
+#### Custom Parameters & Data Access
+*   **Instantiation**: `MazeGenerator(config_path)`
+*   **Access Maze**: `generator.maze` [Verify attribute name]
+*   **Access Solution**: `generator.solution` [Verify attribute name]
 
 # Configuration File
+The configuration file controls the maze generation. Below is the complete structure:
+
 ```bash
 # this is a comment
 
@@ -32,6 +107,8 @@ OUTPUT_FILE=output.txt
 
 # the generated maze contains only one solution
 PERFECT=0
+
+# 0 for Eller's (or Prim's), 1 for Backtracking
 
 # view generation and resolving in realtime
 ANIMATION=1
@@ -101,17 +178,17 @@ We started by researching algorithms, implemented a basic console version, then 
 - **Continuous Walls**: Post-processing for Eller's algorithm to avoid isolated dots.
 
 ## TODO
-- [ ] Fix eller animation
+- [x] Fix eller animation
 - [x] You must implement the maze generation as a unique class
-- [ ] Use frameworks like pytest or unittest for unit tests, covering edge cases.
+- [x] Use frameworks like pytest or unittest for unit tests, covering edge cases.
 - [x] Your functions should handle exceptions gracefully to avoid crashes
-- [ ] Use PEP 257 for docstrings
+- [x] Use PEP 257 for docstrings
 - [x] Use type definition and check using `mypy`
 - [x] Makefile using rules `install` `run` `debug` `clean` `lint-strict` and `lint`
 - [x] Add a `.gitignore`
 - [x] Create test programs to verify project functionality
 - [x] Use venv
-- [ ] Fix `makefile`: add install `mlx`
+- [x] Fix `makefile`: add install `mlx`
 - [x] A default configuration file must be available in your Git repository
 - [x] The maze must be randomly generated, but reproducibility via a seed is required
 - [ ] You must provide a short documentation describing how to:
@@ -124,7 +201,7 @@ We started by researching algorithms, implemented a basic console version, then 
 	- [ ] Why you chose this algorithm.
 	- [ ] What part of your code is reusable, and how.
 	- [ ] Your team and project management with:
-		- [ ] The roles of each team member.
+		- [x] The roles of each team member.
 		- [ ] Your anticipated planning and how it evolved until the end
 		- [ ] What worked well and what could be improved
 		- [ ] Have you used any specific tools? Which ones?
