@@ -53,9 +53,18 @@ def add_symbol(maze: List[List[int]], symbol: List[List[int]],
         logo_x = len(maze[0]) // 2 - len(ft_symbol[0]) // 2
         logo_y = len(maze) // 2 - len(ft_symbol) // 2
 
+        # add path to ensure connectivity inside the 42 logo
+
+        maze[logo_y - 1][logo_x + 11] = 0
+        maze[logo_y - 1][logo_x + 13] = 0
+
+        maze[logo_y - 1][logo_x + 12] = 0
         maze[logo_y][logo_x + 12] = 0
         maze[logo_y + 1][logo_x + 12] = 0
         maze[logo_y + 2][logo_x + 12] = 0
+        maze[logo_y + 3][logo_x + 12] = 0
+        for x in range(logo_x+10, logo_x+16):
+            maze[logo_y + 3][x] = 0
 
 
 def generate_maze(_config: config.Config, xvar: XVar) -> List[List[int]]:
@@ -87,11 +96,19 @@ def generate_maze(_config: config.Config, xvar: XVar) -> List[List[int]]:
         raise exception.ConfigException("Invalid entry or exit position, \
 on the 42 symbol (unvalid path)")
     if _config.ANIMATION and xvar:
-        render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, maze, _config,
-                           xvar)
-    result: list[list[int]] = algo_list[_config.PERFECT].generate(maze,
-                                                                  _config,
-                                                                  xvar)
+        render_maze_to_mlx(
+            xvar.mlx,
+            xvar.mlx_ptr,
+            xvar.win_1,
+            maze,
+            _config,
+            xvar
+        )
+    result: list[list[int]] = algo_list[_config.PERFECT].generate(
+        maze,
+        _config,
+        xvar
+    )
     if (entry_x < 1 or entry_y < 1 or entry_x > _config.WIDTH - 2 or
         entry_y > _config.HEIGHT - 2) \
             or (entry_x == exit_x and entry_y == exit_y):
@@ -99,7 +116,6 @@ on the 42 symbol (unvalid path)")
 outside the map")
     result[entry_y][entry_x] = 3
     result[exit_y][exit_x] = 4
-    result[_config.HEIGHT - 1][23] = 1
     path = resolve(
         (_config.ENTRY[0], _config.ENTRY[1]),
         0,
@@ -109,5 +125,5 @@ outside the map")
         xvar
     )
     if type(path) is not list:
-        exception.display_errors("Could not find a valid path")
+        raise exception.MazeException("Could not find a valid path")
     return result

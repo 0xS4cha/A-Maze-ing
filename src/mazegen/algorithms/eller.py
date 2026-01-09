@@ -101,7 +101,8 @@ def generate(maze: List[List[int]], config: Config,
             candidates = []
             for r, c in current:
                 nr = r + 2
-                if nr < height and not is_blocked(maze, r + 1, c) and not is_blocked(maze, nr, c):
+                if nr < height and not is_blocked(maze, r + 1, c) and\
+                        not is_blocked(maze, nr, c):
                     candidates.append((r, c))
 
             if not candidates:
@@ -122,5 +123,4 @@ def generate(maze: List[List[int]], config: Config,
             new_sets.append(new_set)
 
         sets = new_sets
-
     return maze
