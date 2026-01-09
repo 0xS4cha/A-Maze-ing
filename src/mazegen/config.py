@@ -111,8 +111,8 @@ class Config:
                         else:
                             raise ValueError(f"Unknown entry: '{line}'.")
                     except ValueError as e:
-                        raise exception.ConfigException(f"Invalid config entry: \
-    {e.args[0]}.\n{self.get_error_line_format(i+1, config_path)}")
+                        raise exception.ConfigException(f"Invalid config \
+entry:  {e.args[0]}.\n{self.get_error_line_format(i+1, config_path)}")
         except (FileExistsError, FileNotFoundError, PermissionError):
             raise exception.ConfigException(f"File '{config_path}' \
 is not accessible")

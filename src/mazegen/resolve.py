@@ -21,7 +21,8 @@ def resolve(pos: tuple[int, int], direction: int,
         xvar (XVar): XVar object for rendering (unused in logic).
 
     Returns:
-        list[str] | bool: A list of directions ('N', 'S', 'E', 'W') representing the path,
+        list[str] | bool: A list of directions ('N', 'S', 'E', 'W') \
+representing the path,
                           or False if no solution is found.
     """
     queue = deque([pos])

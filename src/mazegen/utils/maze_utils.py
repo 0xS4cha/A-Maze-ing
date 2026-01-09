@@ -1,3 +1,5 @@
+import random
+import secrets
 from .. import config
 from ..algorithms import backtracking as backtracking
 from ..algorithms import prim as prim
@@ -47,59 +49,44 @@ def add_symbol(maze: List[List[int]], symbol: List[List[int]]) -> None:
 
 
 def make_non_perfect(maze: list[list[int]], path: list[tuple[int, int]]):
+    """
+    Modify the maze to make it non-perfect by removing random walls adjacent\
+to the solution path.
+    This creates loops and ensures multiple possible paths exist.
+    """
     h = len(maze)
     w = len(maze[0])
+    loops_added = 0
+    target_loops = 4  # Ensure at least a few loops
 
-    def in_bounds(r, c):
-        return 0 <= r < h and 0 <= c < w
+    # Try random points along the path
+    indices = list(range(len(path)))
+    random.shuffle(indices)
 
-    def creates_2x2(r, c):
-        for dr in (-1, 0):
-            for dc in (-1, 0):
-                cells = [
-                    (r + dr, c + dc),
-                    (r + dr + 1, c + dc),
-                    (r + dr, c + dc + 1),
-                    (r + dr + 1, c + dc + 1),
-                ]
-                if all(in_bounds(rr, cc) and maze[rr][cc] == 0 for rr, cc in cells):
-                    return True
-        return False
+    for i in indices:
+        if loops_added >= target_loops:
+            break
 
-    for i in range(2, len(path) - 2):
-        r, c = path[i]
-        pr, pc = path[i - 1]
-        nr, nc = path[i + 1]
+        c, r = path[i]
 
-        dr, dc = nr - r, nc - c
+        # check for adjacent wall to remove
+        moves = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        random.shuffle(moves)
 
-        # only allow straight cardinal paths
-        if abs(dr) + abs(dc) != 1:
-            continue
+        for dc, dr in moves:
+            wc, wr = c + dc, r + dr        # wall
+            nc, nr = c + 2*dc, r + 2 * dr  # neighbor
 
-        # perpendicular directions (strict)
-        for pdr, pdc in ((dc, -dr), (-dc, dr)):
-            r1, c1 = r + pdr, c + pdc
-            r2, c2 = r1 + dr, c1 + dc
-
-            if not in_bounds(r1, c1) or not in_bounds(r2, c2):
+            if not (0 < wc < w-1 and 0 < wr < h-1):
+                continue
+            if not (0 < nc < w-1 and 0 < nr < h-1):
                 continue
 
-            if maze[r1][c1] != 1 or maze[r2][c2] != 1:
-                continue
-
-            # simulate carve
-            maze[r1][c1] = 0
-            maze[r2][c2] = 0
-
-            if creates_2x2(r1, c1) or creates_2x2(r2, c2):
-                maze[r1][c1] = 1
-                maze[r2][c2] = 1
-                continue
-
-            # remove original cell to keep acyclic
-            maze[r][c] = 1
-            return
+            if maze[wr][wc] == 1:
+                if maze[nr][nc] == 0:
+                    maze[wr][wc] = 0
+                    loops_added += 1
+                    break
 
 
 def generate_maze(_config: config.Config, xvar: XVar) -> List[List[int]]:
@@ -120,17 +107,16 @@ def generate_maze(_config: config.Config, xvar: XVar) -> List[List[int]]:
         exception.ConfigException: If entry/exit points are invalid.
     """
     global maze
-<<<<<<< HEAD
-    algo_list = [eller, backtracking]
     xvar.show_path = False
-=======
     algo_list = [prim, backtracking]
->>>>>>> jules
     xvar.path = []
     maze = [[1 for _ in range(_config.WIDTH)] for _ in range(_config.HEIGHT)]
     add_symbol(maze, ft_symbol)
     entry_x, entry_y = _config.ENTRY
     exit_x, exit_y = _config.EXIT
+    new_seed = secrets.token_hex(8)
+    random.seed(new_seed)
+    print(f"Maze Seed: {new_seed}")
     if maze[exit_y][exit_x] == 2:
         raise exception.ConfigException("Invalid entry or exit position, \
 on the 42 symbol (unvalid path)")
@@ -163,7 +149,8 @@ outside the map")
         _config,
         xvar
     )
-    make_non_perfect(result, xvar.path)
+    if (_config.PERFECT == 0):
+        make_non_perfect(result, xvar.path)
     if type(path) is not list:
         raise exception.MazeException("Could not find a valid path")
     return result

@@ -57,7 +57,6 @@ minimum 31x21")
                 else:
                     new_seed = secrets.token_hex(8)
                 random.seed(new_seed)
-                print(f"Maze Seed: {new_seed}")
             else:
                 random.seed(self.__config.SEED)
             self.__xvar.mlx_ptr = self.__xvar.mlx.mlx_init()

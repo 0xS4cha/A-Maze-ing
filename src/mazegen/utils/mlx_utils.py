@@ -68,7 +68,8 @@ def calculate_window_size(_config: config.Config, screen_w: int, screen_h: int,
         ui_width (int): Width reserved for the UI panel.
 
     Returns:
-        tuple[int, int, int]: A tuple containing (required_width, required_height, cell_size).
+        tuple[int, int, int]: A tuple containing (required_width, \
+required_height, cell_size).
     """
     avail_w = (screen_w if screen_w else 1920) - ui_width
     avail_h = (screen_h if screen_h else 1080)
