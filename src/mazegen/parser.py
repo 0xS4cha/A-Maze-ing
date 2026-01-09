@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Output file generation for maze data."""
 
 from .config import Config
 

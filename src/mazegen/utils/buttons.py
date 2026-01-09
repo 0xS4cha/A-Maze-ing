@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+"""Button handling utilities for the maze UI."""
 
 from ..utils.mlx_utils import XVar, manage_close, update_cell
 from .. import exception
@@ -109,6 +109,21 @@ def add_button(name: str,
                fg: int,
                callback: Callable,
                args: dict[str, Any]) -> None:
+    """
+    Register a new button in the global callback dictionary.
+
+    Args:
+        name (str): Unique identifier for the button.
+        x (int): X-coordinate of the button.
+        y (int): Y-coordinate of the button.
+        w (int): Width of the button.
+        h (int): Height of the button.
+        text (str): Label text.
+        bg (int): Background color.
+        fg (int): Text color.
+        callback (Callable): Function to execute on click.
+        args (dict[str, Any]): Arguments to pass to the callback.
+    """
     mouse_callbacks[name] = {
         "x": x,
         "y": y,
@@ -124,16 +139,36 @@ def add_button(name: str,
 
 
 def button_exit(xvar: XVar) -> None:
+    """
+    Callback to exit the application.
+
+    Args:
+        xvar (XVar): The graphics context.
+    """
     manage_close(xvar)
 
 
 def button_restart(config: Config, xvar: XVar) -> None:
+    """
+    Callback to generate a new maze.
+
+    Args:
+        config (Config): The configuration object.
+        xvar (XVar): The graphics context.
+    """
     xvar.maze_data = generate_maze(config, xvar)
     render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, xvar.maze_data,
                        config, xvar)
 
 
 def button_color_maze(config: Config, xvar: XVar) -> None:
+    """
+    Callback to cycle through maze color palettes.
+
+    Args:
+        config (Config): The configuration object.
+        xvar (XVar): The graphics context.
+    """
     color_max = len(config.COLORS)
     xvar.color_palette = (xvar.color_palette + 1) % color_max
     render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, xvar.maze_data,
@@ -144,6 +179,14 @@ def button_color_maze(config: Config, xvar: XVar) -> None:
 
 def button_toggle_path(config, xvar: XVar,
                        status: bool | None = None) -> None:
+    """
+    Callback to toggle the solution path visibility.
+
+    Args:
+        config (Config): The configuration object.
+        xvar (XVar): The graphics context.
+        status (bool | None): Explicit status to set, or None to toggle.
+    """
     colors = {True: 5, False: 0}
     if status is not None:
         xvar.show_path = status
@@ -154,6 +197,13 @@ def button_toggle_path(config, xvar: XVar,
 
 
 def buttons_init(config: Config, xvar: XVar) -> None:
+    """
+    Initialize the UI buttons and render them to the window.
+
+    Args:
+        config (Config): The configuration object.
+        xvar (XVar): The graphics context.
+    """
     win_w = xvar.win_w if xvar.win_w else 800
     win_h = xvar.win_h if xvar.win_h else 600
 

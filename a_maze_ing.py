@@ -17,11 +17,7 @@ def main() -> None:
     if len(sys.argv) <= 1:
         raise exception.ArgsException("Not enough arguments")
     try:
-        maze_generator = MazeGenerator(
-            sys.argv[1],
-            seed="Hello World!",
-            size=(61, 61)
-        )
+        maze_generator = MazeGenerator(sys.argv[1])
         maze = maze_generator.generate_maze()
         maze_generator.draw_control_buttons()
         maze_generator.draw_maze(maze)
@@ -42,8 +38,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
     try:
+        main()
         pass
     except SystemExit:
         pass

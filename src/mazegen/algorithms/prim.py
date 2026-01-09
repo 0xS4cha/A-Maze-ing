@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Randomized Prim's algorithm for maze generation."""
 
 import random
 import time

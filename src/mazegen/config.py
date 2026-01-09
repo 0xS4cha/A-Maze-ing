@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Configuration handling for the maze generator."""
 
 from . import exception
 import sys
@@ -12,11 +13,44 @@ COLOR_RESET = "\033[0m"
 
 
 class Config:
+    """
+    Configuration class for parsing and storing settings.
+
+    Attributes:
+        WIDTH (int): Maze width.
+        HEIGHT (int): Maze height.
+        ENTRY (list[int]): Entry coordinates [x, y].
+        EXIT (list[int]): Exit coordinates [x, y].
+        OUTPUT_FILE (str): Path to output file.
+        PERFECT (int): Algorithm choice (0=Eller/Prim, 1=Backtracking).
+        ANIMATION (int): Animation check.
+        COLORS (list[dict]): List of color palettes.
+    """
+
     @staticmethod
     def get_error_line_format(i: int, config_path: str) -> str:
+        """
+        Format error messages for configuration parsing.
+
+        Args:
+            i (int): Line number.
+            config_path (str): Path to config file.
+
+        Returns:
+            str: Formatted error string.
+        """
         return f"\tFile \"{config_path}\", line {i}\n"
 
     def __init__(self, config_path: str) -> None:
+        """
+        Initialize configuration from a file.
+
+        Args:
+            config_path (str): Path to the configuration file.
+
+        Raises:
+            exception.ConfigException: If configuration is invalid.
+        """
         self.WIDTH = 0
         self.HEIGHT = 0
         self.ENTRY = [0, 0]

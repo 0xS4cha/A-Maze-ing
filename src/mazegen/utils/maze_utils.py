@@ -1,3 +1,4 @@
+"""Maze generation utilities."""
 import random
 import secrets
 from .. import config
@@ -50,9 +51,14 @@ def add_symbol(maze: List[List[int]], symbol: List[List[int]]) -> None:
 
 def make_non_perfect(maze: list[list[int]], path: list[tuple[int, int]]):
     """
-    Modify the maze to make it non-perfect by removing random walls adjacent\
-to the solution path.
-    This creates loops and ensures multiple possible paths exist.
+    Modify the maze to make it non-perfect.
+
+    Removes a random wall adjacent to the solution path to create loops
+    and ensure multiple possible paths exist.
+
+    Args:
+        maze (list[list[int]]): The maze grid.
+        path (list[tuple[int, int]]): The solution path coordinates.
     """
     h = len(maze)
     w = len(maze[0])

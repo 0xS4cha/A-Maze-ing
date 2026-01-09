@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Recursive backtracking algorithm for maze generation."""
 
 import random
 import time
@@ -49,7 +50,7 @@ def backtrack(x: int, y: int, maze: list[list[int]], width: int, height: int,
 def ensure_connectivity(maze: list[list[int]], width: int, height: int,
                         _config: Config, xvar: XVar) -> None:
     """
-    Post-processing step to ensure all open areas in the maze are connected.
+    Ensure all open areas in the maze are connected.
 
     Args:
         maze (list[list[int]]): The maze grid.
@@ -75,6 +76,17 @@ def ensure_connectivity(maze: list[list[int]], width: int, height: int,
 
 def generate(maze: list[list[int]], _config: Config,
              xvar: XVar) -> list[list[int]]:
+    """
+    Initialize and execute the backtracking generation algorithm.
+
+    Args:
+        maze (list[list[int]]): The initial maze grid.
+        _config (Config): Configuration object.
+        xvar (XVar): Graphics context.
+
+    Returns:
+        list[list[int]]: The generated maze grid.
+    """
     w = _config.WIDTH
     h = _config.HEIGHT
 

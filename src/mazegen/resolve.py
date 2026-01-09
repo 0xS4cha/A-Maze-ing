@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Maze solving algorithm (BFS)."""
 
 from .config import Config
 from collections import deque

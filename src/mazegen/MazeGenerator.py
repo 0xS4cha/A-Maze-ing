@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Main module for the Maze Generator application logic."""
 
 import random
 from . import exception
@@ -16,9 +17,8 @@ from .parser import generate_output as parser_generate_output
 
 
 class MazeGenerator:
-    """
-    A class to generate, solve, and visualize mazes using MLX.
-    """
+    """A class to generate, solve, and visualize mazes using MLX."""
+
     def __init__(
             self,
             path: str,
@@ -106,7 +106,7 @@ minimum 31x21")
 
     def __main_expose(self, xvar: XVar) -> None:
         """
-        Callback for window exposure events (redraws buttons).
+        Handle window exposure events (redraws buttons).
 
         Args:
             xvar (XVar): The variable container.

@@ -1,3 +1,4 @@
+"""Maze generation package."""
 from .MazeGenerator import MazeGenerator
 from typing import Any
 

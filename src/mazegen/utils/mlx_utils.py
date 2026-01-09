@@ -1,3 +1,4 @@
+"""MLX utility functions for the maze generator."""
 from .. import config
 from .. import exception
 from mlx import Mlx
@@ -6,9 +7,8 @@ from typing import Any, List
 
 
 class XVar:
-    """
-    Class to hold X window server variables and MLX state.
-    """
+    """Class to hold X window server variables and MLX state."""
+
     def __init__(self) -> None:
         self.mlx: Any = None
         self.mlx_ptr = None
@@ -34,7 +34,7 @@ class XVar:
 
 def manage_close(xvar: XVar) -> None:
     """
-    Callback to handle window close event.
+    Handle window close event.
 
     Args:
         xvar (XVar): The graphics context.
@@ -44,7 +44,7 @@ def manage_close(xvar: XVar) -> None:
 
 def manage_key_simple(key: int, xvar: XVar) -> None:
     """
-    Simple key handler for closing the window with 'q' or ESC.
+    Handle key press events for closing the window with 'q' or ESC.
 
     Args:
         key (int): The key code pressed.

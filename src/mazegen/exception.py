@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Custom exceptions for the maze generator."""
 
 import sys
 
@@ -14,24 +15,21 @@ def display_errors(message: str) -> None:
 
 
 class MazeException(Exception):
-    """
-    Base exception class for maze generation errors.
-    """
+    """Base exception class for maze generation errors."""
+
     def __init__(self, *args: str):
         super().__init__(*args)
 
 
 class ArgsException(MazeException):
-    """
-    Exception raised for invalid command-line arguments.
-    """
+    """Exception raised for invalid command-line arguments."""
+
     def __init__(self, *args: str):
         super().__init__(*args)
 
 
 class ConfigException(Exception):
-    """
-    Exception raised for configuration file errors.
-    """
+    """Exception raised for configuration file errors."""
+
     def __init__(self, *args: str):
         super().__init__(*args)

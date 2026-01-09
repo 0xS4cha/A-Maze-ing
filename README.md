@@ -213,3 +213,4 @@ graph TD
 	and build your package again from your sources.
 	The main README.md file (not part of the reusable module) must also contain this short
 	documentation.
+- [ ] Fix the tests
