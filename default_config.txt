@@ -8,7 +8,7 @@ HEIGHT=53
 # position of the entry point of the maze (x, y)
 ENTRY=1,1
 # position of the exit point of the maze (x, y)
-EXIT=49,49
+EXIT=19,19
 
 # path of the output file
 OUTPUT_FILE=output.txt

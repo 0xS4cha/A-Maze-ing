@@ -29,7 +29,7 @@ def generate(maze: List[List[int]], config: Config,
 
     start_x, start_y = config.ENTRY
     if not is_valid(start_x, start_y):
-        start_x, start_y = (1, 1)
+        start_x, start_y = (0, 0)
 
     maze[start_y][start_x] = 0
     if xvar and config.ANIMATION:
