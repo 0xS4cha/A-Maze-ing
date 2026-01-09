@@ -8,7 +8,7 @@ from typing import List
 
 
 def generate(maze: List[List[int]], config: Config,
-             xvar: XVar | None = None) -> List[List[int]]:
+             xvar: XVar) -> List[List[int]]:
     """
     Generate a maze using Randomized Prim's algorithm.
 

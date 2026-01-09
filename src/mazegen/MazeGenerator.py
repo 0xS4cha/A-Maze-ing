@@ -7,7 +7,7 @@ import secrets
 from mlx import Mlx
 from .utils.mlx_utils import manage_expose, manage_close, manage_key_simple
 from .utils.mlx_utils import XVar, render_maze_to_mlx, \
-                            calculate_window_size, update_cell
+                            calculate_window_size
 from .utils.maze_utils import generate_maze as utils_generate_maze
 from .utils.buttons import mouse_handler, buttons_init, \
                            draw_buttons, button_toggle_path
@@ -19,7 +19,12 @@ class MazeGenerator:
     """
     A class to generate, solve, and visualize mazes using MLX.
     """
-    def __init__(self, path: str) -> None:
+    def __init__(
+            self,
+            path: str,
+            seed: str | int = 0,
+            size: tuple[int, int] = (-1, -1)
+            ) -> None:
         """
         Initialize the maze generator with a configuration file.
 
@@ -37,16 +42,22 @@ class MazeGenerator:
             raise exception.ConfigException(f"Can't initialize MLX: {e}")
 
         self.__config = config.Config(path)
-        if self.__config.WIDTH < 30 or self.__config.HEIGHT < 20:
+        if (size[0] != -1 and size[1] != -1):
+            self.__config.WIDTH, self.__config.HEIGHT = size
+
+        if self.__config.WIDTH < 31 or self.__config.HEIGHT < 31:
             raise exception.ConfigException("Window size too small, \
-minimum 30x20")
+minimum 31x21")
         if self.__config.WIDTH % 2 == 0 or self.__config.HEIGHT % 2 == 0:
             raise exception.ConfigException("The window size cannot be even")
         try:
             if self.__config.SEED == 0:
-                seed = secrets.token_hex(8)
-                random.seed(seed)
-                print(f"Maze Seed: {seed}")
+                if (type(seed) is int and seed != 0):
+                    new_seed = seed
+                else:
+                    new_seed = secrets.token_hex(8)
+                random.seed(new_seed)
+                print(f"Maze Seed: {new_seed}")
             else:
                 random.seed(self.__config.SEED)
             self.__xvar.mlx_ptr = self.__xvar.mlx.mlx_init()
