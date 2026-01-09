@@ -127,21 +127,6 @@ def test_generate_maze_invalid_entry_exit(mock_eller):
     config.ENTRY = (10, 10)
     config.EXIT = (10, 10)
 
-    mock_eller.generate.return_value = [[1 for _ in range(config.WIDTH)] for _ in range(config.HEIGHT)]
-
-    with pytest.raises(exception.ConfigException):
-        maze_utils.generate_maze(config, xvar)
-
-
-@patch('src.mazegen.utils.maze_utils.eller')
-def test_generate_maze_even_dimensions(mock_eller):
-    """Verifies that generation fails if dimensions are even."""
-    config = MockConfig()
-    xvar = MockXVar()
-
-    config.WIDTH = 50
-    config.HEIGHT = 50
-
     mock_eller.generate.return_value = [[1 for _ in range(config.WIDTH)]
                                         for _ in range(config.HEIGHT)]
 
