@@ -21,6 +21,9 @@ def backtrack(x: int, y: int, maze: list[list[int]], width: int, height: int,
         _config (Config): Configuration object.
         xvar (XVar): Graphics context for animation.
     """
+    if maze[y][x] == 4:
+        return
+
     directions = [(0, 2), (0, -2), (2, 0), (-2, 0)]
     random.shuffle(directions)
 
@@ -30,6 +33,18 @@ def backtrack(x: int, y: int, maze: list[list[int]], width: int, height: int,
         if 0 < nx < width - 1 and 0 < ny < height - 1:
             is_exit = (maze[ny][nx] == 4)
             is_entry = (maze[ny][nx] == 3)
+
+            if is_exit:
+                exit_connected = False
+                for ex_dx, ex_dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+                    ex_nx, ex_ny = nx + ex_dx, ny + ex_dy
+                    if 0 <= ex_nx < width and 0 <= ex_ny < height:
+                        if maze[ex_ny][ex_nx] == 0:
+                            exit_connected = True
+                            break
+                if exit_connected:
+                    continue
+
             if maze[ny][nx] == 1 or is_exit or is_entry:
                 if not is_exit:
                     maze[ny][nx] = 0
@@ -45,33 +60,6 @@ def backtrack(x: int, y: int, maze: list[list[int]], width: int, height: int,
                         xvar.mlx.mlx_do_sync(xvar.mlx_ptr)
 
                 backtrack(nx, ny, maze, width, height, _config, xvar)
-
-
-def ensure_connectivity(maze: list[list[int]], width: int, height: int,
-                        _config: Config, xvar: XVar) -> None:
-    """
-    Ensure all open areas in the maze are connected.
-
-    Args:
-        maze (list[list[int]]): The maze grid.
-        width (int): Maze width.
-        height (int): Maze height.
-        _config (Config): Configuration object.
-        xvar (XVar): Graphics context.
-    """
-    for row in range(1, height - 1, 2):
-        for col in range(1, width - 1, 2):
-            if maze[row][col] == 1:
-                neighbors = [(row - 2, col), (row + 2, col), (row, col - 2),
-                             (row, col + 2)]
-                random.shuffle(neighbors)
-                for nx, ny in neighbors:
-                    if 0 <= nx < height and 0 <= ny < width and (
-                            maze[nx][ny] == 0):
-                        maze[row][col] = 0
-                        maze[(row + nx) // 2][(col + ny) // 2] = 0
-                        backtrack(col, row, maze, width, height, _config, xvar)
-                        break
 
 
 def generate(maze: list[list[int]], _config: Config,
@@ -110,7 +98,12 @@ def generate(maze: list[list[int]], _config: Config,
     maze[exit_y][exit_x] = 4
     update_cell(xvar, entry_x, entry_y, 3, _config)
     update_cell(xvar, exit_x, exit_y, 4, _config)
+
+    if maze[start_y][start_x] == 1:
+        maze[start_y][start_x] = 0
+        if xvar and _config.ANIMATION == 1:
+            update_cell(xvar, start_x, start_y, 0, _config)
+
     backtrack(start_x, start_y, maze, w, h, _config, xvar)
 
-    ensure_connectivity(maze, w, h, _config, xvar)
     return maze
