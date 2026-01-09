@@ -5,6 +5,17 @@ from .config import Config
 
 def generate_output(maze: list[list[int]], path: list[str],
                     config: Config) -> bool:
+    """
+    Generate the output file containing maze details and solution.
+
+    Args:
+        maze (list[list[int]]): The maze grid.
+        path (list[str]): The solution path as a string of directions.
+        config (Config): The configuration object containing output file path.
+
+    Returns:
+        bool: True if file generation succeeded, False otherwise.
+    """
     try:
         with open(config.OUTPUT_FILE, "w") as f:
             for y in range(1, config.HEIGHT, 2):

@@ -24,6 +24,14 @@ ft_symbol = [
 
 def add_symbol(maze: List[List[int]], symbol: List[List[int]],
                is_perfect: bool) -> None:
+    """
+    Embed a custom symbol (e.g., '42') into the maze.
+
+    Args:
+        maze (List[List[int]]): The maze grid.
+        symbol (List[List[int]]): The symbol pattern to embed.
+        is_perfect (bool): Whether the maze is perfect (affects symbol placement logic).
+    """
     maze_h = len(maze)
     maze_w = len(maze[0])
     sym_h = len(symbol)
@@ -51,6 +59,22 @@ def add_symbol(maze: List[List[int]], symbol: List[List[int]],
 
 
 def generate_maze(_config: config.Config, xvar: XVar) -> List[List[int]]:
+    """
+    Orchestrate the maze generation process.
+
+    Initializes the maze, adds symbols, calls the selected algorithm,
+    and validates entry/exit points.
+
+    Args:
+        _config (config.Config): The configuration object.
+        xvar (XVar): The graphics context.
+
+    Returns:
+        List[List[int]]: The final generated maze.
+
+    Raises:
+        exception.ConfigException: If entry/exit points are invalid.
+    """
     global maze
     algo_list = [eller, backtracking]
     xvar.path = []

@@ -8,6 +8,18 @@ from ..config import Config
 
 def backtrack(x: int, y: int, maze: list[list[int]], width: int, height: int,
               _config: Config, xvar: XVar) -> None:
+    """
+    Generate a maze using the recursive backtracking algorithm.
+
+    Args:
+        x (int): Current x-coordinate.
+        y (int): Current y-coordinate.
+        maze (list[list[int]]): 2D list representing the maze grid.
+        width (int): Width of the maze.
+        height (int): Height of the maze.
+        _config (Config): Configuration object.
+        xvar (XVar): Graphics context for animation.
+    """
     directions = [(0, 2), (0, -2), (2, 0), (-2, 0)]
     random.shuffle(directions)
 
@@ -36,6 +48,16 @@ def backtrack(x: int, y: int, maze: list[list[int]], width: int, height: int,
 
 def ensure_connectivity(maze: list[list[int]], width: int, height: int,
                         _config: Config, xvar: XVar) -> None:
+    """
+    Post-processing step to ensure all open areas in the maze are connected.
+
+    Args:
+        maze (list[list[int]]): The maze grid.
+        width (int): Maze width.
+        height (int): Maze height.
+        _config (Config): Configuration object.
+        xvar (XVar): Graphics context.
+    """
     for row in range(1, height - 1, 2):
         for col in range(1, width - 1, 2):
             if maze[row][col] == 1:

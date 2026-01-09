@@ -9,6 +9,21 @@ def resolve(pos: tuple[int, int], direction: int,
             maze: list[list[int]],
             visited: list[list[bool]] | None,
             config: Config, xvar: XVar) -> list[str] | bool:
+    """
+    Solve the maze using Breadth-First Search (BFS).
+
+    Args:
+        pos (tuple[int, int]): The starting position (x, y).
+        direction (int): Initial direction (unused in BFS implementation).
+        maze (list[list[int]]): The maze grid.
+        visited (list[list[bool]] | None): Matrix of visited cells.
+        config (Config): Configuration object containing exit coordinates.
+        xvar (XVar): XVar object for rendering (unused in logic).
+
+    Returns:
+        list[str] | bool: A list of directions ('N', 'S', 'E', 'W') representing the path,
+                          or False if no solution is found.
+    """
     queue = deque([pos])
     visited_set = {pos}
     came_from: dict[tuple[int, int], tuple[int, int] | None] = {pos: None}

@@ -1,164 +1,126 @@
 #!/usr/bin/env python3
 
-import math
 from ..config import Config
 import random
 import time
-from ..utils.mlx_utils import XVar, update_cell
+from ..utils.mlx_utils import XVar
 from typing import List
 
 
 def indexOfSet(sets, c) -> int:
+    """
+    Find the index of the set containing a specific cell.
+
+    Args:
+        sets (list): List of sets containing cell coordinates.
+        c (list): The cell coordinate [row, col] to find.
+
+    Returns:
+        int: The index of the set containing the cell, or -1 if not found.
+    """
     for i, s in enumerate(sets):
         if c in s:
             return i
     return -1
 
 
+def is_blocked(maze: List[List[int]], r: int, c: int) -> bool:
+    return maze[r][c] == 2
+
+
 def generate(maze: List[List[int]], config: Config,
              xvar: XVar | None = None) -> List[List[int]]:
+    """
+    Generate a maze using Eller's algorithm.
 
+    Args:
+        maze (List[List[int]]): Initial maze grid.
+        config (Config): Configuration object.
+        xvar (XVar | None): Graphics context for visualization.
+
+    Returns:
+        List[List[int]]: The generated maze grid.
+    """
     width = len(maze[0])
     height = len(maze)
 
-    sets: List[List[List[int]]] = []
+    sets = []
+
+    # initialize first row
     for j in range(1, width, 2):
-        if maze[1][j] != 2:
+        if not is_blocked(maze, 1, j):
             maze[1][j] = 0
             sets.append([[1, j]])
 
     for i in range(1, height, 2):
-        # clear sets
-        for m in range(len(sets)):
-            sets[m] = [c for c in sets[m] if c[0] == i]
+        # keep only current row cells
+        for k in range(len(sets)):
+            sets[k] = [c for c in sets[k] if c[0] == i]
         sets = [s for s in sets if s]
 
-        # fill empty spots
+        # fill missing cells
         for j in range(1, width, 2):
-            if maze[i][j] == 2:
+            if is_blocked(maze, i, j):
                 continue
             if indexOfSet(sets, [i, j]) == -1:
-                sets.append([[i, j]])
                 maze[i][j] = 0
+                sets.append([[i, j]])
 
         # horizontal joins
-        for j in range(3, width, 2):
-            if maze[i][j] == 2 or maze[i][j - 1] == 2 or maze[i][j - 2] == 2:
+        j = 3
+        while j < width:
+            if is_blocked(maze, i, j - 1):
+                j += 2
                 continue
 
-            set1 = indexOfSet(sets, [i, j - 2])
-            set2 = indexOfSet(sets, [i, j])
+            left = [i, j - 2]
+            right = [i, j]
 
-            should_join = False
-            if set1 != set2:
-                join = 1 if i == height - 2 else random.randint(0, 1)
-                should_join = bool(join)
-            elif i != height - 2 and random.randint(0, 100) < 5:
-                should_join = True
-            
-            if should_join:
-                maze[i][j - 1] = 0
-                if set1 != set2:
-                    removed = sets.pop(set2)
-                    if set2 < set1:
-                        set1 -= 1
-                    sets[set1].extend(removed)
+            if is_blocked(maze, *left) or is_blocked(maze, *right):
+                j += 2
+                continue
+
+            s1 = indexOfSet(sets, left)
+            s2 = indexOfSet(sets, right)
+
+            if s1 != s2:
+                if i == height - 2 or random.randint(0, 1):
+                    maze[i][j - 1] = 0
+                    merged = sets.pop(max(s1, s2))
+                    sets[min(s1, s2)].extend(merged)
+
+            j += 2
 
         if i == height - 2:
             break
 
-        # vertical connections
-        initial_len = len(sets)
-        for j in range(initial_len):
-            current = sets[j]
-            cells = [c for c in current if c[0] == i]
-            
-            if not cells:
+        # vertical continuation (forced)
+        new_sets = []
+
+        for current in sets:
+            candidates = []
+            for r, c in current:
+                nr = r + 2
+                if nr < height and not is_blocked(maze, r + 1, c) and not is_blocked(maze, nr, c):
+                    candidates.append((r, c))
+
+            if not candidates:
                 continue
 
-            continued = False
-            valid_extensions = []
+            chosen = random.choice(candidates)
+            r, c = chosen
+            maze[r + 1][c] = 0
+            maze[r + 2][c] = 0
+            new_set = [[r + 2, c]]
 
-            for cell in cells:
-                next_r = cell[0] + 2
-                wall_r = cell[0] + 1
-                c = cell[1]
+            for r, c in candidates:
+                if random.randint(0, 1):
+                    maze[r + 1][c] = 0
+                    maze[r + 2][c] = 0
+                    new_set.append([r + 2, c])
 
-                if next_r >= height:
-                    continue
-                if maze[wall_r][c] == 2 or maze[next_r][c] == 2:
-                    continue
-                
-                valid_extensions.append(cell)
-                msg = random.randint(0, 1)
-                if msg:
-                    continued = True
-                    current.append([next_r, c])
-                    maze[wall_r][c] = 0
-                    maze[next_r][c] = 0
-            
-            if not continued and valid_extensions:
-                chosen = random.choice(valid_extensions)
-                r, c = chosen[0], chosen[1]
-                current.append([r + 2, c])
-                maze[r + 1][c] = 0
-                maze[r + 2][c] = 0
+            new_sets.append(new_set)
 
-    # Post-processing 1: Remove isolated walls (floating walls)
-    for i in range(1, height - 1):
-        for j in range(1, width - 1):
-            if maze[i][j] == 1:
-                if (maze[i - 1][j] == 0 and maze[i + 1][j] == 0 and
-                        maze[i][j - 1] == 0 and maze[i][j + 1] == 0):
-                    maze[i][j] = 0
-
-    # Post-processing 2: Remove 2x2 wall blocks (prevent full areas)
-    for i in range(1, height - 1):
-        for j in range(1, width - 1):
-            if (maze[i][j] == 1 and maze[i + 1][j] == 1 and
-                    maze[i][j + 1] == 1 and maze[i + 1][j + 1] == 1):
-                maze[i][j] = 0
-
-    # Post-processing 3: remove 3x3 empty areas by filling center
-    for i in range(1, height - 1):
-        for j in range(1, width - 1):
-            if maze[i][j] == 0:
-                is_3x3 = True
-                for di in range(-1, 2):
-                    for dj in range(-1, 2):
-                        if maze[i + di][j + dj] != 0:
-                            is_3x3 = False
-                            break
-                    if not is_3x3:
-                        break
-                if is_3x3:
-                    maze[i][j] = 1
-
-    # Post-processing 4: Remove isolated empty cells (keep largest component)
-    visited = set()
-    components = []
-    for i in range(height):
-        for j in range(width):
-            if maze[i][j] == 0 and (i, j) not in visited:
-                comp = []
-                stack = [(i, j)]
-                visited.add((i, j))
-                while stack:
-                    r, c = stack.pop()
-                    comp.append((r, c))
-                    for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-                        nr, nc = r + dr, c + dc
-                        if 0 <= nr < height and 0 <= nc < width:
-                            if maze[nr][nc] == 0 and (nr, nc) not in visited:
-                                visited.add((nr, nc))
-                                stack.append((nr, nc))
-                components.append(comp)
-
-    if components:
-        largest_comp = max(components, key=len)
-        for comp in components:
-            if comp != largest_comp:
-                for r, c in comp:
-                    maze[r][c] = 1
+        sets = new_sets
 
     return maze

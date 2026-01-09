@@ -6,6 +6,9 @@ from typing import Any, List
 
 
 class XVar:
+    """
+    Class to hold X window server variables and MLX state.
+    """
     def __init__(self) -> None:
         self.mlx: Any = None
         self.mlx_ptr = None
@@ -30,10 +33,23 @@ class XVar:
 
 
 def manage_close(xvar: XVar) -> None:
+    """
+    Callback to handle window close event.
+
+    Args:
+        xvar (XVar): The graphics context.
+    """
     xvar.mlx.mlx_loop_exit(xvar.mlx_ptr)
 
 
 def manage_key_simple(key: int, xvar: XVar) -> None:
+    """
+    Simple key handler for closing the window with 'q' or ESC.
+
+    Args:
+        key (int): The key code pressed.
+        xvar (XVar): The graphics context.
+    """
     if key in (113, 27, 65307):
         xvar.mlx.mlx_loop_exit(xvar.mlx_ptr)
         return
@@ -41,11 +57,29 @@ def manage_key_simple(key: int, xvar: XVar) -> None:
 
 
 def render_buttons(xvar: XVar) -> None:
+    """
+    Placeholder for rendering buttons appropriately (currently pass-through).
+
+    Args:
+        xvar (XVar): The graphics context.
+    """
     pass
 
 
 def calculate_window_size(_config: config.Config, screen_w: int, screen_h: int,
                           ui_width: int = 250) -> tuple[int, int, int]:
+    """
+    Calculate the appropriate window size and cell size based on screen dimensions.
+
+    Args:
+        _config (config.Config): The configuration using maze dimensions.
+        screen_w (int): The width of the screen.
+        screen_h (int): The height of the screen.
+        ui_width (int): Width reserved for the UI panel.
+
+    Returns:
+        tuple[int, int, int]: A tuple containing (required_width, required_height, cell_size).
+    """
     avail_w = (screen_w if screen_w else 1920) - ui_width
     avail_h = (screen_h if screen_h else 1080)
 
@@ -63,6 +97,12 @@ def calculate_window_size(_config: config.Config, screen_w: int, screen_h: int,
 
 
 def manage_expose(xvar: XVar) -> None:
+    """
+    Manage the expose event to render the image.
+
+    Args:
+        xvar (XVar): The graphics context.
+    """
     if xvar.img:
         xvar.mlx.mlx_put_image_to_window(
             xvar.mlx_ptr,
@@ -76,6 +116,17 @@ def manage_expose(xvar: XVar) -> None:
 def render_maze_to_mlx(mlx: Mlx, mlx_ptr: Any, win_ptr: Any,
                        maze: List[List[int]],
                        _config: config.Config, xvar: XVar) -> None:
+    """
+    Render the maze to the MLX window.
+
+    Args:
+        mlx (Mlx): The MLX instance.
+        mlx_ptr (Any): The MLX pointer.
+        win_ptr (Any): The window pointer.
+        maze (List[List[int]]): The maze data.
+        _config (config.Config): The configuration instance.
+        xvar (XVar): The graphics context.
+    """
     try:
         screen_w = xvar.screen_w if xvar.screen_w else 1920
         screen_h = xvar.screen_h if xvar.screen_h else 1080
@@ -132,6 +183,16 @@ rendering")
 
 def update_cell(xvar: XVar, mx: int, my: int, val: int,
                 _config: config.Config) -> None:
+    """
+    Update a single cell in the maze rendering.
+
+    Args:
+        xvar (XVar): The graphics context.
+        mx (int): The x-coordinate of the cell.
+        my (int): The y-coordinate of the cell.
+        val (int): The new value of the cell.
+        _config (config.Config): The configuration instance.
+    """
     if not xvar or not xvar.img_data:
         return
 

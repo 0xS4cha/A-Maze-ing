@@ -6,6 +6,14 @@ from mazegen import MazeGenerator
 
 
 def main() -> None:
+    """
+    Main entry point for the maze generator application.
+    Parses arguments, generates the maze, and handles the main event loop.
+
+    Raises:
+        exception.ArgsException: If insufficient arguments are provided.
+        Exception: for any other critical failure during execution.
+    """
     if len(sys.argv) <= 1:
         raise exception.ArgsException("Not enough arguments")
     try:

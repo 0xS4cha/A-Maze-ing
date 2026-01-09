@@ -12,6 +12,18 @@ ui_bg_img = None
 
 
 def mouse_handler(btn_type: int, x: int, y: int, arg: None) -> None:
+    """
+    Handle mouse click events for UI buttons.
+
+    Args:
+        btn_type (int): The type of mouse button pressed.
+        x (int): The x-coordinate of the mouse click.
+        y (int): The y-coordinate of the mouse click.
+        arg (None): Additional arguments (unused).
+
+    Raises:
+        SystemExit: If the exit button is clicked.
+    """
     try:
         if btn_type != 1:
             return
@@ -27,6 +39,12 @@ def mouse_handler(btn_type: int, x: int, y: int, arg: None) -> None:
 
 
 def draw_buttons(xvar: XVar) -> None:
+    """
+    Draw the control buttons on the UI panel.
+
+    Args:
+        xvar (XVar): The graphics context.
+    """
     global ui_bg_img
     mlx = xvar.mlx
     mlx_ptr = xvar.mlx_ptr
