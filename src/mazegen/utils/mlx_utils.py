@@ -56,20 +56,10 @@ def manage_key_simple(key: int, xvar: XVar) -> None:
     return
 
 
-def render_buttons(xvar: XVar) -> None:
-    """
-    Placeholder for rendering buttons appropriately (currently pass-through).
-
-    Args:
-        xvar (XVar): The graphics context.
-    """
-    pass
-
-
 def calculate_window_size(_config: config.Config, screen_w: int, screen_h: int,
                           ui_width: int = 250) -> tuple[int, int, int]:
     """
-    Calculate the appropriate window size and cell size based on screen dimensions.
+    Calculate the appropriate window size and cell size based on screen size.
 
     Args:
         _config (config.Config): The configuration using maze dimensions.
