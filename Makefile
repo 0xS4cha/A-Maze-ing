@@ -10,7 +10,7 @@ SRCS			=	./a_maze_ing.py \
 					./src/mazegen/utils/maze_utils.py \
 					./src/mazegen/utils/mlx_utils.py \
 					./src/mazegen/algorithms/backtracking.py \
-					./src/mazegen/algorithms/eller.py \
+					./src/mazegen/algorithms/prim.py \
 					./src/mazegen/lib/mlx_CLXV/python/src/mlx/__init__.py \
 					./src/mazegen/lib/mlx_CLXV/python/src/mlx/mlx.py \
 					./src/mazegen/lib/mlx_CLXV/python/src/mlx/test/mlxtest.py \
@@ -47,6 +47,7 @@ debug:
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	rm -rf .mypy_cache .pytest_cache
+	rm -rf $(OUTPUT_FILE) dist/
 
 lint:
 	flake8 . --exclude './src/mazegen/lib'

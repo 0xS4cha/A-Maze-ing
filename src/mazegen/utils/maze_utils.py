@@ -1,6 +1,6 @@
 from .. import config
 from ..algorithms import backtracking as backtracking
-from ..algorithms import eller as eller
+from ..algorithms import prim as prim
 from ..parser import generate_output
 from ..utils.mlx_utils import XVar, render_maze_to_mlx
 from .. import exception
@@ -22,15 +22,13 @@ ft_symbol = [
 ]
 
 
-def add_symbol(maze: List[List[int]], symbol: List[List[int]],
-               is_perfect: bool) -> None:
+def add_symbol(maze: List[List[int]], symbol: List[List[int]]) -> None:
     """
     Embed a custom symbol (e.g., '42') into the maze.
 
     Args:
         maze (List[List[int]]): The maze grid.
         symbol (List[List[int]]): The symbol pattern to embed.
-        is_perfect (bool): Whether the maze is perfect (affects symbol placement logic).
     """
     maze_h = len(maze)
     maze_w = len(maze[0])
@@ -48,23 +46,6 @@ def add_symbol(maze: List[List[int]], symbol: List[List[int]],
                     maze[y_start][last_x] = ft_symbol[y][x]
             last_x += 1
         y_start += 1
-
-    if not is_perfect:
-        logo_x = len(maze[0]) // 2 - len(ft_symbol[0]) // 2
-        logo_y = len(maze) // 2 - len(ft_symbol) // 2
-
-        # add path to ensure connectivity inside the 42 logo
-
-        maze[logo_y - 1][logo_x + 11] = 0
-        maze[logo_y - 1][logo_x + 13] = 0
-
-        maze[logo_y - 1][logo_x + 12] = 0
-        maze[logo_y][logo_x + 12] = 0
-        maze[logo_y + 1][logo_x + 12] = 0
-        maze[logo_y + 2][logo_x + 12] = 0
-        maze[logo_y + 3][logo_x + 12] = 0
-        for x in range(logo_x+10, logo_x+16):
-            maze[logo_y + 3][x] = 0
 
 
 def generate_maze(_config: config.Config, xvar: XVar) -> List[List[int]]:
@@ -85,10 +66,10 @@ def generate_maze(_config: config.Config, xvar: XVar) -> List[List[int]]:
         exception.ConfigException: If entry/exit points are invalid.
     """
     global maze
-    algo_list = [eller, backtracking]
+    algo_list = [prim, backtracking]
     xvar.path = []
     maze = [[1 for _ in range(_config.WIDTH)] for _ in range(_config.HEIGHT)]
-    add_symbol(maze, ft_symbol, _config.PERFECT == 1)
+    add_symbol(maze, ft_symbol)
     entry_x, entry_y = _config.ENTRY
     exit_x, exit_y = _config.EXIT
     if maze[exit_y][exit_x] == 2:

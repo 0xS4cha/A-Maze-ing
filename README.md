@@ -5,13 +5,13 @@ of the 42 curriculum by sservant and julcleme*
 This project is a python project focused on understanding and implementing maze generation and maze solving algorithms by using a graphic library. 
 
 # Algorithms
-This project contains two algorithms: `Recursive Backtracking` and `Eller` algorithms.
+This project contains two algorithms: `Recursive Backtracking` and `Randomized Prim's` algorithms.
 We choose these algorithms because the `Recursive Backtracking` ensure a perfect maze since it builds the path and never goes back to the pixels already visited.
 
-`Eller`' algorithm is efficient and it uses graphs so its implementation was very interesting. And it could generate non perfect mazes so it was a very good choice
+`Randomized Prim's`' algorithm is interesting due to its working behaviour and it uses graphs so its implementation was very interesting. And it could generate non perfect mazes so it was a very good choice
 
 # Instructions
-Usage: `python3 a_maze_ing.py config.txt`
+Usage: `python3 a_maze_ing.py default_config.txt`
 
 # Configuration File
 ```bash
@@ -109,7 +109,7 @@ We started by researching algorithms, implemented a basic console version, then 
 - [x] Use type definition and check using `mypy`
 - [x] Makefile using rules `install` `run` `debug` `clean` `lint-strict` and `lint`
 - [x] Add a `.gitignore`
-- [ ] Create test programs to verify project functionality
+- [x] Create test programs to verify project functionality
 - [x] Use venv
 - [ ] Fix `makefile`: add install `mlx`
 - [x] A default configuration file must be available in your Git repository

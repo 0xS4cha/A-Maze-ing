@@ -1,9 +1,9 @@
 # this is a comment
 
 # width of the maze
-WIDTH=50
+WIDTH=53
 # height of the maze
-HEIGHT=50
+HEIGHT=53
 
 # position of the entry point of the maze (x, y)
 ENTRY=1,1
