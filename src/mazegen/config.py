@@ -22,7 +22,7 @@ class Config:
         ENTRY (list[int]): Entry coordinates [x, y].
         EXIT (list[int]): Exit coordinates [x, y].
         OUTPUT_FILE (str): Path to output file.
-        PERFECT (int): Algorithm choice (0=Eller/Prim, 1=Backtracking).
+        PERFECT (int): Algorithm choice (False=Eller/Prim, True=stacking).
         ANIMATION (int): Animation check.
         COLORS (list[dict]): List of color palettes.
     """
@@ -56,10 +56,8 @@ class Config:
         self.ENTRY = [0, 0]
         self.EXIT = [0, 0]
         self.OUTPUT_FILE = ""
-        self.PERFECT = 0
+        self.PERFECT = False
         self.ANIMATION = 1
-        self.EMPTY_CHAR = ' '
-        self.FULL_CHAR = '█'
         self.DELAY = 0.001
         self.SEED = 0
         self.COLORS = [
@@ -129,15 +127,18 @@ class Config:
                             if (len(entry) != 2):
                                 raise
                             if left_arg == "ENTRY":
-                                self.ENTRY[0] = int(entry[0].strip()) + 1
-                                self.ENTRY[1] = int(entry[1].strip()) + 1
+                                self.ENTRY[0] = int(entry[0].strip())
+                                self.ENTRY[1] = int(entry[1].strip())
                             else:
-                                self.EXIT[0] = int(entry[0].strip()) + 1
-                                self.EXIT[1] = int(entry[1].strip()) + 1
+                                self.EXIT[0] = int(entry[0].strip())
+                                self.EXIT[1] = int(entry[1].strip())
                         elif left_arg == "OUTPUT_FILE":
                             self.OUTPUT_FILE = right_arg
                         elif left_arg == "PERFECT":
-                            self.PERFECT = int(right_arg)
+                            if right_arg == "True":
+                                self.PERFECT = True
+                            else:
+                                self.PERFECT = False
                         elif left_arg == "ANIMATION":
                             self.ANIMATION = int(right_arg)
                         elif left_arg == "SEED":

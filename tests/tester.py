@@ -14,7 +14,7 @@ class MockConfig:
     def __init__(self):
         self.WIDTH = 51
         self.HEIGHT = 51
-        self.PERFECT = 0
+        self.PERFECT = False
         self.ENTRY = (1, 1)
         self.EXIT = (49, 49)
         self.ANIMATION = False
@@ -92,12 +92,12 @@ def test_generate_maze_eller_success(mock_eller, mock_resolve):
 
 
 @patch('src.mazegen.utils.maze_utils.resolve')
-@patch('src.mazegen.utils.maze_utils.backtracking')
+@patch('src.mazegen.utils.maze_utils.stacking')
 def test_generate_maze_backtracking_success(mock_backtracking, mock_resolve):
     """Tests the full maze generation flow
     with Backtracking algorithm (mocked)."""
     config = MockConfig()
-    config.PERFECT = 1
+    config.PERFECT = True
     xvar = MockXVar()
 
     mock_backtracking.generate.return_value = [[1 for _ in range(config.WIDTH)]

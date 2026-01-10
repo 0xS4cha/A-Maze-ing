@@ -1,86 +1,71 @@
 #!/usr/bin/env python3
-"""Randomized Prim's algorithm for maze generation."""
+"""Prim's algorithm for maze generation."""
 
 import random
 import time
 from ..utils.mlx_utils import XVar, update_cell
+from ..utils.generate_utils import Bit_position, remove_wall
 from ..config import Config
 from typing import List
 
 
-def generate(maze: List[List[int]], config: Config,
+def generate(maze: List[List[int]], _config: Config,
              xvar: XVar) -> List[List[int]]:
-    """
-    Generate a maze using Randomized Prim's algorithm.
+    """Initialize and execute Prim's algorithm."""
+    w = _config.WIDTH
+    h = _config.HEIGHT
 
-    Args:
-        maze (List[List[int]]): Initial maze grid.
-        config (Config): Configuration object.
-        xvar (XVar | None): Graphics context for visualization.
+    for y in range(h):
+        for x in range(w):
+            if not (maze[y][x] & Bit_position.VISITED.value):
+                maze[y][x] = 0
 
-    Returns:
-        List[List[int]]: The generated maze grid.
-    """
-    width = len(maze[0])
-    height = len(maze)
+    try:
+        entry_x = int(_config.ENTRY[0])
+        entry_y = int(_config.ENTRY[1])
+    except (ValueError, IndexError):
+        entry_x, entry_y = 0, 0
 
-    def is_valid(x: int, y: int) -> bool:
-        return (0 < x < width - 1) and (0 < y < height - 1)
+    start_x = max(0, min(entry_x, w - 1))
+    start_y = max(0, min(entry_y, h - 1))
 
-    start_x, start_y = config.ENTRY
-    if not is_valid(start_x, start_y):
-        start_x, start_y = (0, 0)
+    frontier = []
 
-    maze[start_y][start_x] = 0
-    if xvar and config.ANIMATION:
-        update_cell(xvar, start_x, start_y, 0, config)
+    def add_frontier(fx, fy):
+        if not (maze[fy][fx] & Bit_position.VISITED.value):
+            maze[fy][fx] |= Bit_position.VISITED.value
+            if xvar and _config.ANIMATION == 1:
+                update_cell(xvar, fx, fy, maze[fy][fx], _config)
 
-    # candidates
-    frontier: List[tuple[int, int]] = []
+        directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+        for dx, dy in directions:
+            nx, ny = fx + dx, fy + dy
+            if 0 <= nx < w and 0 <= ny < h:
+                if not (maze[ny][nx] & Bit_position.VISITED.value):
+                    frontier.append((fx, fy, nx, ny))
 
-    def add_frontier(gx: int, gy: int) -> None:
-        moves = [(0, 2), (0, -2), (2, 0), (-2, 0)]
-        for dx, dy in moves:
-            nx, ny = gx + dx, gy + dy
-            if is_valid(nx, ny) and (maze[ny][nx] != 0):
-                frontier.append((nx, ny))
-
-    add_frontier(start_x, start_y)
+    if not (maze[start_y][start_x] & Bit_position.VISITED.value):
+        add_frontier(start_x, start_y)
+    else:
+        directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+        for dx, dy in directions:
+            nx, ny = start_x + dx, start_y + dy
+            if 0 <= nx < w and 0 <= ny < h:
+                if not (maze[ny][nx] & Bit_position.VISITED.value):
+                    frontier.append((start_x, start_y, nx, ny))
 
     while frontier:
-        # pick a random cell from the frontier
         idx = random.randrange(len(frontier))
-        cx, cy = frontier.pop(idx)
+        cx, cy, nx, ny = frontier.pop(idx)
 
-        # skip
-        if maze[cy][cx] != 1:
-            continue
-
-        # find neighbors
-        neighbors = []
-        moves = [(0, 2), (0, -2), (2, 0), (-2, 0)]  # NSEW
-        for dx, dy in moves:
-            nx, ny = cx + dx, cy + dy
-            wx, wy = cx + dx // 2, cy + dy // 2
-
-            if is_valid(nx, ny) and maze[ny][nx] == 0:
-                if maze[wy][wx] != 2:
-                    neighbors.append((nx, ny))
-
-        if neighbors:
-            nx, ny = random.choice(neighbors)
-
-            # wall between current and neighbor
-            wx, wy = (cx + nx) // 2, (cy + ny) // 2
-
-            maze[cy][cx] = 0
-            maze[wy][wx] = 0
-
-            if xvar and config.ANIMATION:
-                update_cell(xvar, cx, cy, 0, config)
-                update_cell(xvar, wx, wy, 0, config)
-                if config.DELAY > 0:
-                    time.sleep(config.DELAY)
+        if not (maze[ny][nx] & Bit_position.VISITED.value):
+            remove_wall(maze, cx, cy, nx, ny)
+            if xvar and _config.ANIMATION == 1:
+                update_cell(xvar, cx, cy, maze[cy][cx], _config)
+                if hasattr(_config, 'DELAY') and _config.DELAY > 0:
+                    time.sleep(_config.DELAY)
                     xvar.mlx.mlx_do_sync(xvar.mlx_ptr)
-            add_frontier(cx, cy)
+
+            add_frontier(nx, ny)
+
     return maze

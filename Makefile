@@ -9,7 +9,8 @@ SRCS			=	./a_maze_ing.py \
 					./src/mazegen/utils/buttons.py \
 					./src/mazegen/utils/maze_utils.py \
 					./src/mazegen/utils/mlx_utils.py \
-					./src/mazegen/algorithms/backtracking.py \
+					./src/mazegen/utils/generate_utils.py \
+					./src/mazegen/algorithms/stacking.py \
 					./src/mazegen/algorithms/prim.py \
 					./src/mazegen/lib/mlx_CLXV/python/src/mlx/__init__.py \
 					./src/mazegen/lib/mlx_CLXV/python/src/mlx/mlx.py \

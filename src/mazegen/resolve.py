@@ -3,7 +3,7 @@
 
 from .config import Config
 from collections import deque
-from .utils.mlx_utils import XVar
+from .utils.mlx_utils import XVar, Bit_position
 
 
 def resolve(pos: tuple[int, int], direction: int,
@@ -41,16 +41,20 @@ representing the path,
             break
 
         x, y = current
-        # Directions: N, E, S, W
-        movements = [(0, -1), (1, 0), (0, 1), (-1, 0)]
+        movements = [
+            (0, -1, Bit_position.NORTH.value),
+            (1, 0, Bit_position.EAST.value),
+            (0, 1, Bit_position.SOUTH.value),
+            (-1, 0, Bit_position.WEST.value)
+        ]
 
-        for dx, dy in movements:
+        for dx, dy, direction_bit in movements:
+            if not (maze[y][x] & direction_bit):
+                continue
+
             nx, ny = x + dx, y + dy
 
             if not (0 <= nx < config.WIDTH and 0 <= ny < config.HEIGHT):
-                continue
-
-            if maze[ny][nx] == 1 or maze[ny][nx] == 2:
                 continue
 
             if (nx, ny) not in visited_set:

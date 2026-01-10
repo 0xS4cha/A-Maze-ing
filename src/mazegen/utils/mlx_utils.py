@@ -3,7 +3,8 @@ from .. import config
 from .. import exception
 from mlx import Mlx
 import time
-from typing import Any, List
+from typing import Any, List, Union
+from ..utils.generate_utils import Bit_position
 
 
 class XVar:
@@ -24,6 +25,7 @@ class XVar:
         self.path: List[tuple[int, int]] = []
         self.show_path = False
         self.img = None
+        self.path_img = None
         self.img_data = None
         self.img_bpp = 0
         self.img_sl = 0
@@ -118,6 +120,10 @@ def render_maze_to_mlx(mlx: Mlx, mlx_ptr: Any, win_ptr: Any,
         _config (config.Config): The configuration instance.
         xvar (XVar): The graphics context.
     """
+    if xvar.path_img:
+        mlx.mlx_destroy_image(mlx_ptr, xvar.path_img)
+        xvar.path_img = None
+
     try:
         screen_w = xvar.screen_w if xvar.screen_w else 1920
         screen_h = xvar.screen_h if xvar.screen_h else 1080
@@ -131,6 +137,7 @@ def render_maze_to_mlx(mlx: Mlx, mlx_ptr: Any, win_ptr: Any,
     scale_x = max(1, avail_w // _config.WIDTH)
     scale_y = max(1, avail_h // _config.HEIGHT)
     scale = min(scale_x, scale_y, 16)
+    border_thick = max(1, scale // 5)
 
     img_w = _config.WIDTH * scale
     img_h = _config.HEIGHT * scale
@@ -145,18 +152,57 @@ rendering")
 
     data, bpp, sl, fmt = mlx.mlx_get_data_addr(img)
 
+    wall_bytes = _config.COLORS[xvar.color_palette].get(
+        1, 0x000000).to_bytes(4, 'little')
+    path_bytes = _config.COLORS[xvar.color_palette].get(
+        0, 0xFFFFFF).to_bytes(4, 'little')
+    isolated_bytes = _config.COLORS[xvar.color_palette].get(
+        2, 0xFF0000).to_bytes(4, 'little')
+    start_bytes = _config.COLORS[xvar.color_palette].get(
+        3, 0x00FF00).to_bytes(4, 'little')
+    end_bytes = _config.COLORS[xvar.color_palette].get(
+        4, 0x0000FF).to_bytes(4, 'little')
+
     for my in range(_config.HEIGHT):
         for mx in range(_config.WIDTH):
-            val = maze[my][mx]
-            color = _config.COLORS[xvar.color_palette].get(val, 0xFFFFFFFF)
+            cell = maze[my][mx]
+            is_isolated = (cell & 15) == 0
+
+            if mx == _config.ENTRY[0] and my == _config.ENTRY[1]:
+                bg_bytes = start_bytes
+            elif mx == _config.EXIT[0] and my == _config.EXIT[1]:
+                bg_bytes = end_bytes
+            elif is_isolated:
+                bg_bytes = isolated_bytes
+            else:
+                bg_bytes = path_bytes
+
+            start_y = my * scale
+            start_x = mx * scale
             for dy in range(scale):
-                py = my * scale + dy
+                py = start_y + dy
                 row_off = py * sl
                 for dx in range(scale):
-                    px = mx * scale + dx
+                    px = start_x + dx
                     off = row_off + px * 4
                     if off + 4 <= len(data):
-                        data[off:off+4] = (color).to_bytes(4, 'little')
+                        is_wall = False
+                        if dy < border_thick and not (
+                                cell & Bit_position.NORTH.value):
+                            is_wall = True
+                        elif dx >= scale - border_thick and not (
+                                cell & Bit_position.EAST.value):
+                            is_wall = True
+                        elif dy >= scale - border_thick and not (
+                                cell & Bit_position.SOUTH.value):
+                            is_wall = True
+                        elif dx < border_thick and not (
+                                cell & Bit_position.WEST.value):
+                            is_wall = True
+                        if is_wall:
+                            data[off:off+4] = wall_bytes
+                        else:
+                            data[off:off+4] = bg_bytes
 
     xvar.img = img
     xvar.img_data = data
@@ -172,7 +218,37 @@ rendering")
         time.sleep(_config.DELAY)
 
 
-def update_cell(xvar: XVar, mx: int, my: int, val: int,
+def create_path_image(xvar: XVar, _config: config.Config) -> None:
+    """Create a secondary image that includes the solution path."""
+    if not xvar.img or not xvar.path:
+        return
+
+    scale = xvar.img_w // _config.WIDTH
+    border_thick = max(1, scale // 5)
+    sl = xvar.img_sl
+    xvar.path_img = xvar.mlx.mlx_new_image(xvar.mlx_ptr, xvar.img_w, xvar.img_h)
+    src_data = xvar.img_data
+    dst_data, _, _, _ = xvar.mlx.mlx_get_data_addr(xvar.path_img)
+
+    dst_data[:] = src_data[:]
+    path_color = _config.COLORS[xvar.color_palette].get(5, 0x00FF00).to_bytes(4, 'little')
+    for px, py in xvar.path:
+        start_y = py * scale
+        start_x = px * scale
+        cell_mask = xvar.maze_data[py][px]
+        for dy in range(scale):
+            row_off = (start_y + dy) * sl
+            for dx in range(scale):
+                if dy < border_thick and not (cell_mask & Bit_position.NORTH.value): continue
+                if dx >= scale - border_thick and not (cell_mask & Bit_position.EAST.value): continue
+                if dy >= scale - border_thick and not (cell_mask & Bit_position.SOUTH.value): continue
+                if dx < border_thick and not (cell_mask & Bit_position.WEST.value): continue
+                off = row_off + (start_x + dx) * 4
+                if off + 4 <= len(dst_data):
+                    dst_data[off:off+4] = path_color
+
+
+def update_cell(xvar: XVar, mx: int, my: int, val: Union[int, List[int]],
                 _config: config.Config) -> None:
     """
     Update a single cell in the maze rendering.
@@ -181,7 +257,7 @@ def update_cell(xvar: XVar, mx: int, my: int, val: int,
         xvar (XVar): The graphics context.
         mx (int): The x-coordinate of the cell.
         my (int): The y-coordinate of the cell.
-        val (int): The new value of the cell.
+        val (Union[int, List[int]]): The new value (int mask).
         _config (config.Config): The configuration instance.
     """
     if not xvar or not xvar.img_data:
@@ -200,15 +276,36 @@ def update_cell(xvar: XVar, mx: int, my: int, val: int,
     scale_x = max(1, avail_w // _config.WIDTH)
     scale_y = max(1, avail_h // _config.HEIGHT)
     scale = min(scale_x, scale_y, 16)
-
-    color_int = _config.COLORS[xvar.color_palette].get(val, 0xFFFFFFFF)
-    color_bytes = color_int.to_bytes(4, 'little')
+    border_thick = max(1, scale // 5)
 
     data = xvar.img_data
     sl = xvar.img_sl
     start_y = my * scale
     start_x = mx * scale
 
+    wall_bytes = _config.COLORS[xvar.color_palette].get(
+        1, 0x000000).to_bytes(4, 'little')
+    path_bytes = _config.COLORS[xvar.color_palette].get(
+        0, 0xFFFFFF).to_bytes(4, 'little')
+    isolated_bytes = _config.COLORS[xvar.color_palette].get(
+        2, 0xFF0000).to_bytes(4, 'little')
+    start_bytes = _config.COLORS[xvar.color_palette].get(
+        3, 0x00FF00).to_bytes(4, 'little')
+    end_bytes = _config.COLORS[xvar.color_palette].get(
+        4, 0x0000FF).to_bytes(4, 'little')
+
+    mask = val if isinstance(val, int) else 0
+    is_isolated = (mask & 15) == 0
+
+    if mx == _config.ENTRY[0] and my == _config.ENTRY[1]:
+        bg_bytes = start_bytes
+    elif mx == _config.EXIT[0] and my == _config.EXIT[1]:
+        bg_bytes = end_bytes
+    elif is_isolated:
+        bg_bytes = isolated_bytes
+    else:
+        bg_bytes = path_bytes
+    
     for dy in range(scale):
         py = start_y + dy
         row_off = py * sl
@@ -216,6 +313,20 @@ def update_cell(xvar: XVar, mx: int, my: int, val: int,
             px = start_x + dx
             off = row_off + px * 4
             if off + 4 <= len(data):
-                data[off:off+4] = color_bytes
+                is_wall = False
+                
+                if dy < border_thick and not (mask & Bit_position.NORTH.value):
+                    is_wall = True
+                elif dx >= scale - border_thick and not (mask & Bit_position.EAST.value):
+                    is_wall = True
+                elif dy >= scale - border_thick and not (mask & Bit_position.SOUTH.value):
+                    is_wall = True
+                elif dx < border_thick and not (mask & Bit_position.WEST.value):
+                    is_wall = True
+
+                if is_wall:
+                    data[off:off+4] = wall_bytes
+                else:
+                    data[off:off+4] = bg_bytes
 
     xvar.mlx.mlx_put_image_to_window(xvar.mlx_ptr, xvar.win_1, xvar.img, 0, 0)

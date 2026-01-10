@@ -1,6 +1,6 @@
 """Button handling utilities for the maze UI."""
 
-from ..utils.mlx_utils import XVar, manage_close, update_cell
+from ..utils.mlx_utils import XVar, manage_close, update_cell, create_path_image
 from .. import exception
 from ..utils.maze_utils import generate_maze, render_maze_to_mlx
 from ..config import Config
@@ -159,6 +159,7 @@ def button_restart(config: Config, xvar: XVar) -> None:
     xvar.maze_data = generate_maze(config, xvar)
     render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, xvar.maze_data,
                        config, xvar)
+    create_path_image(xvar, config)
 
 
 def button_color_maze(config: Config, xvar: XVar) -> None:
@@ -173,6 +174,7 @@ def button_color_maze(config: Config, xvar: XVar) -> None:
     xvar.color_palette = (xvar.color_palette + 1) % color_max
     render_maze_to_mlx(xvar.mlx, xvar.mlx_ptr, xvar.win_1, xvar.maze_data,
                        config, xvar)
+    create_path_image(xvar, config)
     if xvar.show_path:
         button_toggle_path(config, xvar, xvar.show_path)
 
@@ -187,13 +189,19 @@ def button_toggle_path(config, xvar: XVar,
         xvar (XVar): The graphics context.
         status (bool | None): Explicit status to set, or None to toggle.
     """
-    colors = {True: 5, False: 0}
     if status is not None:
         xvar.show_path = status
     else:
         xvar.show_path = not xvar.show_path
-    for x, y in xvar.path:
-        update_cell(xvar, x, y, colors[xvar.show_path], config)
+
+    if xvar.show_path and not xvar.path_img:
+        create_path_image(xvar, config)
+
+    target_img = xvar.path_img if (
+        xvar.show_path and xvar.path_img) else xvar.img
+    if target_img:
+        xvar.mlx.mlx_put_image_to_window(
+            xvar.mlx_ptr, xvar.win_1, target_img, 0, 0)
 
 
 def buttons_init(config: Config, xvar: XVar) -> None:

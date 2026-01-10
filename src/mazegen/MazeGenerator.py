@@ -45,11 +45,6 @@ class MazeGenerator:
         if (size[0] != -1 and size[1] != -1):
             self.__config.WIDTH, self.__config.HEIGHT = size
 
-        if self.__config.WIDTH < 31 or self.__config.HEIGHT < 21:
-            raise exception.ConfigException("Window size too small, \
-minimum 31x21")
-        if self.__config.WIDTH % 2 == 0 or self.__config.HEIGHT % 2 == 0:
-            raise exception.ConfigException("The window size cannot be even")
         try:
             if self.__config.SEED == 0:
                 if (type(seed) is int and seed != 0):
