@@ -17,7 +17,7 @@ def main() -> None:
     if len(sys.argv) <= 1:
         raise exception.ArgsException("Not enough arguments")
     try:
-        maze_generator = MazeGenerator(sys.argv[1], seed="ba50c3a0a0c4ff7a")
+        maze_generator = MazeGenerator(sys.argv[1])
         maze = maze_generator.generate_maze()
         maze_generator.draw_control_buttons()
         maze_generator.draw_maze(maze)
