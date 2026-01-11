@@ -2,6 +2,7 @@ __pycache__
 src/mazegen/algorithms/__pycache__
 src/mazegen/__pycache__
 output.txt
+venv
 .mypy_cache
 .vscode
 dist

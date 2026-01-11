@@ -1,5 +1,6 @@
 import sys
 import os
+from typing import Any
 import pytest
 from unittest.mock import MagicMock, patch
 
@@ -11,25 +12,25 @@ from src.mazegen import exception  # noqa: E402
 
 class MockConfig:
     """Mock configuration to isolate tests."""
-    def __init__(self):
+    def __init__(self) -> None:
         self.WIDTH = 51
         self.HEIGHT = 51
         self.PERFECT = False
         self.ENTRY = (1, 1)
         self.EXIT = (49, 49)
         self.ANIMATION = False
-        self.COLORS = [{}, {}, {}, {}, {}]
+        self.COLORS: list[dict[int, int]] = [{}, {}, {}, {}, {}]
         self.DELAY = 0
 
 
 class MockXVar:
     """Mock for the XVar graphics context."""
-    def __init__(self):
+    def __init__(self) -> None:
         self.mlx = MagicMock()
         self.mlx_ptr = MagicMock()
         self.win_1 = MagicMock()
         self.show_path = False
-        self.path = []
+        self.path: list[str] = []
         self.screen_w = 1920
         self.screen_h = 1080
         self.color_palette = 0
@@ -37,7 +38,7 @@ class MockXVar:
         self.img_data = None
 
 
-def test_add_symbol_perfect():
+def test_add_symbol_perfect() -> None:
     """Verifies that the symbol is added correctly in a perfect maze."""
     width, height = 50, 50
     maze = [[1 for _ in range(width)] for _ in range(height)]
@@ -52,7 +53,7 @@ def test_add_symbol_perfect():
     assert found_symbol, "The symbol (value 2) should be present in the maze"
 
 
-def test_add_symbol_imperfect():
+def test_add_symbol_imperfect() -> None:
     """Verifies that the symbol is added correctly in an imperfect maze."""
     width, height = 50, 50
     maze = [[1 for _ in range(width)] for _ in range(height)]
@@ -69,7 +70,8 @@ def test_add_symbol_imperfect():
 
 @patch('src.mazegen.utils.maze_utils.resolve')
 @patch('src.mazegen.utils.maze_utils.prim')
-def test_generate_maze_prim_success(mock_prim, mock_resolve):
+def test_generate_maze_prim_success(mock_prim: Any,
+                                    mock_resolve: Any) -> None:
     """Tests the full maze generation flow with Prim algorithm (mocked)."""
     config = MockConfig()
     xvar = MockXVar()
@@ -90,7 +92,8 @@ def test_generate_maze_prim_success(mock_prim, mock_resolve):
 
 @patch('src.mazegen.utils.maze_utils.resolve')
 @patch('src.mazegen.utils.maze_utils.stacking')
-def test_generate_maze_stacking_success(mock_stacking, mock_resolve):
+def test_generate_maze_stacking_success(mock_stacking: Any,
+                                        mock_resolve: Any) -> None:
     """Tests the full maze generation flow
     with stacking algorithm (mocked)."""
     config = MockConfig()
@@ -112,7 +115,7 @@ def test_generate_maze_stacking_success(mock_stacking, mock_resolve):
 
 
 @patch('src.mazegen.utils.maze_utils.prim')
-def test_generate_maze_invalid_entry_exit(mock_prim):
+def test_generate_maze_invalid_entry_exit(mock_prim: Any) -> None:
     """Verifies that generate_maze raises an
     exception if entry/exit are invalid."""
     config = MockConfig()
@@ -129,7 +132,7 @@ def test_generate_maze_invalid_entry_exit(mock_prim):
 
 
 @patch('src.mazegen.utils.maze_utils.prim')
-def test_generate_maze_out_of_bounds(mock_prim):
+def test_generate_maze_out_of_bounds(mock_prim: Any) -> None:
     """Verifies that generation fails if entry or exit are out of bounds."""
     config = MockConfig()
     xvar = MockXVar()

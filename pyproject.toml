@@ -20,3 +20,6 @@ classifiers = [
 
 [project.urls]
 "Homepage" = "https://projects.intra.42.fr/a-maze-ing/julcleme"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
