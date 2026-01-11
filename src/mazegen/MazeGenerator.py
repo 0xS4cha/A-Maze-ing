@@ -48,6 +48,22 @@ class MazeGenerator:
             self.__config.WIDTH, self.__config.HEIGHT = size
 
         try:
+            if self.__config.EXIT[0] < 0 or \
+                    self.__config.EXIT[0] > self.__config.WIDTH:
+                raise Exception(f"EXIT X position is out of range \
+(min 0, max {self.__config.WIDTH})")
+            if self.__config.EXIT[1] < 0 or \
+                    self.__config.EXIT[1] > self.__config.HEIGHT:
+                raise Exception(f"EXIT Y position is out of range \
+(min 0, max {self.__config.HEIGHT})")
+            if self.__config.ENTRY[0] < 0 or \
+                    self.__config.ENTRY[0] > self.__config.WIDTH:
+                raise Exception(f"ENTRY X position is out of range \
+(min 0, max {self.__config.WIDTH})")
+            if self.__config.ENTRY[1] < 0 or \
+                    self.__config.ENTRY[1] > self.__config.HEIGHT:
+                raise Exception(f"ENTRY Y position is out of range \
+(min 0, max {self.__config.HEIGHT})")
             new_seed = self.__config.SEED
             if new_seed == "0":
                 new_seed = secrets.token_hex(8)
