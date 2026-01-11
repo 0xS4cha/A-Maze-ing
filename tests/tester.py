@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-"""Unit tests for the maze generation modules."""
-
 import sys
 import os
 import pytest
@@ -45,7 +42,7 @@ def test_add_symbol_perfect():
     width, height = 50, 50
     maze = [[1 for _ in range(width)] for _ in range(height)]
 
-    maze_utils.add_symbol(maze, maze_utils.ft_symbol)
+    maze_utils.add_symbol(maze, maze_utils.ft_symbol, is_perfect=True)
 
     found_symbol = False
     for row in maze:
@@ -60,7 +57,7 @@ def test_add_symbol_imperfect():
     width, height = 50, 50
     maze = [[1 for _ in range(width)] for _ in range(height)]
 
-    maze_utils.add_symbol(maze, maze_utils.ft_symbol)
+    maze_utils.add_symbol(maze, maze_utils.ft_symbol, is_perfect=False)
 
     found_symbol = False
     for row in maze:

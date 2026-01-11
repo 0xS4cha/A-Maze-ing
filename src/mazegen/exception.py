@@ -15,36 +15,21 @@ def display_errors(message: str) -> None:
 
 
 class MazeException(Exception):
-    """
-    Base exception class for maze generation errors.
-
-    Args:
-        *args (str): Variable length argument list.
-    """
+    """Base exception class for maze generation errors."""
 
     def __init__(self, *args: str):
         super().__init__(*args)
 
 
 class ArgsException(MazeException):
-    """
-    Exception raised for invalid command-line arguments.
-
-    Args:
-        *args (str): Variable length argument list.
-    """
+    """Exception raised for invalid command-line arguments."""
 
     def __init__(self, *args: str):
         super().__init__(*args)
 
 
 class ConfigException(Exception):
-    """
-    Exception raised for configuration file errors.
-
-    Args:
-        *args (str): Variable length argument list.
-    """
+    """Exception raised for configuration file errors."""
 
     def __init__(self, *args: str):
         super().__init__(*args)
