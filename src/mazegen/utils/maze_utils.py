@@ -22,6 +22,13 @@ ft_symbol = [
 
 
 def maze_mold(maze: List[List[int]], _config: config.Config) -> None:
+    """
+    Reset and initialize the maze grid with full walls.
+
+    Args:
+        maze (List[List[int]]): The maze grid to initialize.
+        _config (config.Config): The configuration object using dimensions.
+    """
     maze.clear()
     full_connections = (Bit_position.NORTH.value | Bit_position.EAST.value |
                         Bit_position.SOUTH.value | Bit_position.WEST.value)
@@ -90,7 +97,7 @@ def make_non_perfect(maze: list[list[int]], path: list[tuple[int, int]]):
             nx, ny = cx + dx, cy + dy
             if not (0 <= nx < w and 0 <= ny < h):
                 continue
-            if not (maze[cy][cx] & bit_curr):
+            if not (maze[cy][cx] & bit_curr) and maze[ny][nx] != 16 and maze[cy][cx] != 16:
                 maze[cy][cx] |= bit_curr
                 maze[ny][nx] |= bit_neigh
                 loops_added += 1

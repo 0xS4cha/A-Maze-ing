@@ -22,7 +22,7 @@ class MazeGenerator:
     def __init__(
             self,
             path: str,
-            seed: str | int = 0,
+            seed: str = "0",
             size: tuple[int, int] = (-1, -1)
             ) -> None:
         """
@@ -30,6 +30,8 @@ class MazeGenerator:
 
         Args:
             path (str): The path to the configuration file.
+            seed (str): The seed for random number generation. Defaults to "0".
+            size (tuple[int, int]): Optional override for maze size.
 
         Raises:
             exception.ConfigException: If the configuration is invalid or MLX
@@ -46,14 +48,12 @@ class MazeGenerator:
             self.__config.WIDTH, self.__config.HEIGHT = size
 
         try:
-            if self.__config.SEED == 0:
-                if (type(seed) is int and seed != 0):
-                    new_seed = seed
-                else:
-                    new_seed = secrets.token_hex(8)
-                random.seed(new_seed)
-            else:
-                random.seed(self.__config.SEED)
+            new_seed = self.__config.SEED
+            if new_seed == "0":
+                new_seed = secrets.token_hex(8)
+            if (seed != "0"):
+                new_seed = seed
+            random.seed(new_seed)
             self.__xvar.mlx_ptr = self.__xvar.mlx.mlx_init()
             ret, self.__xvar.screen_w, self.__xvar.screen_h =\
                 self.__xvar.mlx.mlx_get_screen_size(self.__xvar.mlx_ptr)

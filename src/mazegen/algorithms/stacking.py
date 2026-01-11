@@ -11,11 +11,32 @@ from typing import List
 
 def get_unvisited_neighbors(x: int, y: int, maze: List[List[int]],
                             width: int, height: int) -> List[tuple[int, int]]:
-    """Return a list of unvisited neighbors."""
-    neighbors = []
-    directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
-    for dx, dy in directions:
-        nx, ny = x + dx, y + dy
+    """
+    Return a list of unvisited neighbors.
+
+    Args:
+        x (int): X-coordinate of the current cell.
+        y (int): Y-coordinate of the current cell.
+        maze (List[List[int]]): The maze grid.
+        width (int): Width of the maze.
+        height (int): Height of the maze.
+
+    Returns:
+def stacking(x: int, y: int, maze: List[List[int]], width: int, height: int,
+             _config: Config, xvar: XVar) -> None:
+    """
+    Generate a maze using the iterative algorithm with stack.
+
+    Args:
+        x (int): Starting X-coordinate.
+        y (int): Starting Y-coordinate.
+        maze (List[List[int]]): The maze grid.
+        width (int): Width of the maze.
+        height (int): Height of the maze.
+        _config (Config): Configuration object.
+        xvar (XVar): Graphics context.
+    """
+    stack = [(x, y)] dx, y + dy
         if 0 <= nx < width and 0 <= ny < height:
             if not (maze[ny][nx] & Bit_position.VISITED.value):
                 neighbors.append((nx, ny))
@@ -46,12 +67,20 @@ def stacking(x: int, y: int, maze: List[List[int]], width: int, height: int,
             maze[ny][nx] |= Bit_position.VISITED.value
             if xvar and _config.ANIMATION == 1:
                 update_cell(xvar, cx, cy, maze[cy][cx], _config)
-                update_cell(xvar, nx, ny, maze[ny][nx], _config)
-                if hasattr(_config, 'DELAY') and _config.DELAY > 0:
-                    time.sleep(_config.DELAY)
-                    xvar.mlx.mlx_do_sync(xvar.mlx_ptr)
-            stack.append((nx, ny))
-        else:
+def generate(maze: List[List[int]], _config: Config,
+             xvar: XVar) -> List[List[int]]:
+    """
+    Initialize and execute the backtracking generation algorithm.
+
+    Args:
+        maze (List[List[int]]): The maze grid.
+        _config (Config): Configuration object.
+        xvar (XVar): Graphics context.
+
+    Returns:
+        List[List[int]]: The generated maze.
+    """
+    w = _config.WIDTH
             stack.pop()
 
 

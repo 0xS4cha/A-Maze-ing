@@ -59,7 +59,7 @@ class Config:
         self.PERFECT = False
         self.ANIMATION = 1
         self.DELAY = 0.001
-        self.SEED = 0
+        self.SEED = "0"
         self.COLORS = [
             {
                 0: 0xFF1E1E2E,  # empty -> Dark Blue/Black background (Base)

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Entry point for the A-Maze-ing application."""
 
 import sys
 import src.mazegen.exception as exception
@@ -16,8 +17,9 @@ def main() -> None:
     """
     if len(sys.argv) <= 1:
         raise exception.ArgsException("Not enough arguments")
+    seed = sys.argv[2] if len(sys.argv) > 2 else "0"
     try:
-        maze_generator = MazeGenerator(sys.argv[1])
+        maze_generator = MazeGenerator(sys.argv[1], seed=seed)
         maze = maze_generator.generate_maze()
         maze_generator.draw_control_buttons()
         maze_generator.draw_maze(maze)

@@ -219,7 +219,13 @@ rendering")
 
 
 def create_path_image(xvar: XVar, _config: config.Config) -> None:
-    """Create a secondary image that includes the solution path."""
+    """
+    Create a secondary image that includes the solution path.
+
+    Args:
+        xvar (XVar): The graphics context.
+        _config (config.Config): The configuration object.
+    """
     if not xvar.img or not xvar.path:
         return
 

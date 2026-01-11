@@ -1,20 +1,20 @@
 # this is a comment
 
 # width of the maze
-WIDTH=200
+WIDTH=14
 # height of the maze
-HEIGHT=200
+HEIGHT=14
 
 # position of the entry point of the maze (x, y)
 ENTRY=1,1
 # position of the exit point of the maze (x, y)
-EXIT=199,199
+EXIT=13,13
 
 # path of the output file
 OUTPUT_FILE=output.txt
 
 # the generated maze contains only one solution
-PERFECT=True
+PERFECT=False
 
 # view generation and resolving in realtime
 ANIMATION=0

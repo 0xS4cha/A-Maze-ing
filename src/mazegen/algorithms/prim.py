@@ -11,7 +11,17 @@ from typing import List
 
 def generate(maze: List[List[int]], _config: Config,
              xvar: XVar) -> List[List[int]]:
-    """Initialize and execute Prim's algorithm."""
+    """
+    Initialize and execute Prim's algorithm.
+
+    Args:
+        maze (List[List[int]]): The maze grid.
+        _config (Config): Configuration object.
+        xvar (XVar): Graphics context.
+
+    Returns:
+        List[List[int]]: The generated maze.
+    """
     w = _config.WIDTH
     h = _config.HEIGHT
 

@@ -1,3 +1,4 @@
+"""Utility functions for maze generation algorithms."""
 from typing import List
 
 from enum import Enum
