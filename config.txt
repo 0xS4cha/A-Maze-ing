@@ -1,14 +1,14 @@
 # this is a comment
 
 # width of the maze
-WIDTH=14
+WIDTH=50
 # height of the maze
-HEIGHT=14
+HEIGHT=50
 
 # position of the entry point of the maze (x, y)
 ENTRY=1,14
 # position of the exit point of the maze (x, y)
-EXIT=14,14
+EXIT=50,14
 
 # path of the output file
 OUTPUT_FILE=output.txt
@@ -18,5 +18,9 @@ PERFECT=False
 
 # view generation and resolving in realtime
 ANIMATION=0
+
+# delay in seconds
 DELAY=0
-SEED=123
+
+# maze seed, 0 is a random one
+SEED=0

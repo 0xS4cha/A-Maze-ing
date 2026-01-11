@@ -36,7 +36,7 @@ graph TD
 # Algorithms
 This project implements the following algorithms:
 
-1.  **Recursive Backtracking**: The choice of a backtracking algorithm was very quick because it is the most efficient in generating mazes and creates a perfect maze for sure. ```sservant```
+1.  **Stacking algorithm**: The choice of a stacking algorithm was very quick because it is the most efficient in generating mazes and creates a perfect maze for sure. ```sservant```
 2.  **Prim Algorithm**: We chose the Prim algorithm because using graphs is good practice in this style of generation, and it's a good thing to see. ```julcleme```
 
 
@@ -52,25 +52,29 @@ The configuration file controls the maze generation. Below is the complete struc
 # this is a comment
 
 # width of the maze
-WIDTH=53
+WIDTH=50
 # height of the maze
-HEIGHT=53
+HEIGHT=50
 
 # position of the entry point of the maze (x, y)
-ENTRY=1,1
+ENTRY=1,14
 # position of the exit point of the maze (x, y)
-EXIT=49,49
+EXIT=50,14
 
 # path of the output file
 OUTPUT_FILE=output.txt
 
 # the generated maze contains only one solution
-PERFECT=0
-
-# 0 for Eller's (or Prim's), 1 for Backtracking
+PERFECT=False
 
 # view generation and resolving in realtime
-ANIMATION=1
+ANIMATION=0
+
+# delay in seconds
+DELAY=0
+
+# maze seed, 0 is a random one
+SEED=0
 ```
 
 # Resources
@@ -95,7 +99,7 @@ make build
 Then install it:
 
 ```bash
-pip install mazegen-1.0.0-py3-none-any.whl
+make install
 ```
 
 ## Usage Example
@@ -104,7 +108,7 @@ pip install mazegen-1.0.0-py3-none-any.whl
 from mazegen import MazeGenerator
 
 # Initialize from config file, size and seed are optionnal
-generator = MazeGenerator("config.txt", seed=42, size=(53, 53))
+generator = MazeGenerator("config.txt", seed="42", size=(53, 53))
 
 # Generate maze
 maze = generator.generate_maze()
@@ -128,16 +132,16 @@ generator.run()
 - julcleme
 
 Roles:
-- sservant: Algorithm implementation (Backtracking, Analysis)
-- julcleme: Graphics (MLX), Packaging, Refactoring, Eller's algorithm enhancements
+- sservant: Graphics (MLX), Stacking Algorithm advanced performance.
+- julcleme: Packaging, Prim's algorithm enhancements
 
 Planning:
 We started by researching algorithms, implemented a basic console version, then added MLX graphics. Finally, we refactored repeatedly to meet the modularity requirements and packaging standards.
 
 ## Advanced Features
-- **Multiple Algorithms**: Configurable via `PERFECT` flag (0 for prim, 1 for Backtracking).
+- **Multiple Algorithms**: Configurable via `PERFECT` flag (False for prim, True for Stacking).
 - **Graphical Interface**: Interactive buttons for solving/resetting.
-- **Continuous Walls**: Post-processing for Eller's algorithm to avoid isolated dots.
+- **Continuous Walls**: Post-processing for Prim's algorithm to avoid isolated dots.
 - **Graphics window**: You can display the maze with mlx
 - **42 symbol**: 42 symbol is display in center of the maze
 
@@ -156,7 +160,7 @@ graph TD
     subgraph J2 [📅 Jour 2]
         direction TB
         T1("Prim algorithm</br>and output sys</br>julcleme"):::jul
-        T2("Backtracking algorithm</br>and vizualisation</br>sservant"):::sse
+        T2("Stacking algorithm</br>and vizualisation</br>sservant"):::sse
     end
 
     subgraph J1 [📅 Jour 1]
@@ -165,52 +169,4 @@ graph TD
         T5("Main program with argv</br>sservant"):::sse
 
     end
-
-
 ```
-
-## TODO
-- [x] Fix eller animation
-- [x] You must implement the maze generation as a unique class
-- [x] Use frameworks like pytest or unittest for unit tests, covering edge cases.
-- [x] Your functions should handle exceptions gracefully to avoid crashes
-- [x] Use PEP 257 for docstrings
-- [x] Use type definition and check using `mypy`
-- [x] Makefile using rules `install` `run` `debug` `clean` `lint-strict` and `lint`
-- [x] Add a `.gitignore`
-- [x] Create test programs to verify project functionality
-- [x] Use venv
-- [x] Fix `makefile`: add install `mlx`
-- [x] A default configuration file must be available in your Git repository
-- [x] The maze must be randomly generated, but reproducibility via a seed is required
-- [x] You must provide a short documentation describing how to:
-	- [x] Instantiate and use your generator, with at least a basic example.
-	- [x] Pass custom parameters (e.g., `size`, `seed`).
-	- [x] Access the generated structure, and access at least a solution.
-- [x] Fix `README.md`
-	- [x] The complete structure and format of your config file.
-	- [x] The maze generation algorithm you chose.
-	- [x] Why you chose this algorithm.
-	- [x] What part of your code is reusable, and how.
-	- [x] Your team and project management with:
-		- [x] The roles of each team member.
-		- [x] Your anticipated planning and how it evolved until the end
-		- [x] What worked well and what could be improved
-		- [x] Have you used any specific tools? Which ones?
-	- [x] If you implement advanced features (multiple algorithms, display options)describe them in this README.md file
-- [x] NO FRENCH :fr:
-
-
-- [x] This entire reusable module (code and documentation) must be available in a single file
-	suitable for a later installation by pip.
-	This package must be called mazegen-* and the file must be located at the root of your
-	git repository.
-	Both .tar.gz and .whl extensions are allowed, as generated by the standard build of a
-	Python package.
-	Example of a full filename: mazegen-1.0.0-py3-none-any.whl .
-	You must provide in you Git repository all needed elements to build the package. This
-	will be asked during the evaluation: in a virtualenv or equivalent, install the needed tools
-	and build your package again from your sources.
-	The main README.md file (not part of the reusable module) must also contain this short
-	documentation.
-- [ ] Fix the tests

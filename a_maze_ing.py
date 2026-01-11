@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-import src.exception as exception
+import src.mazegen.exception as exception
 from mazegen import MazeGenerator
 
 
