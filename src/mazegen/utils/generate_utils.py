@@ -1,13 +1,12 @@
 from typing import List
-
 from enum import Enum
 
 
 class Direction(Enum):
-    NORTH: int = 0
-    EAST: int = 1
-    SOUTH: int = 2
-    WEST: int = 3
+    NORTH = 0
+    EAST = 1
+    SOUTH = 2
+    WEST = 3
 
 
 class Bit_position(Enum):

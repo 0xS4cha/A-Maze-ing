@@ -34,6 +34,7 @@ def maze_mold(maze: List[List[int]], _config: config.Config) -> None:
                         Bit_position.SOUTH.value | Bit_position.WEST.value)
     for _ in range(_config.HEIGHT):
         maze.append([full_connections for _ in range(_config.WIDTH)])
+    return maze
 
 
 def add_symbol(maze: List[List[int]], symbol: List[List[int]]) -> None:
@@ -62,7 +63,8 @@ def add_symbol(maze: List[List[int]], symbol: List[List[int]]) -> None:
         y_start += 1
 
 
-def make_non_perfect(maze: list[list[int]], path: list[tuple[int, int]]):
+def make_non_perfect(maze: List[List[int]],
+                     path: List[tuple[int, int]]) -> None:
     """
     Modify the maze to make it non-perfect.
 
@@ -97,7 +99,8 @@ def make_non_perfect(maze: list[list[int]], path: list[tuple[int, int]]):
             nx, ny = cx + dx, cy + dy
             if not (0 <= nx < w and 0 <= ny < h):
                 continue
-            if not (maze[cy][cx] & bit_curr) and maze[ny][nx] != 16 and maze[cy][cx] != 16:
+            if not (maze[cy][cx] & bit_curr) and (maze[ny][nx] != 16
+                                                  and maze[cy][cx] != 16):
                 maze[cy][cx] |= bit_curr
                 maze[ny][nx] |= bit_neigh
                 loops_added += 1
@@ -125,7 +128,7 @@ def generate_maze(_config: config.Config, xvar: XVar) -> List[List[int]]:
     xvar.show_path = False
     algo_list = {False: prim, True: stacking}
     xvar.path = []
-    maze_mold(maze, _config)
+    maze = maze_mold(maze, _config)
     add_symbol(maze, ft_symbol)
     entry_x, entry_y = _config.ENTRY
     exit_x, exit_y = _config.EXIT

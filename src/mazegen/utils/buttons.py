@@ -1,6 +1,6 @@
 """Button handling utilities for the maze UI."""
 
-from ..utils.mlx_utils import XVar, manage_close, update_cell, create_path_image
+from ..utils.mlx_utils import XVar, manage_close, create_path_image
 from .. import exception
 from ..utils.maze_utils import generate_maze, render_maze_to_mlx
 from ..config import Config
@@ -179,8 +179,8 @@ def button_color_maze(config: Config, xvar: XVar) -> None:
         button_toggle_path(config, xvar, xvar.show_path)
 
 
-def button_toggle_path(config, xvar: XVar,
-                       status: bool | None = None) -> None:
+def button_toggle_path(config: Config, xvar: XVar,
+                       status: (bool | None) = None) -> None:
     """
     Callback to toggle the solution path visibility.
 
