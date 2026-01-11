@@ -27,6 +27,7 @@ def maze_mold(maze: List[List[int]], _config: config.Config) -> None:
                         Bit_position.SOUTH.value | Bit_position.WEST.value)
     for _ in range(_config.HEIGHT):
         maze.append([full_connections for _ in range(_config.WIDTH)])
+    return maze
 
 
 def add_symbol(maze: List[List[int]], symbol: List[List[int]]) -> None:
@@ -118,7 +119,7 @@ def generate_maze(_config: config.Config, xvar: XVar) -> List[List[int]]:
     xvar.show_path = False
     algo_list = {False: prim, True: stacking}
     xvar.path = []
-    maze_mold(maze, _config)
+    maze = maze_mold(maze, _config)
     add_symbol(maze, ft_symbol)
     entry_x, entry_y = _config.ENTRY
     exit_x, exit_y = _config.EXIT

@@ -1,6 +1,6 @@
 """Button handling utilities for the maze UI."""
 
-from ..utils.mlx_utils import XVar, manage_close, update_cell, create_path_image
+from ..utils.mlx_utils import XVar, manage_close, create_path_image
 from .. import exception
 from ..utils.maze_utils import generate_maze, render_maze_to_mlx
 from ..config import Config
