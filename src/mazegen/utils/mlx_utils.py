@@ -232,12 +232,14 @@ def create_path_image(xvar: XVar, _config: config.Config) -> None:
     scale = xvar.img_w // _config.WIDTH
     border_thick = max(1, scale // 5)
     sl = xvar.img_sl
-    xvar.path_img = xvar.mlx.mlx_new_image(xvar.mlx_ptr, xvar.img_w, xvar.img_h)
+    xvar.path_img = xvar.mlx.mlx_new_image(
+        xvar.mlx_ptr, xvar.img_w, xvar.img_h)
     src_data = xvar.img_data
     dst_data, _, _, _ = xvar.mlx.mlx_get_data_addr(xvar.path_img)
 
     dst_data[:] = src_data[:]
-    path_color = _config.COLORS[xvar.color_palette].get(5, 0x00FF00).to_bytes(4, 'little')
+    path_color = _config.COLORS[xvar.color_palette].get(
+        5, 0x00FF00).to_bytes(4, 'little')
     for px, py in xvar.path:
         start_y = py * scale
         start_x = px * scale
@@ -245,10 +247,21 @@ def create_path_image(xvar: XVar, _config: config.Config) -> None:
         for dy in range(scale):
             row_off = (start_y + dy) * sl
             for dx in range(scale):
-                if dy < border_thick and not (cell_mask & Bit_position.NORTH.value): continue
-                if dx >= scale - border_thick and not (cell_mask & Bit_position.EAST.value): continue
-                if dy >= scale - border_thick and not (cell_mask & Bit_position.SOUTH.value): continue
-                if dx < border_thick and not (cell_mask & Bit_position.WEST.value): continue
+                if (dy < border_thick and
+                        not (cell_mask & Bit_position.NORTH.value)):
+                    continue
+
+                if (dx >= scale - border_thick and
+                        not (cell_mask & Bit_position.EAST.value)):
+                    continue
+
+                if (dy >= scale - border_thick and
+                        not (cell_mask & Bit_position.SOUTH.value)):
+                    continue
+
+                if (dx < border_thick and
+                        not (cell_mask & Bit_position.WEST.value)):
+                    continue
                 off = row_off + (start_x + dx) * 4
                 if off + 4 <= len(dst_data):
                     dst_data[off:off+4] = path_color
@@ -311,7 +324,7 @@ def update_cell(xvar: XVar, mx: int, my: int, val: Union[int, List[int]],
         bg_bytes = isolated_bytes
     else:
         bg_bytes = path_bytes
-    
+
     for dy in range(scale):
         py = start_y + dy
         row_off = py * sl
@@ -320,16 +333,17 @@ def update_cell(xvar: XVar, mx: int, my: int, val: Union[int, List[int]],
             off = row_off + px * 4
             if off + 4 <= len(data):
                 is_wall = False
-                
                 if dy < border_thick and not (mask & Bit_position.NORTH.value):
                     is_wall = True
-                elif dx >= scale - border_thick and not (mask & Bit_position.EAST.value):
+                elif (dx >= scale - border_thick and
+                        not (mask & Bit_position.EAST.value)):
                     is_wall = True
-                elif dy >= scale - border_thick and not (mask & Bit_position.SOUTH.value):
+                elif (dy >= scale - border_thick and
+                        not (mask & Bit_position.SOUTH.value)):
                     is_wall = True
-                elif dx < border_thick and not (mask & Bit_position.WEST.value):
+                elif dx < border_thick and not \
+                        (mask & Bit_position.WEST.value):
                     is_wall = True
-
                 if is_wall:
                     data[off:off+4] = wall_bytes
                 else:
