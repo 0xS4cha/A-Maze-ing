@@ -125,13 +125,14 @@ class Config:
                                 right_arg.find(",") != -1:
                             entry = right_arg.split(",")
                             if (len(entry) != 2):
-                                raise
+                                raise exception.ConfigException("Invalid entry\
+ position")
                             if left_arg == "ENTRY":
-                                self.ENTRY[0] = int(entry[0].strip())
-                                self.ENTRY[1] = int(entry[1].strip())
+                                self.ENTRY[0] = int(entry[0].strip()) - 1
+                                self.ENTRY[1] = int(entry[1].strip()) - 1
                             else:
-                                self.EXIT[0] = int(entry[0].strip())
-                                self.EXIT[1] = int(entry[1].strip())
+                                self.EXIT[0] = int(entry[0].strip()) - 1
+                                self.EXIT[1] = int(entry[1].strip()) - 1
                         elif left_arg == "OUTPUT_FILE":
                             self.OUTPUT_FILE = right_arg
                         elif left_arg == "PERFECT":

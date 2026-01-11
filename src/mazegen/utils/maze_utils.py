@@ -21,12 +21,14 @@ ft_symbol = [
 ]
 
 
-def maze_mold(maze: List[List[int]], _config: config.Config) -> None:
+def maze_mold(maze: List[List[int]],
+              _config: config.Config) -> List[List[int]]:
     maze.clear()
     full_connections = (Bit_position.NORTH.value | Bit_position.EAST.value |
                         Bit_position.SOUTH.value | Bit_position.WEST.value)
     for _ in range(_config.HEIGHT):
         maze.append([full_connections for _ in range(_config.WIDTH)])
+    return maze
 
 
 def add_symbol(maze: List[List[int]], symbol: List[List[int]]) -> None:
@@ -55,7 +57,8 @@ def add_symbol(maze: List[List[int]], symbol: List[List[int]]) -> None:
         y_start += 1
 
 
-def make_non_perfect(maze: list[list[int]], path: list[tuple[int, int]]):
+def make_non_perfect(maze: list[list[int]],
+                     path: list[tuple[int, int]]) -> None:
     """
     Modify the maze to make it non-perfect.
 
@@ -119,13 +122,8 @@ def generate_maze(_config: config.Config, xvar: XVar) -> List[List[int]]:
     xvar.show_path = False
     algo_list = {False: prim, True: stacking}
     xvar.path = []
-    maze_mold(maze, _config)
+    maze = maze_mold(maze, _config)
     add_symbol(maze, ft_symbol)
-    entry_x, entry_y = _config.ENTRY
-    exit_x, exit_y = _config.EXIT
-    if maze[exit_y][exit_x] == 2:
-        raise exception.ConfigException("Invalid entry or exit position, \
-on the 42 symbol (unvalid path)")
     if _config.ANIMATION and xvar:
         render_maze_to_mlx(
             xvar.mlx,
@@ -138,7 +136,7 @@ on the 42 symbol (unvalid path)")
     try:
         random.seed(_config.SEED)
         print(f"Maze Seed: {_config.SEED}")
-        result = algo_list[_config.PERFECT].generate(
+        result: List[List[int]] = algo_list[_config.PERFECT].generate(
             maze,
             _config,
             xvar
@@ -146,11 +144,6 @@ on the 42 symbol (unvalid path)")
     except RecursionError:
         raise exception.MazeException("Grid too large\
 for recursive algorithm.")
-    if (entry_x < 1 or entry_y < 1 or entry_x > _config.WIDTH - 2 or
-        entry_y > _config.HEIGHT - 2) \
-            or (entry_x == exit_x and entry_y == exit_y):
-        raise exception.ConfigException("Invalid entry or exit position, \
-outside the map")
     path = resolve(
         (_config.ENTRY[0], _config.ENTRY[1]),
         0,

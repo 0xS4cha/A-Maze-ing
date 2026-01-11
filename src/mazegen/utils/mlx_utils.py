@@ -96,11 +96,13 @@ def manage_expose(xvar: XVar) -> None:
     Args:
         xvar (XVar): The graphics context.
     """
-    if xvar.img:
+    target_img = xvar.path_img if (
+        xvar.show_path and xvar.path_img) else xvar.img
+    if target_img:
         xvar.mlx.mlx_put_image_to_window(
             xvar.mlx_ptr,
             xvar.win_1,
-            xvar.img,
+            target_img,
             0,
             0
         )

@@ -31,11 +31,11 @@ $(OUTPUT_FILE): $(SRCS)
 	$(PYTHON) -m build					&& \
 	deactivate						&& \
 	$(RM) -rf venv"
-	cp ./dist/mazegen-*.whl .
+	cp ./dist/$(OUTPUT_FILE) .
 
-install:
+install: build
 	$(PYTHON) -m pip install $(DEPENDENCIES)
-	$(PYTHON) -m pip install mazegen-*.whl
+	$(PYTHON) -m pip install $(OUTPUT_FILE)
 
 run:
 	$(PYTHON) a_maze_ing.py default_config.txt
@@ -44,6 +44,7 @@ debug:
 	$(PYTHON) -m pdb $(MAIN)
 
 clean:
+	pip uninstall mazegen -y
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	rm -rf .mypy_cache .pytest_cache
 	rm -rf $(OUTPUT_FILE) dist/

@@ -6,7 +6,7 @@ WIDTH=14
 HEIGHT=14
 
 # position of the entry point of the maze (x, y)
-ENTRY=1,15
+ENTRY=1,14
 # position of the exit point of the maze (x, y)
 EXIT=14,14
 

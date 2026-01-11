@@ -44,6 +44,7 @@ class MazeGenerator:
             raise exception.ConfigException(f"Can't initialize MLX: {e}")
 
         self.__config = config.Config(path)
+        self.__xvar.show_path = False
         if (size[0] != -1 and size[1] != -1):
             self.__config.WIDTH, self.__config.HEIGHT = size
 
@@ -51,19 +52,19 @@ class MazeGenerator:
             if self.__config.EXIT[0] < 0 or \
                     self.__config.EXIT[0] > self.__config.WIDTH:
                 raise Exception(f"EXIT X position is out of range \
-(min 0, max {self.__config.WIDTH})")
+(min 1, max {self.__config.WIDTH})")
             if self.__config.EXIT[1] < 0 or \
                     self.__config.EXIT[1] > self.__config.HEIGHT:
                 raise Exception(f"EXIT Y position is out of range \
-(min 0, max {self.__config.HEIGHT})")
+(min 1, max {self.__config.HEIGHT})")
             if self.__config.ENTRY[0] < 0 or \
                     self.__config.ENTRY[0] > self.__config.WIDTH:
                 raise Exception(f"ENTRY X position is out of range \
-(min 0, max {self.__config.WIDTH})")
+(min 1, max {self.__config.WIDTH})")
             if self.__config.ENTRY[1] < 0 or \
                     self.__config.ENTRY[1] > self.__config.HEIGHT:
                 raise Exception(f"ENTRY Y position is out of range \
-(min 0, max {self.__config.HEIGHT})")
+(min 1, max {self.__config.HEIGHT})")
             new_seed = self.__config.SEED
             if new_seed == "0":
                 new_seed = secrets.token_hex(8)
@@ -173,7 +174,7 @@ class MazeGenerator:
         Raises:
             exception.MazeException: If no solution is found.
         """
-        pos = tuple(self.__config.ENTRY)
+        pos: tuple[int, int] = (self.__config.ENTRY[0], self.__config.ENTRY[1])
         result = resolve(
             pos,
             0,

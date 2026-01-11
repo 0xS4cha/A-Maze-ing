@@ -194,7 +194,7 @@ def button_toggle_path(config: Config, xvar: XVar,
     else:
         xvar.show_path = not xvar.show_path
 
-    if xvar.show_path and not xvar.path_img:
+    if not xvar.path_img:
         create_path_image(xvar, config)
 
     target_img = xvar.path_img if (

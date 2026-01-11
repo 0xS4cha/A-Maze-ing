@@ -41,7 +41,7 @@ def generate(maze: List[List[int]], _config: Config,
 
     frontier = []
 
-    def add_frontier(fx: int, fy: int) -> None:
+    def add_frontier(fx, fy):
         if not (maze[fy][fx] & Bit_position.VISITED.value):
             maze[fy][fx] |= Bit_position.VISITED.value
             if xvar and _config.ANIMATION == 1:
