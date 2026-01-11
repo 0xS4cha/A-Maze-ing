@@ -5,8 +5,7 @@ DEPENDENCIES	=	src/mazegen/lib/mlx-2.2-py3-ubuntu-any.whl\
 					pytest
 FLAKE			= ~/.local/bin/flake8
 OUTPUT_FILE		= mazegen-1.0.0-py3-none-any.whl
-SRCS			=	./a_maze_ing.py \
-					./src/mazegen/utils/buttons.py \
+SRCS			=	./src/mazegen/utils/buttons.py \
 					./src/mazegen/utils/maze_utils.py \
 					./src/mazegen/utils/mlx_utils.py \
 					./src/mazegen/utils/generate_utils.py \

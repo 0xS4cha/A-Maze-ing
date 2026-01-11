@@ -19,3 +19,4 @@ PERFECT=False
 # view generation and resolving in realtime
 ANIMATION=0
 DELAY=0
+SEED=123

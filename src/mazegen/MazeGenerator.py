@@ -54,6 +54,7 @@ class MazeGenerator:
             if (seed != "0"):
                 new_seed = seed
             random.seed(new_seed)
+            self.__config.SEED = new_seed
             self.__xvar.mlx_ptr = self.__xvar.mlx.mlx_init()
             ret, self.__xvar.screen_w, self.__xvar.screen_h =\
                 self.__xvar.mlx.mlx_get_screen_size(self.__xvar.mlx_ptr)
@@ -116,6 +117,7 @@ class MazeGenerator:
         Returns:
             list[list[int]]: The generated maze as a 2D grid.
         """
+
         self.__xvar.maze_data = utils_generate_maze(self.__config, self.__xvar)
         return self.__xvar.maze_data
 
