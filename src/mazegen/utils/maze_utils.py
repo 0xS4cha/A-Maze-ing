@@ -90,7 +90,8 @@ def make_non_perfect(maze: list[list[int]], path: list[tuple[int, int]]):
             nx, ny = cx + dx, cy + dy
             if not (0 <= nx < w and 0 <= ny < h):
                 continue
-            if not (maze[cy][cx] & bit_curr) and maze[ny][nx] != 16 and maze[cy][cx] != 16:
+            if not (maze[cy][cx] & bit_curr) and \
+                    (maze[ny][nx] != 16 and maze[cy][cx] != 16):
                 maze[cy][cx] |= bit_curr
                 maze[ny][nx] |= bit_neigh
                 loops_added += 1
