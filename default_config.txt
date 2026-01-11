@@ -6,9 +6,9 @@ WIDTH=14
 HEIGHT=14
 
 # position of the entry point of the maze (x, y)
-ENTRY=1,1
+ENTRY=1,15
 # position of the exit point of the maze (x, y)
-EXIT=13,13
+EXIT=14,14
 
 # path of the output file
 OUTPUT_FILE=output.txt

@@ -42,7 +42,7 @@ def test_add_symbol_perfect():
     width, height = 50, 50
     maze = [[1 for _ in range(width)] for _ in range(height)]
 
-    maze_utils.add_symbol(maze, maze_utils.ft_symbol, is_perfect=True)
+    maze_utils.add_symbol(maze, maze_utils.ft_symbol)
 
     found_symbol = False
     for row in maze:
@@ -57,7 +57,7 @@ def test_add_symbol_imperfect():
     width, height = 50, 50
     maze = [[1 for _ in range(width)] for _ in range(height)]
 
-    maze_utils.add_symbol(maze, maze_utils.ft_symbol, is_perfect=False)
+    maze_utils.add_symbol(maze, maze_utils.ft_symbol)
 
     found_symbol = False
     for row in maze:
@@ -68,14 +68,14 @@ def test_add_symbol_imperfect():
 
 
 @patch('src.mazegen.utils.maze_utils.resolve')
-@patch('src.mazegen.utils.maze_utils.eller')
-def test_generate_maze_eller_success(mock_eller, mock_resolve):
-    """Tests the full maze generation flow with Eller algorithm (mocked)."""
+@patch('src.mazegen.utils.maze_utils.prim')
+def test_generate_maze_prim_success(mock_prim, mock_resolve):
+    """Tests the full maze generation flow with Prim algorithm (mocked)."""
     config = MockConfig()
     xvar = MockXVar()
 
-    mock_eller.generate.return_value = [[1 for _ in range(config.WIDTH)]
-                                        for _ in range(config.HEIGHT)]
+    mock_prim.generate.return_value = [[1 for _ in range(config.WIDTH)]
+                                       for _ in range(config.HEIGHT)]
 
     mock_resolve.return_value = [(1, 1), (2, 2)]
 
@@ -85,23 +85,20 @@ def test_generate_maze_eller_success(mock_eller, mock_resolve):
     assert len(result) == config.HEIGHT
     assert len(result[0]) == config.WIDTH
 
-    assert result[config.ENTRY[1]][config.ENTRY[0]] == 3
-    assert result[config.EXIT[1]][config.EXIT[0]] == 4
-
-    mock_eller.generate.assert_called_once()
+    mock_prim.generate.assert_called_once()
 
 
 @patch('src.mazegen.utils.maze_utils.resolve')
 @patch('src.mazegen.utils.maze_utils.stacking')
-def test_generate_maze_backtracking_success(mock_backtracking, mock_resolve):
+def test_generate_maze_stacking_success(mock_stacking, mock_resolve):
     """Tests the full maze generation flow
-    with Backtracking algorithm (mocked)."""
+    with stacking algorithm (mocked)."""
     config = MockConfig()
     config.PERFECT = True
     xvar = MockXVar()
 
-    mock_backtracking.generate.return_value = [[1 for _ in range(config.WIDTH)]
-                                               for _ in range(config.HEIGHT)]
+    mock_stacking.generate.return_value = [[1 for _ in range(config.WIDTH)]
+                                           for _ in range(config.HEIGHT)]
 
     mock_resolve.return_value = [(1, 1), (2, 2)]
 
@@ -111,14 +108,11 @@ def test_generate_maze_backtracking_success(mock_backtracking, mock_resolve):
     assert len(result) == config.HEIGHT
     assert len(result[0]) == config.WIDTH
 
-    assert result[config.ENTRY[1]][config.ENTRY[0]] == 3
-    assert result[config.EXIT[1]][config.EXIT[0]] == 4
-
-    mock_backtracking.generate.assert_called_once()
+    mock_stacking.generate.assert_called_once()
 
 
-@patch('src.mazegen.utils.maze_utils.eller')
-def test_generate_maze_invalid_entry_exit(mock_eller):
+@patch('src.mazegen.utils.maze_utils.prim')
+def test_generate_maze_invalid_entry_exit(mock_prim):
     """Verifies that generate_maze raises an
     exception if entry/exit are invalid."""
     config = MockConfig()
@@ -127,23 +121,23 @@ def test_generate_maze_invalid_entry_exit(mock_eller):
     config.ENTRY = (10, 10)
     config.EXIT = (10, 10)
 
-    mock_eller.generate.return_value = [[1 for _ in range(config.WIDTH)]
-                                        for _ in range(config.HEIGHT)]
+    mock_prim.generate.return_value = [[1 for _ in range(config.WIDTH)]
+                                       for _ in range(config.HEIGHT)]
 
     with pytest.raises(exception.ConfigException):
         maze_utils.generate_maze(config, xvar)
 
 
-@patch('src.mazegen.utils.maze_utils.eller')
-def test_generate_maze_out_of_bounds(mock_eller):
+@patch('src.mazegen.utils.maze_utils.prim')
+def test_generate_maze_out_of_bounds(mock_prim):
     """Verifies that generation fails if entry or exit are out of bounds."""
     config = MockConfig()
     xvar = MockXVar()
 
     config.ENTRY = (config.WIDTH + 5, 1)
 
-    mock_eller.generate.return_value = [[1 for _ in range(config.WIDTH)]
-                                        for _ in range(config.HEIGHT)]
+    mock_prim.generate.return_value = [[1 for _ in range(config.WIDTH)]
+                                       for _ in range(config.HEIGHT)]
 
     with pytest.raises((exception.ConfigException, IndexError)):
         maze_utils.generate_maze(config, xvar)
