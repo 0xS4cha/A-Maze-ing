@@ -125,18 +125,18 @@ graph TD
     classDef sse fill:#C8E6C9,stroke:#2E7D32,stroke-width:2px,color:black;
     classDef both fill:#E1BEE7,stroke:#6A1B9A,stroke-width:2px,stroke-dasharray: 5 5,color:black;
 
-    subgraph J3 [📅 Jour 3]
+    subgraph J3 [📅 Day 3]
         direction TB
         T6("Makefile, module format and fix bugs</br>both"):::both
     end
 
-    subgraph J2 [📅 Jour 2]
+    subgraph J2 [📅 Day 2]
         direction TB
         T1("Prim algorithm</br>and output sys</br>julcleme"):::jul
         T2("Stacking algorithm</br>and vizualisation</br>sservant"):::sse
     end
 
-    subgraph J1 [📅 Jour 1]
+    subgraph J1 [📅 Day 1]
         direction TB
         T4("Parsing of config file</br>julcleme"):::jul
         T5("Main program with argv</br>sservant"):::sse
