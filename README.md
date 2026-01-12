@@ -4,8 +4,8 @@ Maze generation and solving visualisation
 
 ## Authors
 
-- [@sservant](https://github.com/sservant)
-- [@julcleme](https://github.com/julcleme)
+- [@0xS4cha](https://github.com/0xS4cha)
+- [@canarddu38](https://github.com/canarddu38)
 
 ## Description
 
