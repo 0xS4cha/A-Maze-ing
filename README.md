@@ -1,10 +1,15 @@
 # A-Maze-ing
 
-*This project has been created as part
-of the 42 curriculum by sservant and julcleme*
+Maze generation and solving visualisation
 
-# Description
-This project is a python project focused on understanding and implementing maze generation and maze solving algorithms by using a graphic library. 
+## Authors
+
+- [@sservant](https://github.com/sservant)
+- [@julcleme](https://github.com/julcleme)
+
+## Description
+
+This project is a Python project focused on understanding and implementing maze generation and maze solving algorithms using a graphic library (MLX). It has been created as part of the 42 curriculum to explore algorithmic complexity and visualization.
 
 ```mermaid
 graph TD
@@ -33,64 +38,9 @@ graph TD
     Generator -->|draw_maze| GUI
 ```
 
-# Algorithms
-This project implements the following algorithms:
+## Build
 
-1.  **Stacking algorithm**: The choice of a stacking algorithm was very quick because it is the most efficient in generating mazes and creates a perfect maze for sure. ```sservant```
-2.  **Prim Algorithm**: We chose the Prim algorithm because using graphs is good practice in this style of generation, and it's a good thing to see. ```julcleme```
-
-
-#### Custom Parameters & Data Access
-*   **Instantiation**: `MazeGenerator(config_path)`
-*   **Access Maze**: `generator.maze` [Verify attribute name]
-*   **Access Solution**: `generator.solution` [Verify attribute name]
-
-# Configuration File
-The configuration file controls the maze generation. Below is the complete structure:
-
-```bash
-# this is a comment
-
-# width of the maze
-WIDTH=50
-# height of the maze
-HEIGHT=50
-
-# position of the entry point of the maze (x, y)
-ENTRY=1,14
-# position of the exit point of the maze (x, y)
-EXIT=50,14
-
-# path of the output file
-OUTPUT_FILE=output.txt
-
-# the generated maze contains only one solution
-PERFECT=False
-
-# view generation and resolving in realtime
-ANIMATION=0
-
-# delay in seconds
-DELAY=0
-
-# maze seed, 0 is a random one
-SEED=0
-```
-
-# Resources
-This is the list of the resources used to make this project. 
-- [wikipedia.org](https://en.wikipedia.org/wiki/Maze-solving_algorithm) used for the maze solving algorithms
-- [wikipedia.org](https://en.wikipedia.org/wiki/Maze_generation_algorithm) used to understand the maze generation techniques
-- [emrezorlu.com](https://emrezorlu.com/2012/03/20/maze-creation-solving/) used to understand the differences between the different algorithms
-- [professor-l.github.io](https://professor-l.github.io/mazes/) used to visualise concepts behind used algorithms
-- [chatgpt.com](https://chatgpt.com) was used to explain us basics of each algorithm. It also helped with colors and the minilib-x library
-- [mypy.readthedocs.io](https://mypy.readthedocs.io/en/stable/) documentation for the mypy norm
-
-# Developer Guide
-
-## Package Installation
-
-The maze generator is available as a pip-installable package. You can build it from source:
+The maze generator is available as a pip-installable package. You can build it from source using the provided Makefile.
 
 ```bash
 make build
@@ -102,7 +52,9 @@ Then install it:
 make install
 ```
 
-## Usage Example
+## Usage
+
+### Python Script
 
 ```python
 from mazegen import MazeGenerator
@@ -121,31 +73,52 @@ solution_path = generator.get_solution(maze)
 
 # Run event loop (keeps window open)
 generator.run()
-
-
-# All functions in generator class are reusable for any all programs like a pac-man ;) to get list[list[int]] of the maze or other features
 ```
 
-## Team
+### Configuration File
 
-- sservant
-- julcleme
+The configuration file controls the maze generation physics and rules.
 
-Roles:
-- sservant: Graphics (MLX), Stacking Algorithm advanced performance.
-- julcleme: Packaging, Prim's algorithm enhancements
+```bash
+# width and height of the maze
+WIDTH=50
+HEIGHT=50
 
-Planning:
-We started by researching algorithms, implemented a basic console version, then added MLX graphics. Finally, we refactored repeatedly to meet the modularity requirements and packaging standards.
+# position of entry/exit points (x, y)
+ENTRY=1,14
+EXIT=50,14
 
-## Advanced Features
-- **Multiple Algorithms**: Configurable via `PERFECT` flag (False for prim, True for Stacking).
-- **Graphical Interface**: Interactive buttons for solving/resetting.
+# path of the output file
+OUTPUT_FILE=output.txt
+
+# the generated maze contains only one solution (True/False)
+PERFECT=False
+
+# view generation and resolving in realtime
+ANIMATION=0
+DELAY=0
+
+# maze seed, 0 is a random one
+SEED=0
+```
+
+## Algorithms
+
+- **Stacking algorithm** (by `sservant`): The most efficient choice for generating perfect mazes quickly.
+- **Prim Algorithm** (by `julcleme`): A graph-based generation algorithm chosen for good practice and visual aesthetic.
+
+### Advanced Features
+- **Graphical Interface**: Interactive buttons for solving/resetting via MLX.
 - **Continuous Walls**: Post-processing for Prim's algorithm to avoid isolated dots.
-- **Graphics window**: You can display the maze with mlx
-- **42 symbol**: 42 symbol is display in center of the maze
+- **Parametric Generation**: Configurable via `PERFECT` flag (False for Prim, True for Stacking).
 
-## Planning
+## Contributions
+
+- `julcleme` — Packaging, Prim's algorithm enhancements, Parsing, Makefile.
+- `sservant` — Graphics (MLX), Stacking Algorithm advanced performance, Ranking/Array utilities.
+
+### Planning
+
 ```mermaid
 graph TD
     classDef jul fill:#BBDEFB,stroke:#1565C0,stroke-width:2px,color:black;
@@ -170,3 +143,22 @@ graph TD
 
     end
 ```
+
+## Resources
+
+- [wikipedia.org](https://en.wikipedia.org/wiki/Maze-solving_algorithm) — maze solving algorithms
+- [wikipedia.org](https://en.wikipedia.org/wiki/Maze_generation_algorithm) — maze generation techniques
+- [emrezorlu.com](https://emrezorlu.com/2012/03/20/maze-creation-solving/) — differences between algorithms
+- [professor-l.github.io](https://professor-l.github.io/mazes/) — visualization of concepts
+- [chatgpt.com](https://chatgpt.com) — basics of algorithms, colors and minilib-x library
+- [mypy.readthedocs.io](https://mypy.readthedocs.io/en/stable/) — documentation for the mypy norm
+
+## Disclaimer
+
+⚠️ IMPORTANT — Educational use only:
+- Do not copy this code for assessed work in 42 or other courses.
+- Use this repository for study and reference only.
+
+## Feedback
+
+If you have feedback, open an issue or contact the author.
