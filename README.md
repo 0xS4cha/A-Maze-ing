@@ -7,6 +7,10 @@ Maze generation and solving visualisation
 - [@0xS4cha](https://github.com/0xS4cha)
 - [@canarddu38](https://github.com/canarddu38)
 
+## Result
+![Result](result.png)
+
+
 ## Description
 
 This project is a Python project focused on understanding and implementing maze generation and maze solving algorithms using a graphic library (MLX). It has been created as part of the 42 curriculum to explore algorithmic complexity and visualization.
